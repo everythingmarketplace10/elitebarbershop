@@ -3,510 +3,541 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elite Barber Studio | Premium Grooming</title>
+    <title>Elite Barber Studio | Premium Grooming & Barbering</title>
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-dark: #0f0f11;
-            --bg-card: #18181c;
-            --accent-gold: #d4af37;
-            --accent-gold-hover: #f3e5ab;
-            --text-light: #f4f4f6;
-            --text-muted: #a0a0ab;
-            --border-color: #2a2a32;
+            --bg-dark: #0b0b0d;
+            --bg-card: #141417;
+            --bg-card-hover: #1c1c21;
+            --accent-gold: #c5a059;
+            --accent-gold-hover: #e0b86c;
+            --accent-bronze: #8c6d3f;
+            --text-light: #f5f5f7;
+            --text-muted: #9e9ea7;
+            --border-color: #23232a;
+            --border-gold: rgba(197, 160, 89, 0.3);
+            --success: #2e7d32;
+            --warning: #ed6c02;
+            --danger: #d32f2f;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: 'Montserrat', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
 
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-light); 
-            line-height: 1.5; 
-            overflow-x: hidden;
-        }
+        h1, h2, h3, h4, .gold-text { font-family: 'Cinzel', serif; color: var(--accent-gold); letter-spacing: 1px; }
 
-        h1, h2, h3, .gold-text { 
-            font-family: 'Cinzel', serif; 
-            color: var(--accent-gold); 
-        }
-
-        /* Responsive Header & Navigation */
-        header { 
-            background: rgba(15,15,17,0.98); 
-            position: fixed; 
-            width: 100%; 
-            top: 0; 
-            z-index: 1000; 
-            border-bottom: 1px solid var(--border-color); 
-        }
-
-        nav { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 0.8rem 1.5rem; 
-        }
-
-        .logo { 
-            font-size: 1.25rem; 
-            font-weight: 700; 
-            font-family: 'Cinzel', serif; 
-            letter-spacing: 2px; 
-            white-space: nowrap;
-        }
-
-        .nav-links { 
-            display: flex; 
-            gap: 1.2rem; 
-            list-style: none; 
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 2px;
-        }
-
-        .nav-links a { 
-            color: var(--text-light); 
-            text-decoration: none; 
-            font-size: 0.85rem; 
-            transition: 0.3s; 
-            padding: 0.4rem 0.2rem;
-            display: inline-block;
-        }
-
+        /* Navigation Header */
+        header { background: rgba(11, 11, 13, 0.95); backdrop-filter: blur(12px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        nav { display: flex; justify-space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem; }
+        .logo { font-size: 1.35rem; font-weight: 800; font-family: 'Cinzel', serif; letter-spacing: 3px; color: #fff; text-decoration: none; }
+        .logo span { color: var(--accent-gold); }
+        
+        .nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
         .nav-links a:hover { color: var(--accent-gold); }
-
-        /* Touch-Friendly Buttons */
-        .btn { 
-            background: var(--accent-gold); 
-            color: #000; 
-            padding: 0.8rem 1.5rem; 
-            border: none; 
-            font-weight: 600; 
-            cursor: pointer; 
-            text-decoration: none; 
-            display: inline-flex; 
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s; 
-            border-radius: 4px; 
-            min-height: 44px; /* Touch target accessibility */
-            touch-action: manipulation;
-        }
-
-        .btn:hover { background: var(--accent-gold-hover); }
-        .btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
-        .btn-outline:hover { background: var(--accent-gold); color: #000; }
-        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; min-height: 36px; }
-
-        section { padding: 4rem 1.2rem; max-width: 1200px; margin: 0 auto; }
-
-        /* Hero Responsive Styling */
-        .hero { 
-            min-height: 75vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600') center/cover; 
-            padding-top: 6rem;
-        }
-
-        .hero h1 { 
-            font-size: clamp(1.8rem, 5vw, 3.5rem); 
-            margin-bottom: 1rem; 
-            letter-spacing: 2px; 
-            padding: 0 0.5rem;
-        }
-
-        .hero p { 
-            font-size: clamp(0.95rem, 2.5vw, 1.2rem); 
-            color: var(--text-muted); 
-            margin-bottom: 2rem; 
-            max-width: 600px; 
-            padding: 0 1rem;
-        }
-
-        .hero-btns { 
-            display: flex; 
-            gap: 1rem; 
-            width: 100%; 
-            max-width: 320px; 
-            justify-content: center;
-        }
-
-        .hero-btns .btn { width: 100%; }
-
-        /* Category Banners Section */
-        .banner-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 1.2rem; 
-            margin-top: 1.5rem; 
-        }
-
-        .banner-card { 
-            position: relative; 
-            height: 220px; 
-            border-radius: 6px; 
-            overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            cursor: pointer; 
-            transition: transform 0.3s ease, border-color 0.3s ease; 
-            touch-action: manipulation;
-        }
-
-        .banner-card:active { transform: scale(0.98); }
-        .banner-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); transition: filter 0.3s ease; }
-        .banner-card:hover img { filter: brightness(0.85); }
-        .banner-card .banner-text { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2rem; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
-
-        /* General Grids */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-            gap: 1.5rem; 
-            margin-top: 2rem; 
-        }
-
-        .card { 
-            background: var(--bg-card); 
-            border: 1px solid var(--border-color); 
-            padding: 1.2rem; 
-            border-radius: 6px; 
-            transition: 0.3s; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card img { width: 100%; height: 210px; object-fit: cover; border-radius: 4px; margin-bottom: 0.8rem; }
-        .price { font-size: 1.15rem; font-weight: 700; color: var(--accent-gold); margin: 0.5rem 0; }
-
-        /* Touch-Optimized Forms */
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
         
-        input, select, textarea { 
-            width: 100%; 
-            padding: 0.8rem; 
-            background: #222228; 
-            border: 1px solid var(--border-color); 
-            color: #fff; 
-            border-radius: 4px; 
-            font-size: 0.95rem; /* Prevents auto-zoom on iOS safari */
-            min-height: 44px;
-        }
+        /* Buttons */
+        .btn { background: var(--accent-gold); color: #0b0b0d; padding: 0.85rem 1.8rem; border: none; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); border-radius: 2px; min-height: 48px; }
+        .btn:hover { background: var(--accent-gold-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(197, 160, 89, 0.25); }
+        .btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+        .btn-outline:hover { background: var(--accent-gold); color: #0b0b0d; }
+        .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.75rem; min-height: 38px; }
 
-        input:focus, select:focus { border-color: var(--accent-gold); outline: none; }
+        section { padding: 5rem 1.5rem; max-width: 1280px; margin: 0 auto; }
+        
+        /* Hero Section */
+        .hero { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(180deg, rgba(11,11,13,0.5) 0%, rgba(11,11,13,0.95) 100%), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600') center/cover no-repeat; padding-top: 7rem; }
+        .hero h1 { font-size: clamp(2.2rem, 6vw, 4.2rem); margin-bottom: 1.2rem; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .hero p { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-muted); margin-bottom: 2.5rem; max-width: 650px; font-weight: 300; }
+        .hero-btns { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
 
-        /* Mobile Drag & Drop Upload Zone */
-        .drop-zone { 
-            border: 2px dashed var(--border-color); 
-            border-radius: 6px; 
-            padding: 1.2rem 0.8rem; 
-            text-align: center; 
-            background: #121215; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            touch-action: manipulation;
-        }
+        /* Trust Banner */
+        .trust-section { background: var(--bg-card); border-y: 1px solid var(--border-color); padding: 2.5rem 1.5rem; }
+        .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; max-width: 1280px; margin: 0 auto; text-align: center; }
+        .trust-item h4 { font-size: 1rem; margin-bottom: 0.3rem; }
+        .trust-item p { font-size: 0.82rem; color: var(--text-muted); }
 
-        .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent-gold); background: #1c1c22; }
-        .drop-zone p { font-size: 0.85rem; color: var(--text-muted); }
-        .drop-zone img { max-height: 100px; margin-top: 0.8rem; display: none; border-radius: 4px; margin-left: auto; margin-right: auto; }
+        /* Category Grid */
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .category-card { position: relative; height: 260px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-color); cursor: pointer; transition: var(--transition); }
+        .category-card:hover { border-color: var(--accent-gold); transform: translateY(-4px); }
+        .category-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55); transition: var(--transition); }
+        .category-card:hover img { filter: brightness(0.75); scale: 1.03; }
+        .category-card .card-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(0deg, rgba(11,11,13,0.95) 0%, transparent 100%); }
 
-        /* Responsive Backoffice */
-        #backoffice-container { 
-            display: none; 
-            background: #000; 
-            min-height: 100vh; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            z-index: 2000; 
-            overflow-y: auto; 
-            padding: 1rem; 
-            -webkit-overflow-scrolling: touch;
-        }
+        /* Cards & Catalog Grids */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.8rem; margin-top: 2rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 4px; transition: var(--transition); display: flex; flex-direction: column; justify-space-between; position: relative; }
+        .card:hover { border-color: var(--border-gold); background: var(--bg-card-hover); }
+        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 2px; margin-bottom: 1rem; }
+        .card-details { flex-grow: 1; }
+        .card-title { font-size: 1.15rem; color: #fff; margin-bottom: 0.4rem; font-family: 'Cinzel', serif; }
+        .card-cat { font-size: 0.75rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.5rem; }
+        .card-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: auto; }
+        .price { font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); }
+        .duration { font-size: 0.8rem; color: var(--text-muted); }
 
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .admin-nav { 
-            display: flex; 
-            gap: 0.5rem; 
-            border-bottom: 1px solid var(--border-color); 
-            padding-bottom: 1rem; 
-            margin-bottom: 1.5rem; 
-            overflow-x: auto; 
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
+        /* Step-By-Step Booking Experience */
+        .booking-container { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem; margin-top: 2rem; }
+        .booking-steps { display: flex; justify-content: space-between; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; overflow-x: auto; gap: 1rem; }
+        .step-item { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; opacity: 0.5; }
+        .step-item.active { color: var(--accent-gold); opacity: 1; border-bottom: 2px solid var(--accent-gold); padding-bottom: 0.8rem; margin-bottom: -1rem; }
+        .step-item.completed { color: #fff; opacity: 0.8; }
+        
+        .booking-pane { display: none; }
+        .booking-pane.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .admin-nav button { 
-            background: transparent; 
-            color: var(--text-light); 
-            border: 1px solid var(--border-color); 
-            padding: 0.6rem 1rem; 
-            cursor: pointer; 
-            border-radius: 4px; 
-            font-size: 0.85rem;
-            white-space: nowrap;
-            min-height: 40px;
-        }
+        /* Form Inputs */
+        .form-group { margin-bottom: 1.4rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; padding: 0.9rem 1rem; background: #0f0f12; border: 1px solid var(--border-color); color: #fff; border-radius: 3px; font-size: 0.95rem; transition: var(--transition); min-height: 48px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-gold); outline: none; box-shadow: 0 0 10px rgba(197, 160, 89, 0.15); }
 
-        .admin-nav button.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); font-weight: bold; }
+        /* Selection Cards */
+        .select-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .select-card { background: #0f0f12; border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 4px; cursor: pointer; text-align: center; transition: var(--transition); }
+        .select-card:hover, .select-card.selected { border-color: var(--accent-gold); background: rgba(197, 160, 89, 0.05); }
+        .select-card img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.8rem auto; }
 
-        /* Responsive Table Wrapper */
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 1rem; }
-        .table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .table th, .table td { padding: 0.75rem 0.5rem; border: 1px solid var(--border-color); text-align: left; font-size: 0.85rem; }
-        .table th { background: var(--bg-card); color: var(--accent-gold); }
+        /* Summary Receipt */
+        .summary-card { background: #0f0f12; border: 1px dashed var(--accent-gold); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem; }
+        .summary-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .summary-row:last-child { border-bottom: none; font-weight: 700; color: var(--accent-gold); font-size: 1.1rem; padding-top: 1rem; }
 
-        .admin-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.2rem; margin-bottom: 1.5rem; border-radius: 6px; }
+        /* Backoffice Layout */
+        #backoffice-container { display: none; background: #08080a; min-height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 2000; overflow-y: auto; padding: 1.5rem; -webkit-overflow-scrolling: touch; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem; }
+        .admin-nav { display: flex; gap: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; overflow-x: auto; white-space: nowrap; }
+        .admin-nav button { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.6rem 1.2rem; cursor: pointer; border-radius: 3px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
+        .admin-nav button.active { background: var(--accent-gold); color: #0b0b0d; border-color: var(--accent-gold); }
+        
+        /* Stats Dashboard */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 4px; border-left: 3px solid var(--accent-gold); }
+        .stat-card h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem; }
+        .stat-card .stat-val { font-size: 1.6rem; font-weight: 700; color: #fff; font-family: 'Cinzel', serif; }
 
-        /* Media Queries for Mobile & Touch Screen Devices */
+        /* Notification Bell */
+        .notif-bell { position: relative; cursor: pointer; font-size: 1.3rem; margin-right: 1rem; }
+        .notif-badge { position: absolute; top: -5px; right: -8px; background: var(--danger); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+
+        /* Badges */
+        .badge { display: inline-block; padding: 0.25rem 0.6rem; font-size: 0.7rem; font-weight: 700; border-radius: 2px; text-transform: uppercase; }
+        .badge-new { background: rgba(237, 108, 2, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+        .badge-confirmed { background: rgba(46, 125, 50, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .badge-cancelled { background: rgba(211, 47, 47, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+
+        /* Responsive Table */
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 4px; }
+        .table { width: 100%; border-collapse: collapse; min-width: 750px; background: var(--bg-card); }
+        .table th, .table td { padding: 0.9rem; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.85rem; }
+        .table th { background: #0f0f12; color: var(--accent-gold); font-family: 'Cinzel', serif; font-weight: 600; }
+
+        /* Drag & Drop Zone */
+        .drop-zone { border: 2px dashed var(--border-color); border-radius: 4px; padding: 1.5rem; text-align: center; background: #0f0f12; cursor: pointer; transition: var(--transition); }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent-gold); background: rgba(197, 160, 89, 0.03); }
+
+        footer { background: #070708; border-top: 1px solid var(--border-color); padding: 3rem 1.5rem 1.5rem 1.5rem; font-size: 0.85rem; color: var(--text-muted); }
+        .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+
         @media (max-width: 768px) {
-            nav { padding: 0.8rem 1rem; }
-            section { padding: 3rem 1rem; }
-            .grid { grid-template-columns: 1fr; }
-            .banner-grid { grid-template-columns: 1fr; }
-            .admin-card form { grid-template-columns: 1fr !important; }
-            .admin-card form input, .admin-card form select, .admin-card form button, .admin-card form div { grid-column: span 1 !important; }
-        }
-
-        @media (max-width: 480px) {
-            .logo { font-size: 1.1rem; }
-            .nav-links { gap: 0.8rem; }
-            .nav-links a { font-size: 0.8rem; }
-            .hero h1 { font-size: 1.8rem; }
-            #backoffice-container { padding: 0.8rem 0.5rem; }
+            .nav-links { display: none; }
+            .hero { min-height: 75vh; }
+            .booking-steps { font-size: 0.7rem; }
+            #backoffice-container { padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- AUDIO NOTIFICATION SOUND -->
+    <audio id="notif-audio" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- PUBLIC NAVIGATION -->
     <header id="main-header">
         <nav>
-            <div class="logo">ELITE BARBER</div>
+            <a href="#home" class="logo">ELITE <span>BARBER</span></a>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#categories">Categories</a></li>
                 <li><a href="#services">Services</a></li>
                 <li><a href="#barbers">Barbers</a></li>
-                <li><a href="#booking">Book</a></li>
-                <li><a href="#backoffice" onclick="showBackoffice(event)">Admin</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#booking">Book Now</a></li>
+                <li><a href="#backoffice" onclick="showBackoffice(event)" style="color:var(--accent-gold);">Admin</a></li>
             </ul>
+            <a href="#booking" class="btn btn-sm">BOOK APPOINTMENT</a>
         </nav>
     </header>
 
+    <!-- PUBLIC WEBSITE CONTENT -->
     <main id="public-website">
         <!-- Hero Section -->
         <section id="home" class="hero">
             <h1>LOOK SHARP. FEEL CONFIDENT.</h1>
-            <p>Premium haircuts, beard styling & rejuvenation treatments on your schedule.</p>
+            <p>Premium haircuts, precision beard grooming & facial rejuvenation treatments from master UK barbers.</p>
             <div class="hero-btns">
                 <a href="#booking" class="btn">BOOK AN APPOINTMENT</a>
+                <a href="#services" class="btn btn-outline">EXPLORE SERVICES</a>
             </div>
         </section>
 
-        <!-- Category Banners -->
+        <!-- Trust Features -->
+        <div class="trust-section">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h4 class="gold-text">MASTER BARBERS</h4>
+                    <p>Experienced styling specialists</p>
+                </div>
+                <div class="trust-item">
+                    <h4 class="gold-text">LUXURY PRODUCTS</h4>
+                    <p>Premium pomades & skin treatments</p>
+                </div>
+                <div class="trust-item">
+                    <h4 class="gold-text">EASY ONLINE BOOKING</h4>
+                    <p>Select barber, time & date seamlessly</p>
+                </div>
+                <div class="trust-item">
+                    <h4 class="gold-text">PRISTINE ENVIRONMENT</h4>
+                    <p>Clean, comfortable & masculine setup</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Treatment Categories -->
         <section id="categories">
-            <h2>EXPLORE SERVICES BY CATEGORY</h2>
-            <div class="banner-grid">
-                <!-- Male Hairstyle Image -->
-                <div class="banner-card" onclick="filterCategory('Hairstyles')">
-                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800" alt="Male Hairstyle">
-                    <div class="banner-text">
-                        <h3>HAIRSTYLES</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Fades, Cuts, & Custom Styles</p>
+            <h2>SERVICE CATEGORIES</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">Select a category to filter treatments</p>
+            <div class="category-grid">
+                <div class="category-card" onclick="filterCategory('Hairstyles')">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800" alt="Hairstyles">
+                    <div class="card-overlay">
+                        <h3>HAIRSTYLES & FADES</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Skin Fades, Crops & Scissors Cuts</p>
                     </div>
                 </div>
-                <!-- Beard Care Image -->
-                <div class="banner-card" onclick="filterCategory('Beards')">
+                <div class="category-card" onclick="filterCategory('Beards')">
                     <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800" alt="Beards">
-                    <div class="banner-text">
-                        <h3>BEARDS</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Trims, Hot Towels & Shaves</p>
+                    <div class="card-overlay">
+                        <h3>BEARD GROOMING</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Hot Towel Shaves, Edging & Trims</p>
                     </div>
                 </div>
-                <!-- Female Skin Care Image -->
-                <div class="banner-card" onclick="filterCategory('Skin Care')">
-                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800" alt="Female Skin Care">
-                    <div class="banner-text">
-                        <h3>SKIN CARE</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Facials, Scrubs & Treatments</p>
+                <div class="category-card" onclick="filterCategory('Skin Care')">
+                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800" alt="Skin Care">
+                    <div class="card-overlay">
+                        <h3>SKIN CARE & FACIALS</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Deep Cleansing, Scrubs & Treatments</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Services Grid -->
+        <!-- Dynamic Services Catalog -->
         <section id="services">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <h2 id="services-title">ALL SERVICES & TREATMENTS</h2>
                 <button onclick="filterCategory('ALL')" class="btn btn-outline btn-sm">Show All</button>
             </div>
-            <div id="services-grid" class="grid">Loading options...</div>
+            <div id="services-grid" class="grid">
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Loading catalog from database...</div>
+            </div>
         </section>
 
         <!-- Barbers Section -->
         <section id="barbers">
-            <h2>OUR BARBERS</h2>
-            <div id="barbers-grid" class="grid">Loading barbers...</div>
+            <h2>OUR MASTER BARBERS</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">Craftsmen committed to perfection</p>
+            <div id="barbers-grid" class="grid">
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Loading barbers...</div>
+            </div>
         </section>
 
-        <!-- Booking Section -->
-        <section id="booking" style="background: var(--bg-card); border-radius:6px; margin-bottom: 2rem;">
-            <h2>BOOK APPOINTMENT</h2>
-            <div id="booking-wizard" style="margin-top: 1.5rem;">
-                <form id="appointment-form" onsubmit="handleBookingSubmit(event)">
-                    <div class="form-group">
-                        <label>Select Service / Treatment</label>
-                        <select id="book-service" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Select Barber</label>
-                        <select id="book-barber" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Preferred Date</label>
-                        <input type="date" id="book-date" required onchange="loadAvailableSlots()">
-                    </div>
-                    <div class="form-group">
-                        <label>Preferred Time Slot</label>
-                        <select id="book-time" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="book-name" required placeholder="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label>Mobile / WhatsApp</label>
-                        <input type="tel" id="book-phone" required placeholder="+44 7123 456789">
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="book-email" required placeholder="john@example.com">
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">CONFIRM & BOOK NOW</button>
-                </form>
+        <!-- About Section -->
+        <section id="about" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; margin-top: 3rem;">
+            <h2>ABOUT ELITE BARBER STUDIO</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem; align-items: center;">
+                <div>
+                    <p style="color:var(--text-muted); margin-bottom: 1rem;">Elite Barber Studio delivers modern barbering and traditional grooming executed to exact standards. Designed for gentlemen who value sharp aesthetic detail, high-grade products, and punctual scheduling.</p>
+                    <p style="color:var(--text-muted);">Whether preparing for executive meetings, events, or routine upkeep, our studio environment offers comfort, luxury, and unmatched precision.</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800" alt="Studio Interior" style="width: 100%; border-radius: 4px; border: 1px solid var(--border-color);">
             </div>
-            <div id="booking-confirmation" style="display: none; text-align: center; padding: 2rem;">
-                <h3 class="gold-text">APPOINTMENT REQUEST RECEIVED</h3>
-                <p style="margin: 1rem 0;">Thank you for choosing Elite Barber Studio. Reference code: <strong id="conf-ref" class="gold-text"></strong></p>
-                <button onclick="location.reload()" class="btn">Book Another</button>
+        </section>
+
+        <!-- STEP-BY-STEP BOOKING EXPERIENCE -->
+        <section id="booking">
+            <h2>BOOK YOUR APPOINTMENT</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Complete the steps below to reserve your slot</p>
+
+            <div class="booking-container">
+                <!-- Steps Progress Bar -->
+                <div class="booking-steps">
+                    <div id="step-indicator-1" class="step-item active">1. Service</div>
+                    <div id="step-indicator-2" class="step-item">2. Barber</div>
+                    <div id="step-indicator-3" class="step-item">3. Date & Time</div>
+                    <div id="step-indicator-4" class="step-item">4. Details & Confirm</div>
+                </div>
+
+                <!-- STEP 1: CHOOSE SERVICE -->
+                <div id="booking-step-1" class="booking-pane active">
+                    <h3 style="margin-bottom: 1rem;">Select Treatment or Style</h3>
+                    <div class="form-group">
+                        <label>Category Filter</label>
+                        <select id="booking-cat-filter" onchange="filterBookingServices(this.value)">
+                            <option value="ALL">All Categories</option>
+                            <option value="Hairstyles">Hairstyles & Fades</option>
+                            <option value="Beards">Beard Grooming</option>
+                            <option value="Skin Care">Skin Care & Facials</option>
+                        </select>
+                    </div>
+                    <div id="booking-service-select-grid" class="select-card-grid"></div>
+                    <button onclick="goToBookingStep(2)" id="btn-to-step-2" class="btn" disabled style="width: 100%;">CONTINUE TO BARBER SELECTION</button>
+                </div>
+
+                <!-- STEP 2: CHOOSE BARBER -->
+                <div id="booking-step-2" class="booking-pane">
+                    <h3 style="margin-bottom: 1rem;">Select Barber</h3>
+                    <div id="booking-barber-select-grid" class="select-card-grid"></div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="goToBookingStep(1)" class="btn btn-outline" style="width: 50%;">BACK</button>
+                        <button onclick="goToBookingStep(3)" class="btn" style="width: 50%;">CONTINUE TO TIME</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: CHOOSE DATE & TIME -->
+                <div id="booking-step-3" class="booking-pane">
+                    <h3 style="margin-bottom: 1rem;">Select Date & Time</h3>
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <input type="date" id="book-date" onchange="generateTimeSlots()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Available Time Slots</label>
+                        <div id="time-slots-grid" class="select-card-grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+                            <p style="color:var(--text-muted); font-size:0.85rem; grid-column:1/-1;">Select a valid date above to display available times.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="goToBookingStep(2)" class="btn btn-outline" style="width: 50%;">BACK</button>
+                        <button onclick="goToBookingStep(4)" id="btn-to-step-4" class="btn" disabled style="width: 50%;">CONTINUE TO SUMMARY</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: CUSTOMER DETAILS & CONFIRM -->
+                <div id="booking-step-4" class="booking-pane">
+                    <h3 style="margin-bottom: 1rem;">Review Summary & Personal Info</h3>
+                    
+                    <div class="summary-card">
+                        <div class="summary-row"><span>Service:</span><strong id="sum-service">-</strong></div>
+                        <div class="summary-row"><span>Barber:</span><strong id="sum-barber">-</strong></div>
+                        <div class="summary-row"><span>Date & Time:</span><strong id="sum-datetime">-</strong></div>
+                        <div class="summary-row"><span>Total Payable:</span><strong id="sum-price">-</strong></div>
+                    </div>
+
+                    <form onsubmit="handleBookingSubmit(event)">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="book-name" required placeholder="e.g. John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number (WhatsApp) *</label>
+                            <input type="tel" id="book-phone" required placeholder="+44 7123 456789">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="book-email" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Special Instructions / Notes</label>
+                            <textarea id="book-notes" rows="2" placeholder="Specific styling preferences..."></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="button" onclick="goToBookingStep(3)" class="btn btn-outline" style="width: 40%;">BACK</button>
+                            <button type="submit" id="btn-submit-booking" class="btn" style="width: 60%;">CONFIRM & RESERVATION</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- CONFIRMATION RECEIPT SCREEN -->
+                <div id="booking-confirmation-pane" class="booking-pane" style="text-align: center; padding: 2rem 1rem;">
+                    <h2 class="gold-text" style="margin-bottom: 0.5rem;">YOU'RE ALL SET</h2>
+                    <p style="color:var(--text-muted); margin-bottom: 1.5rem;">Your reservation request has been transmitted successfully.</p>
+                    
+                    <div class="summary-card" style="max-width: 500px; margin: 0 auto 2rem auto; text-align: left;">
+                        <div class="summary-row"><span>Booking Reference:</span><strong id="conf-ref" class="gold-text"></strong></div>
+                        <div class="summary-row"><span>Customer:</span><strong id="conf-name"></strong></div>
+                        <div class="summary-row"><span>Service:</span><strong id="conf-service"></strong></div>
+                        <div class="summary-row"><span>Barber:</span><strong id="conf-barber"></strong></div>
+                        <div class="summary-row"><span>Date & Time:</span><strong id="conf-datetime"></strong></div>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">We look forward to seeing you at Elite Barber Studio.</p>
+                    <button onclick="resetBookingWizard()" class="btn">Make Another Reservation</button>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- BACK OFFICE CONTAINER -->
+    <!-- BACK OFFICE MANAGEMENT CONTAINER (#backoffice) -->
     <div id="backoffice-container">
         <div class="admin-header">
-            <h2>BACK OFFICE MANAGEMENT</h2>
-            <button onclick="hideBackoffice()" class="btn btn-outline btn-sm">Exit Admin</button>
+            <div style="display: flex; align-items: center;">
+                <h2 style="font-size: 1.2rem;">ELITE BARBER STUDIO — DASHBOARD</h2>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div class="notif-bell" onclick="switchAdminTab('appointments')">
+                    🔔 <span id="admin-unread-count" class="notif-badge">0</span>
+                </div>
+                <button onclick="hideBackoffice()" class="btn btn-outline btn-sm">Exit to Website</button>
+            </div>
         </div>
         
-        <div id="admin-login-view" style="max-width: 400px; margin: 3rem auto;">
-            <h3 style="margin-bottom: 1rem;">Staff Authentication</h3>
-            <div class="form-group"><label>Email</label><input type="email" id="admin-email"></div>
-            <div class="form-group"><label>Password</label><input type="password" id="admin-password"></div>
-            <button onclick="loginAdmin()" class="btn" style="width: 100%;">LOGIN</button>
+        <!-- ADMIN LOGIN VIEW -->
+        <div id="admin-login-view" style="max-width: 420px; margin: 4rem auto; background: var(--bg-card); padding: 2rem; border: 1px solid var(--border-color); border-radius: 4px;">
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">STAFF AUTHENTICATION</h3>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="admin-email" placeholder="admin@elitebarber.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="admin-password" placeholder="••••••••">
+            </div>
+            <button onclick="loginAdmin()" class="btn" style="width: 100%;">LOGIN TO DASHBOARD</button>
         </div>
 
+        <!-- AUTHENTICATED DASHBOARD VIEW -->
         <div id="admin-dashboard-view" style="display: none;">
-            <div class="admin-nav">
-                <button id="btn-tab-appointments" class="active" onclick="switchAdminTab('appointments')">Appointments</button>
-                <button id="btn-tab-services" onclick="switchAdminTab('services')">Treatments & Services</button>
-                <button id="btn-tab-barbers" onclick="switchAdminTab('barbers')">Barbers</button>
-                <button onclick="logoutAdmin()">Logout</button>
+            <!-- Statistics Banner -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Today's Appointments</h4>
+                    <div id="stat-today" class="stat-val">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>New Requests</h4>
+                    <div id="stat-new" class="stat-val" style="color:var(--warning);">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Confirmed</h4>
+                    <div id="stat-confirmed" class="stat-val" style="color:var(--success);">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Revenue</h4>
+                    <div id="stat-revenue" class="stat-val" style="color:var(--accent-gold);">£0</div>
+                </div>
             </div>
 
-            <!-- APPOINTMENTS TAB -->
+            <!-- Tab Buttons -->
+            <div class="admin-nav">
+                <button id="btn-tab-appointments" class="active" onclick="switchAdminTab('appointments')">Appointments</button>
+                <button id="btn-tab-services" onclick="switchAdminTab('services')">Services & Catalog</button>
+                <button id="btn-tab-barbers" onclick="switchAdminTab('barbers')">Barber Roster</button>
+                <button onclick="logoutAdmin()" style="margin-left: auto; border-color: var(--danger); color: var(--danger);">Logout</button>
+            </div>
+
+            <!-- APPOINTMENTS MANAGEMENT TAB -->
             <div id="tab-appointments">
-                <h3>Appointments Dashboard</h3>
+                <h3>Appointments & Live Enquiries</h3>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <tr><th>Ref</th><th>Customer</th><th>Service</th><th>Barber</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Ref</th>
+                                <th>Customer Info</th>
+                                <th>Service</th>
+                                <th>Barber</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-                        <tbody id="admin-appointments-list"></tbody>
+                        <tbody id="admin-appointments-list">
+                            <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading appointments...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- SERVICES TAB -->
+            <!-- SERVICES & CATALOG TAB -->
             <div id="tab-services" style="display: none;">
-                <div class="admin-card">
-                    <h3>Add Treatment, Hairstyle, or Skin Care Item</h3>
-                    <form onsubmit="addService(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                        <input type="text" id="srv-name" placeholder="Item Name" required>
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
+                    <h3>Add New Treatment / Hairstyle</h3>
+                    <form onsubmit="addService(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <input type="text" id="srv-name" placeholder="Item Name (e.g., Taper Fade)" required>
                         <select id="srv-cat" required>
-                            <option value="Hairstyles">Category: Hairstyles</option>
-                            <option value="Beards">Category: Beards</option>
-                            <option value="Skin Care">Category: Skin Care</option>
+                            <option value="Hairstyles">Category: Hairstyles & Fades</option>
+                            <option value="Beards">Category: Beard Grooming</option>
+                            <option value="Skin Care">Category: Skin Care & Facials</option>
                         </select>
                         <input type="number" step="0.01" id="srv-price" placeholder="Price (£)" required>
                         <input type="number" id="srv-mins" placeholder="Duration (Minutes)" required>
-                        <input type="text" id="srv-desc" placeholder="Description" style="grid-column: span 2;">
+                        <input type="text" id="srv-desc" placeholder="Short Description" style="grid-column: span 2;">
                         
-                        <!-- Drag & Drop Photo Area -->
                         <div style="grid-column: span 2;">
-                            <label>Image (Tap to select or Drag & Drop photo)</label>
+                            <label>Item Image (Tap to select or Drag & Drop photo)</label>
                             <div class="drop-zone" id="srv-dropzone">
-                                <p>Tap here or drop image to upload</p>
-                                <img id="srv-preview" src="" alt="Preview">
+                                <p style="font-size:0.85rem; color:var(--text-muted);">Drop image here or tap to upload file</p>
+                                <img id="srv-preview" src="" alt="Preview" style="max-height: 100px; display: none; margin: 0.8rem auto 0 auto; border-radius: 4px;">
                                 <input type="file" id="srv-file" accept="image/*" style="display:none">
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">Save Item</button>
+                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">SAVE CATALOG ITEM</button>
                     </form>
                 </div>
-                <h3>Service Catalog</h3>
+
+                <h3>Active Catalog</h3>
                 <div class="table-responsive">
                     <table class="table">
-                        <thead><tr><th>Name</th><th>Category</th><th>Price (£)</th><th>Mins</th><th>Status</th><th>Action</th></tr></thead>
+                        <thead>
+                            <tr><th>Item Name</th><th>Category</th><th>Price</th><th>Duration</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
                         <tbody id="admin-services-list"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- BARBERS TAB -->
+            <!-- BARBERS MANAGEMENT TAB -->
             <div id="tab-barbers" style="display: none;">
-                <div class="admin-card">
-                    <h3>Add New Barber</h3>
-                    <form onsubmit="addBarber(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
+                    <h3>Add New Staff / Barber</h3>
+                    <form onsubmit="addBarber(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
                         <input type="text" id="barber-name" placeholder="Barber Name" required>
-                        <input type="text" id="barber-desc" placeholder="Specialty / Bio" required>
+                        <input type="text" id="barber-desc" placeholder="Specialty (e.g. Master Fade Specialist)" required>
                         
-                        <!-- Drag & Drop Photo Area for Barber -->
                         <div style="grid-column: span 2;">
-                            <label>Photo (Tap to select or Drag & Drop photo)</label>
+                            <label>Barber Portrait (Tap to select or Drag & Drop photo)</label>
                             <div class="drop-zone" id="barber-dropzone">
-                                <p>Tap here or drop photo to upload</p>
-                                <img id="barber-preview" src="" alt="Preview">
+                                <p style="font-size:0.85rem; color:var(--text-muted);">Drop portrait photo here or tap to upload</p>
+                                <img id="barber-preview" src="" alt="Preview" style="max-height: 100px; display: none; margin: 0.8rem auto 0 auto; border-radius: 4px;">
                                 <input type="file" id="barber-file" accept="image/*" style="display:none">
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">Save Barber</button>
+                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">SAVE BARBER</button>
                     </form>
                 </div>
-                <h3>Barbers List</h3>
+
+                <h3>Barber Roster</h3>
                 <div class="table-responsive">
                     <table class="table">
-                        <thead><tr><th>Photo</th><th>Name</th><th>Bio</th><th>Status</th><th>Action</th></tr></thead>
+                        <thead>
+                            <tr><th>Photo</th><th>Name</th><th>Specialty</th><th>Status</th><th>Action</th></tr>
+                        </thead>
                         <tbody id="admin-barbers-list"></tbody>
                     </table>
                 </div>
@@ -514,23 +545,56 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h3 class="gold-text" style="font-size: 1.1rem; margin-bottom: 0.8rem;">ELITE BARBER STUDIO</h3>
+                <p>Authentic UK barbering excellence, classic fades, and executive facial treatments.</p>
+            </div>
+            <div>
+                <h4>LOCATION & CONTACT</h4>
+                <p>12 High Street, City Centre</p>
+                <p>Phone / WhatsApp: +44 7123 456789</p>
+                <p>Email: info@elitebarberstudio.co.uk</p>
+            </div>
+            <div>
+                <h4>OPENING HOURS</h4>
+                <p>Mon - Fri: 09:00 - 19:00</p>
+                <p>Saturday: 08:30 - 18:00</p>
+                <p>Sunday: 10:00 - 16:00</p>
+            </div>
+        </div>
+        <div style="text-align: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">
+            <p>&copy; 2026 Elite Barber Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- APPLICATION CONTROLLER & SUPABASE LOGIC -->
     <script>
-        // SUPABASE SETUP
+        // AUTHENTIC SUPABASE CLIENT CONFIGURATION
         const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let allServicesData = [];
+        // Application State
+        let allServices = [];
+        let allBarbers = [];
+        let selectedService = null;
+        let selectedBarber = null;
+        let selectedTimeSlot = null;
         let srvImageData = '';
         let barberImageData = '';
+        let previousAppointmentCount = 0;
 
-        // Gender-specific placeholder photos
+        // Visual Placeholders for Gender-Specific Categories
         const CATEGORY_PLACEHOLDERS = {
-            'Hairstyles': 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600', // Male haircut
-            'Beards': 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600',     // Beard styling
-            'Skin Care': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600'  // Female skin care facial
+            'Hairstyles': 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800', // Male Haircut
+            'Beards': 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800',     // Beard Grooming
+            'Skin Care': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800'  // Female Facial Skin Treatment
         };
 
+        // Initialization
         document.addEventListener('DOMContentLoaded', () => {
             fetchServices();
             fetchBarbers();
@@ -540,80 +604,78 @@
             if (window.location.hash === '#backoffice') {
                 showBackoffice();
             }
+
+            // Real-time appointment polling every 12 seconds for Back Office notifications
+            setInterval(pollAppointmentsForNotifications, 12000);
         });
 
         function initDateMin() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('book-date').min = today;
+            document.getElementById('book-date').value = today;
         }
 
-        /* Drag & Drop Upload Helper for Touch & Desktop */
-        function setupDragAndDrop() {
-            setupZone('srv-dropzone', 'srv-file', 'srv-preview', (base64) => srvImageData = base64);
-            setupZone('barber-dropzone', 'barber-file', 'barber-preview', (base64) => barberImageData = base64);
-        }
-
-        function setupZone(zoneId, inputId, previewId, callback) {
-            const zone = document.getElementById(zoneId);
-            const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-
-            zone.addEventListener('click', () => input.click());
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                zone.addEventListener(eventName, (e) => { e.preventDefault(); zone.classList.add('dragover'); }, false);
-            });
-            ['dragleave', 'drop'].forEach(eventName => {
-                zone.addEventListener(eventName, (e) => { e.preventDefault(); zone.classList.remove('dragover'); }, false);
-            });
-
-            zone.addEventListener('drop', (e) => {
-                const files = e.dataTransfer.files;
-                if (files.length) handleFile(files[0], preview, callback);
-            });
-
-            input.addEventListener('change', () => {
-                if (input.files.length) handleFile(input.files[0], preview, callback);
-            });
-        }
-
-        function handleFile(file, previewEl, callback) {
-            if (!file.type.startsWith('image/')) return alert('Please upload an image file.');
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewEl.src = e.target.result;
-                previewEl.style.display = 'block';
-                callback(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        /* Fetch & Display Logic */
+        /* ---------------- PUBLIC DATA FETCHING ---------------- */
         async function fetchServices() {
             const { data, error } = await supabaseClient.from('services').select('*').eq('active', true);
             if (error) return console.error('Error fetching services:', error);
-            allServicesData = data || [];
-            renderServices(allServicesData);
+            
+            allServices = data || [];
+            renderServicesCatalog(allServices);
+            renderBookingServiceSelect(allServices);
         }
 
-        function renderServices(items) {
+        function renderServicesCatalog(items) {
             const grid = document.getElementById('services-grid');
-            const select = document.getElementById('book-service');
-            grid.innerHTML = ''; select.innerHTML = '';
+            grid.innerHTML = '';
+            
+            if (!items.length) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:2rem;">No services active in this category.</div>`;
+                return;
+            }
 
             items.forEach(s => {
                 const fallbackImg = CATEGORY_PLACEHOLDERS[s.category] || CATEGORY_PLACEHOLDERS['Hairstyles'];
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${s.image || fallbackImg}" alt="${s.name}">
-                        <div>
-                            <h3>${s.name}</h3>
-                            <p style="font-size: 0.8rem; color: var(--accent-gold); font-weight: bold; margin-bottom:0.3rem;">${s.category}</p>
-                            <p style="font-size: 0.85rem; color: var(--text-muted);">${s.description || ''}</p>
+                        <div class="card-details">
+                            <div class="card-cat">${s.category}</div>
+                            <h3 class="card-title">${s.name}</h3>
+                            <p class="card-desc">${s.description || 'Premium grooming treatment tailored to client preferences.'}</p>
                         </div>
-                        <div class="price">£${Number(s.price).toFixed(2)} (${s.estimated_minutes} mins)</div>
+                        <div class="card-meta">
+                            <div>
+                                <div class="price">£${Number(s.price).toFixed(2)}</div>
+                                <div class="duration">${s.estimated_minutes} MINS</div>
+                            </div>
+                            <button onclick="quickSelectService('${s.id}')" class="btn btn-sm">BOOK NOW</button>
+                        </div>
                     </div>`;
-                select.innerHTML += `<option value="${s.id}">${s.name} [${s.category}] - £${s.price}</option>`;
+            });
+        }
+
+        async function fetchBarbers() {
+            const { data, error } = await supabaseClient.from('barbers').select('*').eq('active', true);
+            if (error) return console.error('Error fetching barbers:', error);
+
+            allBarbers = data || [];
+            renderBarbersCatalog(allBarbers);
+            renderBookingBarberSelect(allBarbers);
+        }
+
+        function renderBarbersCatalog(items) {
+            const grid = document.getElementById('barbers-grid');
+            grid.innerHTML = '';
+
+            items.forEach(b => {
+                grid.innerHTML += `
+                    <div class="card" style="text-align:center;">
+                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}" style="border-radius:50%; width:140px; height:140px; margin:0 auto 1rem auto;">
+                        <h3 class="card-title">${b.name}</h3>
+                        <p class="card-desc">${b.description || 'Master Barber Specialist'}</p>
+                        <button onclick="quickSelectBarber('${b.id}')" class="btn btn-sm btn-outline" style="width:100%; margin-top:auto;">BOOK WITH ${b.name.split(' ')[0].toUpperCase()}</button>
+                    </div>`;
             });
         }
 
@@ -621,75 +683,180 @@
             const title = document.getElementById('services-title');
             if (cat === 'ALL') {
                 title.innerText = 'ALL SERVICES & TREATMENTS';
-                renderServices(allServicesData);
+                renderServicesCatalog(allServices);
             } else {
                 title.innerText = `${cat.toUpperCase()} CATALOG`;
-                const filtered = allServicesData.filter(s => s.category === cat);
-                renderServices(filtered);
+                renderServicesCatalog(allServices.filter(s => s.category === cat));
             }
             document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
         }
 
-        async function fetchBarbers() {
-            const { data, error } = await supabaseClient.from('barbers').select('*').eq('active', true);
-            if (error) return console.error('Error fetching barbers:', error);
+        /* ---------------- STEP-BY-STEP BOOKING WIZARD ---------------- */
+        function renderBookingServiceSelect(items) {
+            const container = document.getElementById('booking-service-select-grid');
+            container.innerHTML = '';
 
-            const grid = document.getElementById('barbers-grid');
-            const select = document.getElementById('book-barber');
-            grid.innerHTML = ''; select.innerHTML = '<option value="">Any Barber</option>';
-
-            data.forEach(b => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}">
-                        <h3>${b.name}</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${b.description || ''}</p>
+            items.forEach(s => {
+                const img = s.image || CATEGORY_PLACEHOLDERS[s.category] || CATEGORY_PLACEHOLDERS['Hairstyles'];
+                container.innerHTML += `
+                    <div class="select-card" id="srv-card-${s.id}" onclick="selectServiceForBooking('${s.id}')">
+                        <img src="${img}" alt="${s.name}" style="width:100%; height:100px; border-radius:4px; margin-bottom:0.5rem; object-fit:cover;">
+                        <h4 style="font-size:0.95rem; color:#fff;">${s.name}</h4>
+                        <p style="font-size:0.8rem; color:var(--accent-gold); font-weight:700;">£${Number(s.price).toFixed(2)} (${s.estimated_minutes}m)</p>
                     </div>`;
-                select.innerHTML += `<option value="${b.id}">${b.name}</option>`;
             });
         }
 
-        function loadAvailableSlots() {
-            const select = document.getElementById('book-time');
-            select.innerHTML = '';
-            const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
-            times.forEach(t => { select.innerHTML += `<option value="${t}">${t}</option>`; });
+        function filterBookingServices(cat) {
+            if (cat === 'ALL') renderBookingServiceSelect(allServices);
+            else renderBookingServiceSelect(allServices.filter(s => s.category === cat));
+        }
+
+        function selectServiceForBooking(id) {
+            selectedService = allServices.find(s => s.id === id);
+            document.querySelectorAll('#booking-service-select-grid .select-card').forEach(el => el.classList.remove('selected'));
+            const target = document.getElementById(`srv-card-${id}`);
+            if (target) target.classList.add('selected');
+            document.getElementById('btn-to-step-2').disabled = false;
+        }
+
+        function quickSelectService(id) {
+            selectServiceForBooking(id);
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+            goToBookingStep(2);
+        }
+
+        function renderBookingBarberSelect(barbers) {
+            const container = document.getElementById('booking-barber-select-grid');
+            container.innerHTML = `
+                <div class="select-card selected" id="barber-card-any" onclick="selectBarberForBooking(null)">
+                    <div style="width:60px; height:60px; border-radius:50%; background:var(--border-color); margin:0 auto 0.8rem auto; display:flex; align-items:center; justify-content:center; color:var(--accent-gold); font-weight:bold;">ANY</div>
+                    <h4 style="font-size:0.95rem; color:#fff;">Any Available Barber</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted);">First available professional</p>
+                </div>`;
+
+            barbers.forEach(b => {
+                container.innerHTML += `
+                    <div class="select-card" id="barber-card-${b.id}" onclick="selectBarberForBooking('${b.id}')">
+                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}">
+                        <h4 style="font-size:0.95rem; color:#fff;">${b.name}</h4>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">${b.description || 'Specialist'}</p>
+                    </div>`;
+            });
+        }
+
+        function selectBarberForBooking(id) {
+            if (!id) selectedBarber = { id: null, name: 'Any Available Barber' };
+            else selectedBarber = allBarbers.find(b => b.id === id);
+
+            document.querySelectorAll('#booking-barber-select-grid .select-card').forEach(el => el.classList.remove('selected'));
+            const selId = id ? `barber-card-${id}` : 'barber-card-any';
+            document.getElementById(selId).classList.add('selected');
+        }
+
+        function quickSelectBarber(id) {
+            selectBarberForBooking(id);
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+            if (!selectedService && allServices.length) selectServiceForBooking(allServices[0].id);
+            goToBookingStep(3);
+        }
+
+        function generateTimeSlots() {
+            const container = document.getElementById('time-slots-grid');
+            container.innerHTML = '';
+            const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+
+            times.forEach(t => {
+                container.innerHTML += `
+                    <div class="select-card" id="slot-${t.replace(':','')}" onclick="selectTimeSlot('${t}')" style="padding:0.8rem;">
+                        <strong style="color:#fff; font-size:0.9rem;">${t}</strong>
+                    </div>`;
+            });
+        }
+
+        function selectTimeSlot(t) {
+            selectedTimeSlot = t;
+            document.querySelectorAll('#time-slots-grid .select-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`slot-${t.replace(':','')}`).classList.add('selected');
+            document.getElementById('btn-to-step-4').disabled = false;
+        }
+
+        function goToBookingStep(stepNum) {
+            [1, 2, 3, 4].forEach(i => {
+                document.getElementById(`booking-step-${i}`).classList.remove('active');
+                document.getElementById(`step-indicator-${i}`).classList.remove('active');
+            });
+
+            document.getElementById(`booking-step-${stepNum}`).classList.add('active');
+            document.getElementById(`step-indicator-${stepNum}`).classList.add('active');
+
+            if (stepNum === 3 && (!document.querySelectorAll('#time-slots-grid .select-card').length)) {
+                generateTimeSlots();
+            }
+
+            if (stepNum === 4) {
+                const dateVal = document.getElementById('book-date').value;
+                document.getElementById('sum-service').innerText = selectedService ? `${selectedService.name} (£${selectedService.price})` : '-';
+                document.getElementById('sum-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Available Barber';
+                document.getElementById('sum-datetime').innerText = `${dateVal} at ${selectedTimeSlot}`;
+                document.getElementById('sum-price').innerText = selectedService ? `£${Number(selectedService.price).toFixed(2)}` : '-';
+            }
         }
 
         async function handleBookingSubmit(e) {
             e.preventDefault();
+            const btn = document.getElementById('btn-submit-booking');
+            btn.disabled = true;
+            btn.innerText = 'RESERVING SLOT...';
+
             const dateStr = document.getElementById('book-date').value.replace(/-/g, '');
             const ref = `EBS-${dateStr}-${Math.floor(1000 + Math.random() * 9000)}`;
-            
+
             const payload = {
                 booking_ref: ref,
                 customer_name: document.getElementById('book-name').value,
                 customer_phone: document.getElementById('book-phone').value,
                 customer_email: document.getElementById('book-email').value,
-                service_id: document.getElementById('book-service').value,
-                barber_id: document.getElementById('book-barber').value || null,
+                service_id: selectedService ? selectedService.id : null,
+                barber_id: (selectedBarber && selectedBarber.id) ? selectedBarber.id : null,
                 appointment_date: document.getElementById('book-date').value,
-                start_time: document.getElementById('book-time').value,
-                end_time: document.getElementById('book-time').value,
+                start_time: selectedTimeSlot,
+                end_time: selectedTimeSlot,
                 status: 'New'
             };
 
             const { error } = await supabaseClient.from('appointments').insert([payload]);
+            btn.disabled = false;
+            btn.innerText = 'CONFIRM & RESERVATION';
+
             if (error) {
-                alert('Booking error: ' + error.message);
+                alert('Reservation error: ' + error.message);
             } else {
-                document.getElementById('appointment-form').style.display = 'none';
-                document.getElementById('booking-confirmation').style.display = 'block';
+                [1, 2, 3, 4].forEach(i => document.getElementById(`booking-step-${i}`).classList.remove('active'));
+                document.getElementById('booking-confirmation-pane').classList.add('active');
+
                 document.getElementById('conf-ref').innerText = ref;
+                document.getElementById('conf-name').innerText = payload.customer_name;
+                document.getElementById('conf-service').innerText = selectedService ? selectedService.name : 'Grooming Service';
+                document.getElementById('conf-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Barber';
+                document.getElementById('conf-datetime').innerText = `${payload.appointment_date} @ ${payload.start_time}`;
             }
         }
 
-        /* Backoffice Logic */
+        function resetBookingWizard() {
+            selectedService = null;
+            selectedBarber = null;
+            selectedTimeSlot = null;
+            document.getElementById('booking-confirmation-pane').classList.remove('active');
+            goToBookingStep(1);
+        }
+
+        /* ---------------- BACK OFFICE DASHBOARD ---------------- */
         function showBackoffice(e) {
             if (e) e.preventDefault();
             window.location.hash = 'backoffice';
             document.getElementById('backoffice-container').style.display = 'block';
-            
+
             supabaseClient.auth.getSession().then(({ data: { session } }) => {
                 if (session) {
                     document.getElementById('admin-login-view').style.display = 'none';
@@ -712,7 +879,7 @@
             const password = document.getElementById('admin-password').value;
             const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-            if (error) alert("Login failed: " + error.message);
+            if (error) alert("Authentication failed: " + error.message);
             else {
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
@@ -721,41 +888,69 @@
         }
 
         async function loadAdminData() {
-            // Appointments
-            const { data: appointments } = await supabaseClient.from('appointments').select('*');
+            // Appointments & Statistics
+            const { data: appointments } = await supabaseClient.from('appointments').select('*').order('created_at', { ascending: false });
+            const appList = appointments || [];
+
+            // Stats calculation
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todayCount = appList.filter(a => a.appointment_date === todayStr).length;
+            const newCount = appList.filter(a => a.status === 'New').length;
+            const confirmedCount = appList.filter(a => a.status === 'Confirmed').length;
+
+            document.getElementById('stat-today').innerText = todayCount;
+            document.getElementById('stat-new').innerText = newCount;
+            document.getElementById('stat-confirmed').innerText = confirmedCount;
+            document.getElementById('admin-unread-count').innerText = newCount;
+
+            // Render Appointments Table
             const appBody = document.getElementById('admin-appointments-list');
             appBody.innerHTML = '';
-            (appointments || []).forEach(a => {
+            
+            if (!appList.length) {
+                appBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No appointment records found.</td></tr>`;
+            }
+
+            appList.forEach(a => {
+                const srv = allServices.find(s => s.id === a.service_id);
+                const barb = allBarbers.find(b => b.id === a.barber_id);
+                const badgeClass = a.status === 'New' ? 'badge-new' : (a.status === 'Confirmed' ? 'badge-confirmed' : 'badge-cancelled');
+
                 appBody.innerHTML += `
                     <tr>
-                        <td>${a.booking_ref}</td>
-                        <td>${a.customer_name}<br>${a.customer_phone}</td>
-                        <td>${a.service_id}</td>
-                        <td>${a.barber_id || 'Any'}</td>
-                        <td>${a.appointment_date}</td>
-                        <td>${a.start_time}</td>
-                        <td><strong>${a.status}</strong></td>
-                        <td><button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn btn-sm">Confirm</button></td>
+                        <td style="font-weight:bold; color:var(--accent-gold);">${a.booking_ref}</td>
+                        <td>
+                            <strong>${a.customer_name}</strong><br>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">${a.customer_phone} | ${a.customer_email}</span>
+                        </td>
+                        <td>${srv ? srv.name : 'Treatment'}</td>
+                        <td>${barb ? barb.name : 'Any Barber'}</td>
+                        <td>${a.appointment_date}<br><small style="color:var(--text-muted);">${a.start_time}</small></td>
+                        <td><span class="badge ${badgeClass}">${a.status}</span></td>
+                        <td>
+                            <button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn btn-sm" style="margin-bottom:0.2rem;">Confirm</button>
+                            <button onclick="updateStatus('${a.id}', 'Cancelled')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Cancel</button>
+                        </td>
                     </tr>`;
             });
 
-            // Services
+            // Services Table
             const { data: services } = await supabaseClient.from('services').select('*');
             const srvBody = document.getElementById('admin-services-list');
             srvBody.innerHTML = '';
             (services || []).forEach(s => {
                 srvBody.innerHTML += `
                     <tr>
-                        <td>${s.name}</td>
+                        <td><strong>${s.name}</strong></td>
                         <td>${s.category}</td>
                         <td>£${Number(s.price).toFixed(2)}</td>
-                        <td>${s.estimated_minutes} min</td>
-                        <td>${s.active ? 'Active' : 'Inactive'}</td>
+                        <td>${s.estimated_minutes} MINS</td>
+                        <td>${s.active ? '<span style="color:var(--success);">Active</span>' : '<span style="color:var(--danger);">Inactive</span>'}</td>
                         <td><button onclick="toggleServiceActive('${s.id}', ${!s.active})" class="btn btn-sm btn-outline">${s.active ? 'Deactivate' : 'Activate'}</button></td>
                     </tr>`;
             });
 
-            // Barbers
+            // Barbers Table
             const { data: barbers } = await supabaseClient.from('barbers').select('*');
             const barbBody = document.getElementById('admin-barbers-list');
             barbBody.innerHTML = '';
@@ -763,14 +958,72 @@
                 barbBody.innerHTML += `
                     <tr>
                         <td><img src="${b.photo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"></td>
-                        <td>${b.name}</td>
-                        <td>${b.description || ''}</td>
-                        <td>${b.active ? 'Active' : 'Inactive'}</td>
+                        <td><strong>${b.name}</strong></td>
+                        <td>${b.description || '-'}</td>
+                        <td>${b.active ? '<span style="color:var(--success);">Active</span>' : '<span style="color:var(--danger);">Inactive</span>'}</td>
                         <td><button onclick="toggleBarberActive('${b.id}', ${!b.active})" class="btn btn-sm btn-outline">${b.active ? 'Deactivate' : 'Activate'}</button></td>
                     </tr>`;
             });
         }
 
+        async function pollAppointmentsForNotifications() {
+            const { data } = await supabaseClient.from('appointments').select('id, status');
+            if (data) {
+                const newCount = data.filter(a => a.status === 'New').length;
+                if (newCount > previousAppointmentCount && previousAppointmentCount !== 0) {
+                    try {
+                        document.getElementById('notif-audio').play();
+                    } catch (err) {
+                        console.log('Audio autoplay prevented by browser permissions.');
+                    }
+                }
+                previousAppointmentCount = newCount;
+                document.getElementById('admin-unread-count').innerText = newCount;
+            }
+        }
+
+        /* ---------------- DRAG AND DROP FILE UPLOADS ---------------- */
+        function setupDragAndDrop() {
+            setupZone('srv-dropzone', 'srv-file', 'srv-preview', (base64) => srvImageData = base64);
+            setupZone('barber-dropzone', 'barber-file', 'barber-preview', (base64) => barberImageData = base64);
+        }
+
+        function setupZone(zoneId, inputId, previewId, callback) {
+            const zone = document.getElementById(zoneId);
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            zone.addEventListener('click', () => input.click());
+
+            ['dragenter', 'dragover'].forEach(eName => {
+                zone.addEventListener(eName, (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+            });
+            ['dragleave', 'drop'].forEach(eName => {
+                zone.addEventListener(eName, (e) => { e.preventDefault(); zone.classList.remove('dragover'); });
+            });
+
+            zone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length) handleFile(files[0], preview, callback);
+            });
+
+            input.addEventListener('change', () => {
+                if (input.files.length) handleFile(input.files[0], preview, callback);
+            });
+        }
+
+        function handleFile(file, previewEl, callback) {
+            if (!file.type.startsWith('image/')) return alert('Please drop a valid image file.');
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewEl.src = e.target.result;
+                previewEl.style.display = 'block';
+                callback(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* ---------------- BACK OFFICE ACTIONS ---------------- */
         async function addService(e) {
             e.preventDefault();
             const category = document.getElementById('srv-cat').value;
@@ -786,11 +1039,11 @@
 
             const { error } = await supabaseClient.from('services').insert([payload]);
             if (error) alert("Error adding item: " + error.message);
-            else { 
-                alert("Item saved!"); 
+            else {
+                alert("Catalog item saved successfully!");
                 srvImageData = '';
                 document.getElementById('srv-preview').style.display = 'none';
-                loadAdminData(); fetchServices(); e.target.reset(); 
+                loadAdminData(); fetchServices(); e.target.reset();
             }
         }
 
@@ -805,11 +1058,11 @@
 
             const { error } = await supabaseClient.from('barbers').insert([payload]);
             if (error) alert("Error adding barber: " + error.message);
-            else { 
-                alert("Barber saved!"); 
+            else {
+                alert("Barber saved successfully!");
                 barberImageData = '';
                 document.getElementById('barber-preview').style.display = 'none';
-                loadAdminData(); fetchBarbers(); e.target.reset(); 
+                loadAdminData(); fetchBarbers(); e.target.reset();
             }
         }
 

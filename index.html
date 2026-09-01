@@ -2,969 +2,677 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Elite Barber Studio | Premium Grooming & Barbering</title>
-    <!-- Supabase JS Client -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Barber Studio</title>
+    <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --bg-dark: #0b0b0d;
-            --bg-card: #141417;
-            --bg-card-hover: #1c1c21;
-            --accent-gold: #c5a059;
-            --accent-gold-hover: #e0b86c;
-            --text-light: #f5f5f7;
-            --text-muted: #9e9ea7;
-            --border-color: #23232a;
-            --border-gold: rgba(197, 160, 89, 0.3);
-            --success: #2e7d32;
-            --warning: #ed6c02;
-            --danger: #d32f2f;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --primary: #111111;
+            --accent: #d4af37;
+            --bg-light: #f8f9fa;
+            --border-color: #e2e8f0;
+            --status-new: #fef08a;
+            --status-done: #bbf7d0;
+            --status-rejected: #fecaca;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-light); color: #333; line-height: 1.5; }
+
+        /* Navigation */
+        nav { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        nav h1 { font-size: 1.25rem; color: var(--accent); }
+        .nav-btn { background: var(--accent); border: none; padding: 0.5rem 1rem; color: black; font-weight: bold; cursor: pointer; border-radius: 4px; }
+
+        /* Main Container */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
-
-        h1, h2, h3, h4, .gold-text { font-family: 'Cinzel', serif; color: var(--accent-gold); letter-spacing: 1px; }
-
-        /* Public Top Info Banner */
-        .info-bar { background: #070708; border-bottom: 1px solid var(--border-color); padding: 0.5rem 1.5rem; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
-        .info-bar-left, .info-bar-right { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
-        .status-badge { font-weight: 700; padding: 2px 8px; border-radius: 3px; font-size: 0.7rem; text-transform: uppercase; }
-        .status-open { background: rgba(46, 125, 50, 0.2); color: #4caf50; border: 1px solid #4caf50; }
-        .status-closed { background: rgba(211, 47, 47, 0.2); color: #ef5350; border: 1px solid #ef5350; }
-
-        /* Navigation Header */
-        header { background: rgba(11, 11, 13, 0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0.8rem 1.5rem; }
-        .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
-        .logo-img { height: 40px; width: auto; object-fit: contain; }
-        .logo-text { font-size: 1.25rem; font-weight: 800; font-family: 'Cinzel', serif; letter-spacing: 2px; color: #fff; }
-        .logo-text span { color: var(--accent-gold); }
+        /* Utility Components */
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .btn { padding: 0.6rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; text-align: center; text-decoration: none; display: inline-block; }
+        .btn-primary { background: var(--accent); color: black; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-secondary { background: #64748b; color: white; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; }
         
-        .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
-        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 0.82rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
-        .nav-links a:hover { color: var(--accent-gold); }
+        /* Banner */
+        .business-banner { background: var(--primary); color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+        .business-banner h2 { color: var(--accent); margin-bottom: 0.5rem; }
+
+        /* Tables */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
+        th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; font-size: 0.875rem; }
+        th { background: #f1f5f9; }
+
+        /* Status Select Specific Styling */
+        select.status-select { border: none; padding: 4px 8px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
+        select.status-NEW { background-color: var(--status-new); color: #854d0e; }
+        select.status-DONE { background-color: var(--status-done); color: #166534; }
+        select.status-REJECTED { background-color: var(--status-rejected); color: #991b1b; }
+
+        /* Barber Photos */
+        .barber-thumb { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .barber-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-top: 0.5rem; }
         
-        /* Buttons */
-        .btn { background: var(--accent-gold); color: #0b0b0d; padding: 0.8rem 1.6rem; border: none; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.2px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); border-radius: 2px; min-height: 44px; }
-        .btn:hover { background: var(--accent-gold-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(197, 160, 89, 0.25); }
-        .btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
-        .btn-outline:hover { background: var(--accent-gold); color: #0b0b0d; }
-        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; min-height: 36px; }
+        /* Dashboard Metric Cards */
+        .metric-card { background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--accent); }
+        .metric-card span { font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: bold; }
+        .metric-card h3 { font-size: 1.5rem; margin-top: 0.2rem; }
 
-        section { padding: 4.5rem 1.5rem; max-width: 1280px; margin: 0 auto; }
-        
-        /* Dynamic Hero Section */
-        .hero { min-height: 82vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background-position: center; background-size: cover; background-repeat: no-repeat; padding-top: 5rem; position: relative; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,13,0.6) 0%, rgba(11,11,13,0.98) 100%); }
-        .hero-content { position: relative; z-index: 2; max-width: 800px; }
-        .hero h1 { font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 1rem; text-shadow: 0 4px 20px rgba(0,0,0,0.9); }
-        .hero p { font-size: clamp(0.95rem, 2vw, 1.2rem); color: var(--text-muted); margin-bottom: 2rem; font-weight: 300; }
-        .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-
-        /* Grid Frameworks */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 4px; transition: var(--transition); display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--border-gold); background: var(--bg-card-hover); }
-        .card img { width: 100%; height: 210px; object-fit: cover; border-radius: 2px; margin-bottom: 1rem; }
-        
-        /* Step Booking System */
-        .booking-container { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem; margin-top: 1.5rem; }
-        .booking-steps { display: flex; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; overflow-x: auto; gap: 1rem; }
-        .step-item { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; opacity: 0.5; }
-        .step-item.active { color: var(--accent-gold); opacity: 1; border-bottom: 2px solid var(--accent-gold); padding-bottom: 0.8rem; margin-bottom: -1rem; }
-        .booking-pane { display: none; }
-        .booking-pane.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Form Inputs */
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.4rem; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        input, select, textarea { width: 100%; padding: 0.85rem 1rem; background: #0f0f12; border: 1px solid var(--border-color); color: #fff; border-radius: 3px; font-size: 0.9rem; transition: var(--transition); min-height: 46px; }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent-gold); outline: none; }
-
-        .select-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-        .select-card { background: #0f0f12; border: 1px solid var(--border-color); padding: 1rem; border-radius: 4px; cursor: pointer; text-align: center; transition: var(--transition); }
-        .select-card:hover, .select-card.selected { border-color: var(--accent-gold); background: rgba(197, 160, 89, 0.05); }
-
-        /* Backoffice Layout */
-        #backoffice-container { display: none; background: #08080a; min-height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 2000; overflow-y: auto; padding: 1.5rem; -webkit-overflow-scrolling: touch; }
-        .admin-bar { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .admin-nav { display: flex; gap: 0.6rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; overflow-x: auto; white-space: nowrap; }
-        .admin-nav button { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.6rem 1.1rem; cursor: pointer; border-radius: 3px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
-        .admin-nav button.active { background: var(--accent-gold); color: #0b0b0d; border-color: var(--accent-gold); }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.8rem; }
-        .stat-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1rem; border-radius: 4px; border-left: 3px solid var(--accent-gold); }
-        .stat-card h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem; }
-        .stat-card .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; font-family: 'Cinzel', serif; }
-
-        .table-responsive { width: 100%; overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 4px; }
-        .table { width: 100%; border-collapse: collapse; min-width: 800px; background: var(--bg-card); }
-        .table th, .table td { padding: 0.85rem; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.82rem; }
-        .table th { background: #0f0f12; color: var(--accent-gold); font-family: 'Cinzel', serif; }
-
-        footer { background: #070708; border-top: 1px solid var(--border-color); padding: 3rem 1.5rem 1.5rem 1.5rem; font-size: 0.85rem; color: var(--text-muted); }
-        .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        /* Toggle Views */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .info-bar { justify-content: center; text-align: center; }
-            .hero { min-height: 70vh; }
-            #backoffice-container { padding: 1rem; }
+            .grid-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- AUDIO NOTIFICATION SOUND -->
-    <audio id="notif-audio" preload="auto">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
-    </audio>
+    <!-- NAVBAR -->
+    <nav>
+        <h1 id="navTitle">ELITE BARBER STUDIO</h1>
+        <button class="nav-btn" onclick="toggleView()">Switch View (Public/Admin)</button>
+    </nav>
 
-    <!-- PUBLIC TOP SHOP INFO BANNER -->
-    <div class="info-bar">
-        <div class="info-bar-left">
-            <span id="pub-banner-address">📍 Loading address...</span>
-            <span id="pub-banner-phone">📞 Loading phone...</span>
-        </div>
-        <div class="info-bar-right">
-            <div id="pub-status-indicator" class="status-badge status-open">CHECKING STATUS...</div>
-            <a id="pub-banner-whatsapp" href="#" target="_blank" style="color:#25D366; text-decoration:none; font-weight:600;">💬 WhatsApp</a>
-            <a id="pub-banner-maps" href="#" target="_blank" style="color:var(--accent-gold); text-decoration:none; font-weight:600;">📍 Directions</a>
-        </div>
-    </div>
+    <div class="container">
 
-    <!-- PUBLIC NAVIGATION HEADER -->
-    <header>
-        <nav>
-            <a href="#home" class="logo-container">
-                <img id="site-logo-img" src="" alt="Logo" class="logo-img" style="display:none;">
-                <span id="site-logo-text" class="logo-text">ELITE <span>BARBER</span></span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#barbers">Barbers</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#about">About & Map</a></li>
-                <li><a href="#booking">Book Now</a></li>
-                <li><a href="#backoffice" onclick="showBackoffice(event)" style="color:var(--accent-gold);">Admin</a></li>
-            </ul>
-            <a href="#booking" class="btn btn-sm">BOOK APPOINTMENT</a>
-        </nav>
-    </header>
-
-    <!-- PUBLIC WEBSITE CONTENT -->
-    <main id="public-website">
-        <!-- Dynamic Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 id="hero-title">LOOK SHARP. FEEL CONFIDENT.</h1>
-                <p id="hero-desc">Premium haircuts, precision beard grooming & facial rejuvenation treatments from professional barbers.</p>
-                <div class="hero-btns">
-                    <a href="#booking" class="btn">BOOK AN APPOINTMENT</a>
-                    <a href="#services" class="btn btn-outline">EXPLORE SERVICES</a>
-                </div>
+        <!-- PUBLIC WEBSITE VIEW -->
+        <div id="publicView" class="view-section active">
+            <!-- Business Details Banner -->
+            <div class="business-banner" id="publicBanner">
+                <h2 id="bannerShopName">Elite Barber Studio</h2>
+                <p>📍 <span id="bannerAddress">123 High Street, London</span> | 📞 <span id="bannerPhone">+44 7123 456789</span> | 💬 WhatsApp: <span id="bannerWhatsApp">+44 7123 456789</span></p>
+                <p>🕐 Hours: <span id="bannerHours">Mon-Sat: 9AM - 7PM</span></p>
             </div>
-        </section>
 
-        <!-- Trust Features -->
-        <div style="background: var(--bg-card); border-y: 1px solid var(--border-color); padding: 2rem 1.5rem;">
-            <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem; text-align:center;">
-                <div><h4 class="gold-text" style="font-size:0.9rem;">MASTER BARBERS</h4><p style="font-size:0.8rem; color:var(--text-muted);">Skilled UK specialists</p></div>
-                <div><h4 class="gold-text" style="font-size:0.9rem;">PREMIUM PRODUCTS</h4><p style="font-size:0.8rem; color:var(--text-muted);">Luxury oils & pomades</p></div>
-                <div><h4 class="gold-text" style="font-size:0.9rem;">EASY ONLINE BOOKING</h4><p style="font-size:0.8rem; color:var(--text-muted);">Real-time availability</p></div>
-                <div><h4 class="gold-text" style="font-size:0.9rem;">PRISTINE SETUP</h4><p style="font-size:0.8rem; color:var(--text-muted);">Clean & comfortable</p></div>
-            </div>
-        </div>
-
-        <!-- Dynamic Services Catalog -->
-        <section id="services">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <h2>SERVICES & TREATMENTS</h2>
-                <div style="display:flex; gap:0.5rem;">
-                    <button onclick="filterCategory('ALL')" class="btn btn-outline btn-sm">All</button>
-                    <button onclick="filterCategory('Hairstyles')" class="btn btn-outline btn-sm">Hair</button>
-                    <button onclick="filterCategory('Beards')" class="btn btn-outline btn-sm">Beards</button>
-                    <button onclick="filterCategory('Skin Care')" class="btn btn-outline btn-sm">Skin</button>
-                </div>
-            </div>
-            <div id="services-grid" class="grid">
-                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Loading catalog...</div>
-            </div>
-        </section>
-
-        <!-- Barbers Section -->
-        <section id="barbers">
-            <h2>OUR MASTER BARBERS</h2>
-            <div id="barbers-grid" class="grid">
-                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Loading barbers...</div>
-            </div>
-        </section>
-
-        <!-- Customer Reviews Section -->
-        <section id="reviews" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; margin-top: 2rem;">
-            <h2>CLIENT REVIEWS & TESTIMONIALS</h2>
-            <div id="reviews-grid" class="grid">
-                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">Loading reviews...</div>
-            </div>
-        </section>
-
-        <!-- STEP-BY-STEP BOOKING EXPERIENCE -->
-        <section id="booking">
-            <h2>BOOK YOUR APPOINTMENT</h2>
-            <div class="booking-container">
-                <div class="booking-steps">
-                    <div id="step-indicator-1" class="step-item active">1. Service</div>
-                    <div id="step-indicator-2" class="step-item">2. Barber</div>
-                    <div id="step-indicator-3" class="step-item">3. Date & Time</div>
-                    <div id="step-indicator-4" class="step-item">4. Confirm</div>
-                </div>
-
-                <!-- STEP 1: CHOOSE SERVICE -->
-                <div id="booking-step-1" class="booking-pane active">
-                    <h3 style="margin-bottom: 1rem;">Select Treatment</h3>
-                    <div id="booking-service-select-grid" class="select-card-grid"></div>
-                    <button onclick="goToBookingStep(2)" id="btn-to-step-2" class="btn" disabled style="width: 100%;">CONTINUE TO BARBER</button>
-                </div>
-
-                <!-- STEP 2: CHOOSE BARBER -->
-                <div id="booking-step-2" class="booking-pane">
-                    <h3 style="margin-bottom: 1rem;">Select Barber</h3>
-                    <div id="booking-barber-select-grid" class="select-card-grid"></div>
-                    <div style="display: flex; gap: 1rem;">
-                        <button onclick="goToBookingStep(1)" class="btn btn-outline" style="width: 50%;">BACK</button>
-                        <button onclick="goToBookingStep(3)" class="btn" style="width: 50%;">CONTINUE TO TIME</button>
-                    </div>
-                </div>
-
-                <!-- STEP 3: CHOOSE DATE & TIME -->
-                <div id="booking-step-3" class="booking-pane">
-                    <h3 style="margin-bottom: 1rem;">Select Date & Time</h3>
-                    <div class="form-group">
-                        <label>Appointment Date</label>
-                        <input type="date" id="book-date" onchange="generateTimeSlots()" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Available Slots</label>
-                        <div id="time-slots-grid" class="select-card-grid"></div>
-                    </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <button onclick="goToBookingStep(2)" class="btn btn-outline" style="width: 50%;">BACK</button>
-                        <button onclick="goToBookingStep(4)" id="btn-to-step-4" class="btn" disabled style="width: 50%;">CONTINUE TO DETAILS</button>
-                    </div>
-                </div>
-
-                <!-- STEP 4: CUSTOMER DETAILS & POLICY -->
-                <div id="booking-step-4" class="booking-pane">
-                    <h3 style="margin-bottom: 1rem;">Customer Details & Review</h3>
-                    <div style="background:#0f0f12; border:1px dashed var(--accent-gold); padding:1rem; border-radius:4px; margin-bottom:1rem; font-size:0.85rem;">
-                        <div><strong>Service:</strong> <span id="sum-service">-</span></div>
-                        <div><strong>Barber:</strong> <span id="sum-barber">-</span></div>
-                        <div><strong>Date/Time:</strong> <span id="sum-datetime">-</span></div>
-                        <div><strong>Price:</strong> <span id="sum-price" style="color:var(--accent-gold); font-weight:700;">-</span></div>
-                    </div>
-
-                    <form onsubmit="handleBookingSubmit(event)">
-                        <div class="form-group"><label>Full Name *</label><input type="text" id="book-name" required placeholder="John Doe"></div>
-                        <div class="form-group"><label>Mobile Phone (WhatsApp) *</label><input type="tel" id="book-phone" required placeholder="+44 7123 456789"></div>
-                        <div class="form-group"><label>Email Address *</label><input type="email" id="book-email" required placeholder="john@example.com"></div>
-                        <div class="form-group"><label>Notes / Preferences</label><textarea id="book-notes" rows="2" placeholder="Specific style requests..."></textarea></div>
-
-                        <!-- CANCELLATION POLICY -->
-                        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:0.8rem; border-radius:3px; font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">
-                            <strong>CANCELLATION POLICY:</strong>
-                            <p id="pub-policy-text">Please provide at least 24 hours notice when cancelling.</p>
+            <!-- Booking Section -->
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Book an Appointment</h3>
+                    <form id="publicBookingForm" onsubmit="handleBookingSubmit(event)">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="custName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile / WhatsApp Number *</label>
+                            <input type="tel" id="custPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address (Optional)</label>
+                            <input type="email" id="custEmail" placeholder="Optional">
+                        </div>
+                        <div class="form-group">
+                            <label>Select Treatment *</label>
+                            <select id="selectTreatment" required onchange="calculateDepositPreview()">
+                                <option value="Skin Fade" data-price="30">Skin Fade - £30</option>
+                                <option value="Beard Trim" data-price="15">Beard Trim - £15</option>
+                                <option value="Full Service" data-price="40">Full Service - £40</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Selected Hairstyle/Service *</label>
+                            <input type="text" id="custHairstyle" placeholder="e.g. Mid Fade with Beard" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Barber *</label>
+                            <select id="selectBarber" required></select>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Preferred Date *</label>
+                                <input type="date" id="custDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Preferred Time *</label>
+                                <input type="time" id="custTime" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes / Special Requirements (Optional)</label>
+                            <textarea id="custNotes" rows="2"></textarea>
                         </div>
 
-                        <div style="display: flex; gap: 1rem;">
-                            <button type="button" onclick="goToBookingStep(3)" class="btn btn-outline" style="width: 40%;">BACK</button>
-                            <button type="submit" id="btn-submit-booking" class="btn" style="width: 60%;">CONFIRM RESERVATION</button>
-                        </div>
+                        <div id="depositPreview" style="margin-bottom: 1rem; font-weight: bold; color: #b45309;"></div>
+
+                        <button type="submit" class="btn btn-primary">Submit Booking</button>
                     </form>
                 </div>
 
-                <!-- CONFIRMATION RECEIPT -->
-                <div id="booking-confirmation-pane" class="booking-pane" style="text-align: center; padding: 1.5rem 0;">
-                    <h2 class="gold-text" style="margin-bottom: 0.5rem;">APPOINTMENT REQUEST RECEIVED</h2>
-                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">Thank you for choosing <span id="conf-shop-name">Elite Barber Studio</span>.</p>
-                    
-                    <div style="background:#0f0f12; border:1px solid var(--border-gold); padding:1.2rem; border-radius:4px; max-width:480px; margin:0 auto 1.5rem auto; text-align:left; font-size:0.88rem;">
-                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Reference:</span><strong id="conf-ref" class="gold-text"></strong></div>
-                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Customer:</span><strong id="conf-name"></strong></div>
-                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Service:</span><strong id="conf-service"></strong></div>
-                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Barber:</span><strong id="conf-barber"></strong></div>
-                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Date & Time:</span><strong id="conf-datetime"></strong></div>
-                    </div>
-
-                    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
-                        <a id="conf-call-btn" href="#" class="btn btn-sm btn-outline">📞 Call Shop</a>
-                        <a id="conf-wa-btn" href="#" target="_blank" class="btn btn-sm btn-outline" style="border-color:#25D366; color:#25D366;">💬 WhatsApp Us</a>
-                        <a id="conf-map-btn" href="#" target="_blank" class="btn btn-sm">📍 Get Directions</a>
-                    </div>
-
-                    <button onclick="resetBookingWizard()" class="btn btn-sm">Make Another Reservation</button>
+                <!-- Confirmation / Display Card -->
+                <div class="card" id="confirmationContainer">
+                    <h3>Appointment Status</h3>
+                    <p style="color: #666;">Fill out the booking form to receive your payment details and booking reference.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- ABOUT & GOOGLE MAPS SECTION -->
-        <section id="about" style="border-top:1px solid var(--border-color);">
-            <h2>FIND OUR STUDIO</h2>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; margin-top:1.5rem;">
-                <div>
-                    <h3 id="about-shop-name" class="gold-text" style="font-size:1.1rem; margin-bottom:0.5rem;">Elite Barber Studio</h3>
-                    <p id="about-address" style="color:var(--text-muted); margin-bottom:1rem;">12 High Street, London</p>
-                    <p id="about-hours" style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.85rem;"></p>
-                    <a id="about-directions-btn" href="#" target="_blank" class="btn btn-sm">GET DIRECTIONS</a>
-                </div>
-                <div style="background:#0f0f12; border:1px solid var(--border-color); border-radius:4px; padding:2rem; text-align:center; display:flex; flex-direction:column; justify-content:center;">
-                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Interactive Navigation & Location</p>
-                    <a id="about-map-link" href="#" target="_blank" class="btn btn-outline btn-sm">OPEN IN GOOGLE MAPS</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- BACK OFFICE DASHBOARD (#backoffice) -->
-    <div id="backoffice-container">
-        <!-- Admin Banner Header -->
-        <div class="admin-bar">
-            <div>
-                <h2 id="adm-bar-shop-name" style="font-size:1.1rem; color:#fff;">ELITE BARBER STUDIO — BACK OFFICE</h2>
-                <div style="font-size:0.75rem; color:var(--text-muted);" id="adm-bar-meta">📍 London | 📞 Phone</div>
-            </div>
-            <div style="display:flex; align-items:center; gap:1rem;">
-                <div onclick="switchAdminTab('appointments')" style="cursor:pointer; font-size:1.1rem;">
-                    🔔 <span id="admin-unread-count" style="background:var(--danger); color:#fff; font-size:0.65rem; padding:2px 6px; border-radius:10px; font-weight:bold;">0</span>
-                </div>
-                <button onclick="hideBackoffice()" class="btn btn-outline btn-sm">Exit Dashboard</button>
             </div>
         </div>
 
-        <!-- LOGIN VIEW -->
-        <div id="admin-login-view" style="max-width:380px; margin:4rem auto; background:var(--bg-card); padding:2rem; border:1px solid var(--border-color); border-radius:4px;">
-            <h3 style="margin-bottom:1.2rem; text-align:center;">STAFF LOGIN</h3>
-            <div class="form-group"><label>Email</label><input type="email" id="admin-email" placeholder="admin@elitebarber.com"></div>
-            <div class="form-group"><label>Password</label><input type="password" id="admin-password" placeholder="••••••••"></div>
-            <button onclick="loginAdmin()" class="btn" style="width:100%;">LOGIN</button>
-        </div>
+        <!-- BACK OFFICE VIEW -->
+        <div id="adminView" class="view-section">
+            <h2>BACK OFFICE MANAGEMENT</h2>
+            <br>
 
-        <!-- AUTHENTICATED DASHBOARD PANELS -->
-        <div id="admin-dashboard-view" style="display:none;">
-            <div class="stats-grid">
-                <div class="stat-card"><h4>Today's Bookings</h4><div id="stat-today" class="stat-val">0</div></div>
-                <div class="stat-card"><h4>New Enquiries</h4><div id="stat-new" class="stat-val" style="color:var(--warning);">0</div></div>
-                <div class="stat-card"><h4>Confirmed</h4><div id="stat-confirmed" class="stat-val" style="color:var(--success);">0</div></div>
-                <div class="stat-card"><h4>Total Customers</h4><div id="stat-customers" class="stat-val" style="color:var(--accent-gold);">0</div></div>
+            <!-- Metrics Summary Cards -->
+            <div class="grid-4" style="margin-bottom: 1.5rem;">
+                <div class="metric-card"><span>Today's New</span><h3 id="mNew">0</h3></div>
+                <div class="metric-card"><span>Completed</span><h3 id="mDone">0</h3></div>
+                <div class="metric-card"><span>Rejected</span><h3 id="mRejected">0</h3></div>
+                <div class="metric-card"><span>Deposits Received</span><h3 id="mDeposits">£0.00</h3></div>
             </div>
 
-            <div class="admin-nav">
-                <button id="btn-tab-appointments" class="active" onclick="switchAdminTab('appointments')">Appointments</button>
-                <button id="btn-tab-business" onclick="switchAdminTab('business')">Shop Details & Hours</button>
-                <button id="btn-tab-services" onclick="switchAdminTab('services')">Services</button>
-                <button id="btn-tab-barbers" onclick="switchAdminTab('barbers')">Barbers</button>
-                <button id="btn-tab-reviews" onclick="switchAdminTab('reviews')">Reviews</button>
-                <button onclick="logoutAdmin()" style="margin-left:auto; border-color:var(--danger); color:var(--danger);">Logout</button>
-            </div>
-
-            <!-- TAB 1: APPOINTMENTS & CUSTOMER HISTORY -->
-            <div id="tab-appointments">
-                <h3>Appointments Master Table</h3>
+            <!-- Appointments Table -->
+            <div class="card">
+                <h3>Appointments</h3>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table>
                         <thead>
-                            <tr><th>Ref</th><th>Customer</th><th>Service</th><th>Barber</th><th>Date/Time</th><th>Status</th><th>Actions & Notes</th></tr>
+                            <tr>
+                                <th>Ref</th>
+                                <th>Customer</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Treatment</th>
+                                <th>Hairstyle</th>
+                                <th>Barber</th>
+                                <th>Date/Time</th>
+                                <th>Price</th>
+                                <th>Appt Status</th>
+                                <th>Payment Status</th>
+                                <th>History</th>
+                            </tr>
                         </thead>
-                        <tbody id="admin-appointments-list"></tbody>
+                        <tbody id="adminAppointmentsBody"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- TAB 2: BUSINESS PROFILE & OPENING HOURS -->
-            <div id="tab-business" style="display:none;">
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem;">
-                    <!-- Profile Form -->
-                    <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px;">
-                        <h3>Business Information Profile</h3>
-                        <form onsubmit="saveBusinessProfile(event)" style="margin-top:1rem;">
-                            <div class="form-group"><label>Shop Name</label><input type="text" id="prof-name" required></div>
-                            <div class="form-group"><label>Address</label><input type="text" id="prof-address" required></div>
-                            <div class="form-group"><label>Phone</label><input type="text" id="prof-phone" required></div>
-                            <div class="form-group"><label>WhatsApp</label><input type="text" id="prof-wa" required></div>
-                            <div class="form-group"><label>Email</label><input type="email" id="prof-email" required></div>
-                            <div class="form-group"><label>Google Maps URL</label><input type="text" id="prof-maps"></div>
-                            <div class="form-group"><label>Cancellation Policy</label><textarea id="prof-policy" rows="2"></textarea></div>
-                            <button type="submit" class="btn btn-sm" style="width:100%;">SAVE PROFILE DETAILS</button>
-                        </form>
+            <!-- Barber Management -->
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Manage Barbers</h3>
+                    <form id="barberForm" onsubmit="handleBarberSave(event)">
+                        <input type="hidden" id="barberId">
+                        <input type="hidden" id="currentPhotoUrl">
+                        <div class="form-group">
+                            <label>Barber Name</label>
+                            <input type="text" id="barberName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specialty</label>
+                            <input type="text" id="barberSpecialty">
+                        </div>
+                        <div class="form-group">
+                            <label>Biography</label>
+                            <textarea id="barberBio" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="barberActive">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Photo</label>
+                            <input type="file" id="barberPhotoInput" accept="image/*" onchange="previewBarberImage(event)">
+                            <img id="barberImagePreview" class="barber-preview" src="https://via.placeholder.com/100?text=No+Photo">
+                            <br><br>
+                            <button type="button" class="btn btn-secondary" onclick="removeBarberPhoto()" style="width: auto; padding: 4px 8px; font-size: 0.8rem;">Remove Photo</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Barber Record</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Barber Roster</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barberTableBody"></tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Hours Form -->
-                    <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px;">
-                        <h3>Opening Hours Schedule</h3>
-                        <div id="admin-hours-list" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.8rem;"></div>
+            <!-- Payment & Deposit Settings -->
+            <div class="card">
+                <h3>Payment & Deposit Settings</h3>
+                <form id="paymentSettingsForm" onsubmit="handleSettingsSave(event)" class="grid-2">
+                    <div>
+                        <div class="form-group">
+                            <label>Payment Mode</label>
+                            <select id="cfgPaymentMode">
+                                <option value="NO_DEPOSIT">No Deposit</option>
+                                <option value="FIXED">Fixed Deposit</option>
+                                <option value="PERCENTAGE">Percentage Deposit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fixed Deposit Amount (£)</label>
+                            <input type="number" step="0.01" id="cfgFixedDeposit" value="10.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Percentage Deposit (%)</label>
+                            <input type="number" step="1" id="cfgPercentageDeposit" value="20">
+                        </div>
+                        <div class="form-group">
+                            <label>Enable Payment Link</label>
+                            <select id="cfgEnableLink">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Link URL</label>
+                            <input type="url" id="cfgLinkUrl" placeholder="https://buy.stripe.com/...">
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: SERVICES -->
-            <div id="tab-services" style="display:none;">
-                <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px; margin-bottom:1.5rem;">
-                    <h3>Add Catalog Item</h3>
-                    <form onsubmit="addService(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:0.8rem; margin-top:1rem;">
-                        <input type="text" id="srv-name" placeholder="Item Name" required>
-                        <select id="srv-cat"><option value="Hairstyles">Hairstyles</option><option value="Beards">Beards</option><option value="Skin Care">Skin Care</option></select>
-                        <input type="number" step="0.01" id="srv-price" placeholder="Price (£)" required>
-                        <input type="number" id="srv-mins" placeholder="Mins" required>
-                        <button type="submit" class="btn btn-sm" style="grid-column:span 2;">SAVE SERVICE</button>
-                    </form>
-                </div>
-                <div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Cat</th><th>Price</th><th>Mins</th><th>Status</th><th>Action</th></tr></thead><tbody id="admin-services-list"></tbody></table></div>
-            </div>
-
-            <!-- TAB 4: BARBERS -->
-            <div id="tab-barbers" style="display:none;">
-                <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px; margin-bottom:1.5rem;">
-                    <h3>Add Barber</h3>
-                    <form onsubmit="addBarber(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.8rem; margin-top:1rem;">
-                        <input type="text" id="barber-name" placeholder="Name" required>
-                        <input type="text" id="barber-desc" placeholder="Specialty" required>
-                        <button type="submit" class="btn btn-sm">SAVE BARBER</button>
-                    </form>
-                </div>
-                <div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Specialty</th><th>Status</th><th>Action</th></tr></thead><tbody id="admin-barbers-list"></tbody></table></div>
-            </div>
-
-            <!-- TAB 5: REVIEWS -->
-            <div id="tab-reviews" style="display:none;">
-                <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px; margin-bottom:1.5rem;">
-                    <h3>Add Review / Testimonial</h3>
-                    <form onsubmit="addReview(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.8rem; margin-top:1rem;">
-                        <input type="text" id="rev-name" placeholder="Customer Name" required>
-                        <select id="rev-rating"><option value="5">5 Stars</option><option value="4">4 Stars</option></select>
-                        <input type="text" id="rev-text" placeholder="Review Text" style="grid-column:span 2;" required>
-                        <button type="submit" class="btn btn-sm" style="grid-column:span 2;">PUBLISH REVIEW</button>
-                    </form>
-                </div>
-                <div class="table-responsive"><table class="table"><thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Action</th></tr></thead><tbody id="admin-reviews-list"></tbody></table></div>
+                    <div>
+                        <div class="form-group">
+                            <label>Enable Bank Transfer</label>
+                            <select id="cfgEnableBank">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Account Name</label>
+                            <input type="text" id="cfgBankName">
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" id="cfgBankBank">
+                        </div>
+                        <div class="form-group">
+                            <label>Sort Code</label>
+                            <input type="text" id="cfgBankSort">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input type="text" id="cfgBankAcc">
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Instructions</label>
+                            <textarea id="cfgBankInstructions" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </form>
             </div>
         </div>
+
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <h3 id="ft-shop-name" class="gold-text" style="font-size:1rem; margin-bottom:0.8rem;">ELITE BARBER STUDIO</h3>
-                <p id="ft-desc">Authentic grooming excellence and executive facials.</p>
-            </div>
-            <div>
-                <h4>CONTACT & LOCATION</h4>
-                <p id="ft-address">12 High Street, London</p>
-                <p id="ft-phone">Phone: +44 20 7946 0912</p>
-                <p id="ft-email">info@elitebarberstudio.co.uk</p>
-            </div>
-            <div>
-                <h4>OPENING HOURS</h4>
-                <div id="ft-hours-list" style="font-size:0.8rem; color:var(--text-muted);"></div>
-            </div>
-        </div>
-        <div style="text-align: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
-            <p>&copy; 2026 <span id="ft-copy-name">Elite Barber Studio</span>. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- CONTROLLER SCRIPT -->
+    <!-- JAVASCRIPT APPLICATION ARCHITECTURE -->
     <script>
-        const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // 1. SUPABASE INITIALIZATION
+        // Ensure you plug in your actual Supabase credentials below if not loaded globally
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let bizProfile = {};
-        let openingSchedule = [];
-        let allServices = [];
-        let allBarbers = [];
-        let selectedService = null;
-        let selectedBarber = null;
-        let selectedTimeSlot = null;
+        const DEFAULT_PLACEHOLDER = 'https://via.placeholder.com/100?text=No+Photo';
+        let cachedSettings = {};
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            await fetchBusinessProfile();
-            await fetchOpeningHours();
-            await fetchServices();
-            await fetchBarbers();
-            await fetchReviews();
-            initDateMin();
-
-            if (window.location.hash === '#backoffice') showBackoffice();
+        // 2. INITIALIZATION & ROUTING
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadBusinessSettings();
+            await loadBarbers();
+            await loadAppointments();
+            calculateDepositPreview();
         });
 
-        function initDateMin() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('book-date').min = today;
-            document.getElementById('book-date').value = today;
+        function toggleView() {
+            const pub = document.getElementById('publicView');
+            const adm = document.getElementById('adminView');
+            pub.classList.toggle('active');
+            adm.classList.toggle('active');
         }
 
-        /* ---------------- DYNAMIC BUSINESS PROFILE & HOURS ---------------- */
-        async function fetchBusinessProfile() {
-            const { data } = await supabaseClient.from('business_profile').select('*').single();
+        // 3. BUSINESS PROFILE & SETTINGS
+        async function loadBusinessSettings() {
+            const { data, error } = await supabaseClient.from('business_profile').select('*').single();
             if (data) {
-                bizProfile = data;
-                // Render Public Banners
-                document.getElementById('pub-banner-address').innerText = `📍 ${data.address}`;
-                document.getElementById('pub-banner-phone').innerText = `📞 ${data.phone}`;
-                document.getElementById('pub-banner-phone').setAttribute('href', `tel:${data.phone}`);
-                document.getElementById('pub-banner-whatsapp').setAttribute('href', `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(data.shop_name)},%20I%20would%20like%20to%20book%20an%20appointment.`);
-                document.getElementById('pub-banner-maps').setAttribute('href', data.google_maps_url || '#');
+                cachedSettings = data;
+                document.getElementById('bannerShopName').innerText = data.shop_name || 'Elite Barber Studio';
+                document.getElementById('bannerAddress').innerText = `${data.address || ''} ${data.postcode || ''}`;
+                document.getElementById('bannerPhone').innerText = data.phone || '';
+                document.getElementById('bannerWhatsApp').innerText = data.whatsapp || '';
 
-                // Hero & Headers
-                document.getElementById('hero-title').innerText = `LOOK SHARP AT ${data.shop_name.toUpperCase()}`;
-                document.getElementById('hero-desc').innerText = data.description;
-                document.getElementById('site-logo-text').innerHTML = `${data.shop_name.split(' ')[0]} <span>${data.shop_name.split(' ').slice(1).join(' ')}</span>`;
-                
-                // Backoffice Bar
-                document.getElementById('adm-bar-shop-name').innerText = `${data.shop_name.toUpperCase()} — BACK OFFICE`;
-                document.getElementById('adm-bar-meta').innerText = `📍 ${data.address} | 📞 ${data.phone}`;
-
-                // Policy & About
-                document.getElementById('pub-policy-text').innerText = data.cancellation_policy;
-                document.getElementById('about-shop-name').innerText = data.shop_name;
-                document.getElementById('about-address').innerText = data.address;
-                document.getElementById('about-directions-btn').setAttribute('href', data.google_maps_url || '#');
-                document.getElementById('about-map-link').setAttribute('href', data.google_maps_url || '#');
-
-                // Footer
-                document.getElementById('ft-shop-name').innerText = data.shop_name;
-                document.getElementById('ft-desc').innerText = data.description;
-                document.getElementById('ft-address').innerText = data.address;
-                document.getElementById('ft-phone').innerText = `Phone: ${data.phone}`;
-                document.getElementById('ft-email').innerText = data.email;
-                document.getElementById('ft-copy-name').innerText = data.shop_name;
-
-                // Form prefill
-                document.getElementById('prof-name').value = data.shop_name;
-                document.getElementById('prof-address').value = data.address;
-                document.getElementById('prof-phone').value = data.phone;
-                document.getElementById('prof-wa').value = data.whatsapp;
-                document.getElementById('prof-email').value = data.email;
-                document.getElementById('prof-maps').value = data.google_maps_url;
-                document.getElementById('prof-policy').value = data.cancellation_policy;
+                // Populate Settings Form
+                document.getElementById('cfgPaymentMode').value = data.payment_mode || 'NO_DEPOSIT';
+                document.getElementById('cfgFixedDeposit').value = data.default_deposit_fixed || 10.00;
+                document.getElementById('cfgPercentageDeposit').value = data.default_deposit_percentage || 20;
+                document.getElementById('cfgEnableLink').value = data.enable_payment_link ? 'true' : 'false';
+                document.getElementById('cfgLinkUrl').value = data.payment_link_url || '';
+                document.getElementById('cfgEnableBank').value = data.enable_bank_transfer ? 'true' : 'false';
+                document.getElementById('cfgBankName').value = data.bank_account_name || '';
+                document.getElementById('cfgBankBank').value = data.bank_name || '';
+                document.getElementById('cfgBankSort').value = data.bank_sort_code || '';
+                document.getElementById('cfgBankAcc').value = data.bank_account_number || '';
+                document.getElementById('cfgBankInstructions').value = data.bank_instructions || '';
             }
         }
 
-        async function fetchOpeningHours() {
-            const { data } = await supabaseClient.from('opening_hours').select('*');
-            if (data) {
-                openingSchedule = data;
-                calculateOpenStatus(data);
+        async function handleSettingsSave(e) {
+            e.preventDefault();
+            const payload = {
+                payment_mode: document.getElementById('cfgPaymentMode').value,
+                default_deposit_fixed: parseFloat(document.getElementById('cfgFixedDeposit').value),
+                default_deposit_percentage: parseFloat(document.getElementById('cfgPercentageDeposit').value),
+                enable_payment_link: document.getElementById('cfgEnableLink').value === 'true',
+                payment_link_url: document.getElementById('cfgLinkUrl').value,
+                enable_bank_transfer: document.getElementById('cfgEnableBank').value === 'true',
+                bank_account_name: document.getElementById('cfgBankName').value,
+                bank_name: document.getElementById('cfgBankBank').value,
+                bank_sort_code: document.getElementById('cfgBankSort').value,
+                bank_account_number: document.getElementById('cfgBankAcc').value,
+                bank_instructions: document.getElementById('cfgBankInstructions').value
+            };
 
-                // Footer Hours
-                const ftHours = document.getElementById('ft-hours-list');
-                const abtHours = document.getElementById('about-hours');
-                ftHours.innerHTML = '';
-                
-                let hoursSummary = [];
-                data.forEach(h => {
-                    const row = `<div>${h.day_of_week}: ${h.is_open ? `${h.open_time.slice(0,5)} - ${h.close_time.slice(0,5)}` : 'Closed'}</div>`;
-                    ftHours.innerHTML += row;
-                    if(h.is_open) hoursSummary.push(`${h.day_of_week.slice(0,3)}: ${h.open_time.slice(0,5)}-${h.close_time.slice(0,5)}`);
-                });
-                abtHours.innerText = hoursSummary.join(' | ');
-
-                // Admin Form List
-                const admHours = document.getElementById('admin-hours-list');
-                admHours.innerHTML = '';
-                data.forEach(h => {
-                    admHours.innerHTML += `
-                        <div style="display:flex; justify-space-between; align-items:center; background:#0f0f12; padding:0.6rem; border-radius:3px; font-size:0.8rem;">
-                            <strong>${h.day_of_week}</strong>
-                            <div style="display:flex; gap:0.5rem; align-items:center;">
-                                <input type="checkbox" ${h.is_open ? 'checked' : ''} onchange="updateHourStatus('${h.id}', this.checked)">
-                                <span>${h.is_open ? 'Open' : 'Closed'}</span>
-                            </div>
-                        </div>`;
-                });
-            }
-        }
-
-        function calculateOpenStatus(schedule) {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const now = new Date();
-            const todayName = days[now.getDay()];
-            const todaySched = schedule.find(s => s.day_of_week === todayName);
-
-            const badge = document.getElementById('pub-status-indicator');
-            if (todaySched && todaySched.is_open) {
-                badge.innerText = `🟢 OPEN TODAY: ${todaySched.open_time.slice(0,5)} - ${todaySched.close_time.slice(0,5)}`;
-                badge.className = 'status-badge status-open';
+            const { error } = await supabaseClient.from('business_profile').update(payload).eq('id', 1);
+            if (!error) {
+                alert('Settings updated successfully!');
+                await loadBusinessSettings();
+                calculateDepositPreview();
             } else {
-                badge.innerText = `🔴 CLOSED TODAY`;
-                badge.className = 'status-badge status-closed';
+                alert('Error updating settings: ' + error.message);
             }
         }
 
-        /* ---------------- SERVICES, BARBERS, REVIEWS ---------------- */
-        async function fetchServices() {
-            const { data } = await supabaseClient.from('services').select('*').eq('active', true);
-            allServices = data || [];
-            renderServicesCatalog(allServices);
-            renderBookingServiceSelect(allServices);
+        // 4. DEPOSIT COMPUTATION LOGIC
+        function calculateDepositAmount(price) {
+            if (cachedSettings.payment_mode === 'FIXED') {
+                return Math.min(price, parseFloat(cachedSettings.default_deposit_fixed || 0));
+            } else if (cachedSettings.payment_mode === 'PERCENTAGE') {
+                const pct = parseFloat(cachedSettings.default_deposit_percentage || 0) / 100;
+                return price * pct;
+            }
+            return 0.00;
         }
 
-        function renderServicesCatalog(items) {
-            const grid = document.getElementById('services-grid');
-            grid.innerHTML = '';
-            items.forEach(s => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="${s.image || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800'}" alt="${s.name}">
-                        <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:600; text-transform:uppercase;">${s.category}</div>
-                        <h3 style="font-size:1.1rem; color:#fff; font-family:'Cinzel', serif;">${s.name}</h3>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">${s.description || 'Professional grooming service.'}</p>
-                        <div style="display:flex; justify-space-between; align-items:center; margin-top:auto; border-top:1px solid var(--border-color); padding-top:0.8rem;">
-                            <div><strong style="color:var(--accent-gold); font-size:1.2rem;">£${Number(s.price).toFixed(2)}</strong> <small style="color:var(--text-muted);">${s.estimated_minutes}m</small></div>
-                            <button onclick="quickSelectService('${s.id}')" class="btn btn-sm">BOOK</button>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        async function fetchBarbers() {
-            const { data } = await supabaseClient.from('barbers').select('*').eq('active', true);
-            allBarbers = data || [];
-            const grid = document.getElementById('barbers-grid');
-            grid.innerHTML = '';
-            allBarbers.forEach(b => {
-                grid.innerHTML += `
-                    <div class="card" style="text-align:center;">
-                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}" style="border-radius:50%; width:120px; height:120px; margin:0 auto 1rem auto; object-fit:cover;">
-                        <h3 style="font-size:1.1rem; color:#fff; font-family:'Cinzel', serif;">${b.name}</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">${b.description || 'Barber Specialist'}</p>
-                    </div>`;
-            });
-            renderBookingBarberSelect(allBarbers);
-        }
-
-        async function fetchReviews() {
-            const { data } = await supabaseClient.from('reviews').select('*').eq('active', true);
-            const grid = document.getElementById('reviews-grid');
-            grid.innerHTML = '';
-            (data || []).forEach(r => {
-                grid.innerHTML += `
-                    <div class="card" style="padding:1.2rem;">
-                        <div style="color:var(--accent-gold); font-size:0.9rem; margin-bottom:0.4rem;">★★★★★</div>
-                        <p style="font-size:0.85rem; color:#fff; font-style:italic; margin-bottom:0.8rem;">"${r.review_text}"</p>
-                        <strong style="font-size:0.8rem; color:var(--text-muted);">— ${r.customer_name}</strong>
-                    </div>`;
-            });
-        }
-
-        function filterCategory(cat) {
-            if (cat === 'ALL') renderServicesCatalog(allServices);
-            else renderServicesCatalog(allServices.filter(s => s.category === cat));
-        }
-
-        /* ---------------- WIZARD BOOKING LOGIC ---------------- */
-        function renderBookingServiceSelect(items) {
-            const container = document.getElementById('booking-service-select-grid');
-            container.innerHTML = '';
-            items.forEach(s => {
-                container.innerHTML += `
-                    <div class="select-card" id="srv-card-${s.id}" onclick="selectServiceForBooking('${s.id}')">
-                        <strong style="color:#fff; font-size:0.9rem;">${s.name}</strong>
-                        <div style="color:var(--accent-gold); font-size:0.8rem; font-weight:bold; margin-top:0.3rem;">£${Number(s.price).toFixed(2)} (${s.estimated_minutes}m)</div>
-                    </div>`;
-            });
-        }
-
-        function selectServiceForBooking(id) {
-            selectedService = allServices.find(s => s.id === id);
-            document.querySelectorAll('#booking-service-select-grid .select-card').forEach(el => el.classList.remove('selected'));
-            document.getElementById(`srv-card-${id}`).classList.add('selected');
-            document.getElementById('btn-to-step-2').disabled = false;
-        }
-
-        function quickSelectService(id) {
-            selectServiceForBooking(id);
-            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
-            goToBookingStep(2);
-        }
-
-        function renderBookingBarberSelect(barbers) {
-            const container = document.getElementById('booking-barber-select-grid');
-            container.innerHTML = `
-                <div class="select-card selected" id="barber-card-any" onclick="selectBarberForBooking(null)">
-                    <strong style="color:#fff;">Any Available Barber</strong>
-                </div>`;
-            barbers.forEach(b => {
-                container.innerHTML += `
-                    <div class="select-card" id="barber-card-${b.id}" onclick="selectBarberForBooking('${b.id}')">
-                        <strong style="color:#fff;">${b.name}</strong>
-                    </div>`;
-            });
-        }
-
-        function selectBarberForBooking(id) {
-            if (!id) selectedBarber = { id: null, name: 'Any Available Barber' };
-            else selectedBarber = allBarbers.find(b => b.id === id);
-
-            document.querySelectorAll('#booking-barber-select-grid .select-card').forEach(el => el.classList.remove('selected'));
-            const selId = id ? `barber-card-${id}` : 'barber-card-any';
-            document.getElementById(selId).classList.add('selected');
-        }
-
-        function generateTimeSlots() {
-            const container = document.getElementById('time-slots-grid');
-            container.innerHTML = '';
-            const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-            times.forEach(t => {
-                container.innerHTML += `
-                    <div class="select-card" id="slot-${t.replace(':','')}" onclick="selectTimeSlot('${t}')">
-                        <strong style="color:#fff;">${t}</strong>
-                    </div>`;
-            });
-        }
-
-        function selectTimeSlot(t) {
-            selectedTimeSlot = t;
-            document.querySelectorAll('#time-slots-grid .select-card').forEach(el => el.classList.remove('selected'));
-            document.getElementById(`slot-${t.replace(':','')}`).classList.add('selected');
-            document.getElementById('btn-to-step-4').disabled = false;
-        }
-
-        function goToBookingStep(stepNum) {
-            [1, 2, 3, 4].forEach(i => {
-                document.getElementById(`booking-step-${i}`).classList.remove('active');
-                document.getElementById(`step-indicator-${i}`).classList.remove('active');
-            });
-            document.getElementById(`booking-step-${stepNum}`).classList.add('active');
-            document.getElementById(`step-indicator-${stepNum}`).classList.add('active');
-
-            if (stepNum === 3 && (!document.querySelectorAll('#time-slots-grid .select-card').length)) generateTimeSlots();
-
-            if (stepNum === 4) {
-                document.getElementById('sum-service').innerText = selectedService ? `${selectedService.name} (£${selectedService.price})` : '-';
-                document.getElementById('sum-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Barber';
-                document.getElementById('sum-datetime').innerText = `${document.getElementById('book-date').value} @ ${selectedTimeSlot}`;
-                document.getElementById('sum-price').innerText = selectedService ? `£${Number(selectedService.price).toFixed(2)}` : '-';
+        function calculateDepositPreview() {
+            const select = document.getElementById('selectTreatment');
+            const price = parseFloat(select.options[select.selectedIndex].getAttribute('data-price') || 0);
+            const deposit = calculateDepositAmount(price);
+            const container = document.getElementById('depositPreview');
+            
+            if (deposit > 0) {
+                container.innerText = `Required Deposit: £${deposit.toFixed(2)} (Balance on arrival: £${(price - deposit).toFixed(2)})`;
+            } else {
+                container.innerText = `No deposit required for this booking.`;
             }
         }
 
+        // 5. PUBLIC BOOKING SYSTEM
         async function handleBookingSubmit(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-submit-booking');
-            btn.disabled = true; btn.innerText = 'RESERVING...';
-
-            const dateStr = document.getElementById('book-date').value.replace(/-/g, '');
-            const ref = `EBS-${dateStr}-${Math.floor(1000 + Math.random() * 9000)}`;
+            const select = document.getElementById('selectTreatment');
+            const price = parseFloat(select.options[select.selectedIndex].getAttribute('data-price'));
+            const deposit = calculateDepositAmount(price);
+            const emailValue = document.getElementById('custEmail').value.trim();
 
             const payload = {
-                booking_ref: ref,
-                customer_name: document.getElementById('book-name').value,
-                customer_phone: document.getElementById('book-phone').value,
-                customer_email: document.getElementById('book-email').value,
-                service_id: selectedService ? selectedService.id : null,
-                barber_id: (selectedBarber && selectedBarber.id) ? selectedBarber.id : null,
-                appointment_date: document.getElementById('book-date').value,
-                start_time: selectedTimeSlot,
-                end_time: selectedTimeSlot,
-                status: 'New'
+                booking_ref: 'EBS-' + Math.floor(100000 + Math.random() * 900000),
+                customer_name: document.getElementById('custName').value,
+                customer_phone: document.getElementById('custPhone').value,
+                customer_email: emailValue !== '' ? emailValue : null,
+                treatment: select.value,
+                hairstyle: document.getElementById('custHairstyle').value,
+                barber_id: document.getElementById('selectBarber').value,
+                appointment_date: document.getElementById('custDate').value,
+                appointment_time: document.getElementById('custTime').value,
+                price: price,
+                deposit_amount: deposit,
+                balance_amount: price - deposit,
+                notes: document.getElementById('custNotes').value,
+                status: 'NEW',
+                payment_status: deposit > 0 ? 'DEPOSIT PENDING' : 'UNPAID'
             };
 
-            const { error } = await supabaseClient.from('appointments').insert([payload]);
-            btn.disabled = false; btn.innerText = 'CONFIRM RESERVATION';
+            const { data, error } = await supabaseClient.from('appointments').insert([payload]).select().single();
 
             if (error) {
-                alert("Booking Error: " + error.message);
-            } else {
-                [1, 2, 3, 4].forEach(i => document.getElementById(`booking-step-${i}`).classList.remove('active'));
-                document.getElementById('booking-confirmation-pane').classList.add('active');
-
-                document.getElementById('conf-shop-name').innerText = bizProfile.shop_name;
-                document.getElementById('conf-ref').innerText = ref;
-                document.getElementById('conf-name').innerText = payload.customer_name;
-                document.getElementById('conf-service').innerText = selectedService ? selectedService.name : 'Grooming';
-                document.getElementById('conf-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Barber';
-                document.getElementById('conf-datetime').innerText = `${payload.appointment_date} @ ${payload.start_time}`;
-                document.getElementById('conf-call-btn').setAttribute('href', `tel:${bizProfile.phone}`);
-                document.getElementById('conf-wa-btn').setAttribute('href', `https://wa.me/${bizProfile.whatsapp.replace(/[^0-9]/g, '')}`);
-                document.getElementById('conf-map-btn').setAttribute('href', bizProfile.google_maps_url || '#');
+                alert('Booking failed: ' + error.message);
+                return;
             }
+
+            renderConfirmation(data);
+            loadAppointments();
         }
 
-        function resetBookingWizard() {
-            selectedService = null; selectedBarber = null; selectedTimeSlot = null;
-            document.getElementById('booking-confirmation-pane').classList.remove('active');
-            goToBookingStep(1);
-        }
+        function renderConfirmation(app) {
+            let paymentSectionHTML = '';
 
-        /* ---------------- BACK OFFICE OPERATIONS ---------------- */
-        function showBackoffice(e) {
-            if (e) e.preventDefault();
-            window.location.hash = 'backoffice';
-            document.getElementById('backoffice-container').style.display = 'block';
+            if (app.deposit_amount > 0) {
+                paymentSectionHTML += `<div style="margin-top:1rem; padding:1rem; background:#fffbe8; border:1px solid #fde047; border-radius:6px;">
+                    <h4>Deposit Required: £${parseFloat(app.deposit_amount).toFixed(2)}</h4>
+                    <p>Remaining Balance: £${parseFloat(app.balance_amount).toFixed(2)}</p><br>`;
 
-            supabaseClient.auth.getSession().then(({ data: { session } }) => {
-                if (session) {
-                    document.getElementById('admin-login-view').style.display = 'none';
-                    document.getElementById('admin-dashboard-view').style.display = 'block';
-                    loadAdminData();
-                } else {
-                    document.getElementById('admin-login-view').style.display = 'block';
-                    document.getElementById('admin-dashboard-view').style.display = 'none';
+                if (cachedSettings.enable_payment_link && cachedSettings.payment_link_url) {
+                    paymentSectionHTML += `<a href="${cachedSettings.payment_link_url}" target="_blank" class="btn btn-primary" style="margin-bottom:0.5rem;">PAY £${parseFloat(app.deposit_amount).toFixed(2)} DEPOSIT ONLINE</a>`;
                 }
-            });
-        }
 
-        function hideBackoffice() { window.location.hash = ''; document.getElementById('backoffice-container').style.display = 'none'; }
-
-        async function loginAdmin() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) alert("Login Failed: " + error.message);
-            else {
-                document.getElementById('admin-login-view').style.display = 'none';
-                document.getElementById('admin-dashboard-view').style.display = 'block';
-                loadAdminData();
+                if (cachedSettings.enable_bank_transfer) {
+                    paymentSectionHTML += `
+                        <div style="font-size:0.85rem; background:white; padding:0.75rem; border-radius:4px; margin-top:0.5rem;">
+                            <strong>PAY BY BANK TRANSFER</strong><br>
+                            Account Name: ${cachedSettings.bank_account_name || ''}<br>
+                            Bank: ${cachedSettings.bank_name || ''}<br>
+                            Sort Code: ${cachedSettings.bank_sort_code || ''}<br>
+                            Account No: ${cachedSettings.bank_account_number || ''}<br>
+                            Reference: <strong>${app.booking_ref}</strong><br>
+                            <em>${cachedSettings.bank_instructions || ''}</em>
+                        </div>
+                    `;
+                }
+                paymentSectionHTML += `</div>`;
             }
+
+            document.getElementById('confirmationContainer').innerHTML = `
+                <div style="border-left: 4px solid var(--accent); padding-left:1rem;">
+                    <h3>APPOINTMENT REQUEST RECEIVED</h3>
+                    <p><strong>Ref:</strong> ${app.booking_ref}</p>
+                    <p><strong>Service:</strong> ${app.treatment} (${app.hairstyle})</p>
+                    <p><strong>Date & Time:</strong> ${app.appointment_date} at ${app.appointment_time}</p>
+                    <p><strong>Total Price:</strong> £${parseFloat(app.price).toFixed(2)}</p>
+                    ${paymentSectionHTML}
+                </div>
+            `;
         }
 
-        async function loadAdminData() {
-            const { data: appointments } = await supabaseClient.from('appointments').select('*').order('created_at', { ascending: false });
-            const appList = appointments || [];
+        // 6. APPOINTMENT MANAGEMENT & STATUS HISTORY
+        async function loadAppointments() {
+            const { data: appointments } = await supabaseClient.from('appointments').select('*').order('id', { ascending: false });
+            if (!appointments) return;
 
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('stat-today').innerText = appList.filter(a => a.appointment_date === todayStr).length;
-            document.getElementById('stat-new').innerText = appList.filter(a => a.status === 'New').length;
-            document.getElementById('stat-confirmed').innerText = appList.filter(a => a.status === 'Confirmed').length;
-            document.getElementById('stat-customers').innerText = new Set(appList.map(a => a.customer_phone)).size;
-            document.getElementById('admin-unread-count').innerText = appList.filter(a => a.status === 'New').length;
+            const tbody = document.getElementById('adminAppointmentsBody');
+            tbody.innerHTML = '';
 
-            const appBody = document.getElementById('admin-appointments-list');
-            appBody.innerHTML = '';
-            appList.forEach(a => {
-                const srv = allServices.find(s => s.id === a.service_id);
-                const barb = allBarbers.find(b => b.id === a.barber_id);
-                appBody.innerHTML += `
-                    <tr>
-                        <td style="color:var(--accent-gold); font-weight:bold;">${a.booking_ref}</td>
-                        <td><strong>${a.customer_name}</strong><br><small style="color:var(--text-muted);">${a.customer_phone}</small></td>
-                        <td>${srv ? srv.name : 'Grooming'}</td>
-                        <td>${barb ? barb.name : 'Any Barber'}</td>
-                        <td>${a.appointment_date} ${a.start_time}</td>
-                        <td><span style="color:var(--accent-gold); font-weight:bold;">${a.status}</span></td>
-                        <td>
-                            <button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn btn-sm">Confirm</button>
-                            <button onclick="updateStatus('${a.id}', 'Cancelled')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Cancel</button>
-                        </td>
-                    </tr>`;
+            let countNew = 0, countDone = 0, countRejected = 0, totalDeposits = 0;
+
+            appointments.forEach(app => {
+                if (app.status === 'NEW') countNew++;
+                if (app.status === 'DONE') countDone++;
+                if (app.status === 'REJECTED') countRejected++;
+                if (app.payment_status === 'DEPOSIT PAID' || app.payment_status === 'FULLY PAID') {
+                    totalDeposits += parseFloat(app.deposit_amount || 0);
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${app.booking_ref}</strong></td>
+                    <td>${app.customer_name}</td>
+                    <td>${app.customer_phone}</td>
+                    <td>${app.customer_email ? app.customer_email : '<em>Not provided</em>'}</td>
+                    <td>${app.treatment}</td>
+                    <td>${app.hairstyle || '-'}</td>
+                    <td>${app.barber_id || 'Any'}</td>
+                    <td>${app.appointment_date} ${app.appointment_time}</td>
+                    <td>£${parseFloat(app.price).toFixed(2)}</td>
+                    <td>
+                        <select class="status-select status-${app.status}" onchange="changeAppointmentStatus(${app.id}, '${app.status}', this.value)">
+                            <option value="NEW" ${app.status === 'NEW' ? 'selected' : ''}>🟡 NEW</option>
+                            <option value="DONE" ${app.status === 'DONE' ? 'selected' : ''}>🟢 DONE</option>
+                            <option value="REJECTED" ${app.status === 'REJECTED' ? 'selected' : ''}>🔴 REJECTED</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select onchange="changePaymentStatus(${app.id}, this.value)" style="width:100%;">
+                            <option value="UNPAID" ${app.payment_status === 'UNPAID' ? 'selected' : ''}>UNPAID</option>
+                            <option value="DEPOSIT PENDING" ${app.payment_status === 'DEPOSIT PENDING' ? 'selected' : ''}>DEPOSIT PENDING</option>
+                            <option value="DEPOSIT PAID" ${app.payment_status === 'DEPOSIT PAID' ? 'selected' : ''}>DEPOSIT PAID</option>
+                            <option value="FULLY PAID" ${app.payment_status === 'FULLY PAID' ? 'selected' : ''}>FULLY PAID</option>
+                            <option value="REFUNDED" ${app.payment_status === 'REFUNDED' ? 'selected' : ''}>REFUNDED</option>
+                        </select>
+                    </td>
+                    <td><button onclick="showHistory(${app.id})" class="btn btn-secondary" style="padding:2px 6px; font-size:0.75rem;">Logs</button></td>
+                `;
+                tbody.appendChild(tr);
             });
 
-            // Services Admin
-            const srvBody = document.getElementById('admin-services-list');
-            srvBody.innerHTML = '';
-            allServices.forEach(s => {
-                srvBody.innerHTML += `<tr><td>${s.name}</td><td>${s.category}</td><td>£${s.price}</td><td>${s.estimated_minutes}m</td><td>${s.active ? 'Active' : 'Inactive'}</td><td><button onclick="toggleServiceActive('${s.id}', ${!s.active})" class="btn btn-sm btn-outline">Toggle</button></td></tr>`;
-            });
+            // Update Dash metrics
+            document.getElementById('mNew').innerText = countNew;
+            document.getElementById('mDone').innerText = countDone;
+            document.getElementById('mRejected').innerText = countRejected;
+            document.getElementById('mDeposits').innerText = `£${totalDeposits.toFixed(2)}`;
+        }
 
-            // Barbers Admin
-            const barbBody = document.getElementById('admin-barbers-list');
-            barbBody.innerHTML = '';
-            allBarbers.forEach(b => {
-                barbBody.innerHTML += `<tr><td>${b.name}</td><td>${b.description}</td><td>${b.active ? 'Active' : 'Inactive'}</td><td><button onclick="toggleBarberActive('${b.id}', ${!b.active})" class="btn btn-sm btn-outline">Toggle</button></td></tr>`;
-            });
+        async function changeAppointmentStatus(id, oldStatus, newStatus) {
+            if (oldStatus === newStatus) return;
+            
+            const { error } = await supabaseClient.from('appointments').update({ status: newStatus }).eq('id', id);
+            if (error) { alert('Update failed'); return; }
 
-            // Reviews Admin
-            const { data: revs } = await supabaseClient.from('reviews').select('*');
-            const revBody = document.getElementById('admin-reviews-list');
-            revBody.innerHTML = '';
-            (revs || []).forEach(r => {
-                revBody.innerHTML += `<tr><td>${r.customer_name}</td><td>${r.rating} Stars</td><td>${r.review_text}</td><td><button onclick="deleteReview('${r.id}')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Delete</button></td></tr>`;
+            // Write to Status Audit History
+            await supabaseClient.from('appointment_status_history').insert([{
+                appointment_id: id,
+                previous_status: oldStatus,
+                new_status: newStatus,
+                changed_by: 'Admin'
+            }]);
+
+            await loadAppointments();
+        }
+
+        async function changePaymentStatus(id, newPaymentStatus) {
+            await supabaseClient.from('appointments').update({ payment_status: newPaymentStatus }).eq('id', id);
+            await loadAppointments();
+        }
+
+        async function showHistory(appId) {
+            const { data } = await supabaseClient.from('appointment_status_history').select('*').eq('appointment_id', appId).order('id', { ascending: false });
+            if (!data || data.length === 0) {
+                alert('No status history changes recorded for this appointment.');
+                return;
+            }
+            let logs = data.map(h => `${h.previous_status} → ${h.new_status} | By: ${h.changed_by} | At: ${new Date(h.changed_at).toLocaleString()}`).join('\n');
+            alert('STATUS HISTORY LOGS:\n\n' + logs);
+        }
+
+        // 7. BARBER PROFILE & STORAGE PHOTO MANAGEMENT
+        async function loadBarbers() {
+            const { data: barbers } = await supabaseClient.from('barbers').select('*');
+            if (!barbers) return;
+
+            const select = document.getElementById('selectBarber');
+            const tbody = document.getElementById('barberTableBody');
+            
+            select.innerHTML = '<option value="">Select Barber...</option>';
+            tbody.innerHTML = '';
+
+            barbers.forEach(b => {
+                if (b.is_active) {
+                    select.innerHTML += `<option value="${b.id}">${b.name} (${b.specialty || 'Stylist'})</option>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${b.photo_url || DEFAULT_PLACEHOLDER}" class="barber-thumb"></td>
+                    <td><strong>${b.name}</strong><br><small>${b.specialty || ''}</small></td>
+                    <td>${b.is_active ? '🟢 Active' : '🔴 Inactive'}</td>
+                    <td><button onclick='editBarber(${JSON.stringify(b)})' class="btn btn-secondary" style="padding:2px 6px; font-size:0.75rem;">Edit</button></td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
-        async function saveBusinessProfile(e) {
-            e.preventDefault();
-            const payload = {
-                shop_name: document.getElementById('prof-name').value,
-                address: document.getElementById('prof-address').value,
-                phone: document.getElementById('prof-phone').value,
-                whatsapp: document.getElementById('prof-wa').value,
-                email: document.getElementById('prof-email').value,
-                google_maps_url: document.getElementById('prof-maps').value,
-                cancellation_policy: document.getElementById('prof-policy').value
+        function previewBarberImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('barberImagePreview').src = reader.result;
             };
-            const { error } = await supabaseClient.from('business_profile').update(payload).eq('id', 1);
-            if (error) alert("Error saving profile: " + error.message);
-            else { alert("Business Profile updated successfully!"); fetchBusinessProfile(); }
+            if (event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
         }
 
-        async function updateHourStatus(id, is_open) {
-            await supabaseClient.from('opening_hours').update({ is_open }).eq('id', id);
-            fetchOpeningHours();
+        function removeBarberPhoto() {
+            document.getElementById('currentPhotoUrl').value = '';
+            document.getElementById('barberPhotoInput').value = '';
+            document.getElementById('barberImagePreview').src = DEFAULT_PLACEHOLDER;
         }
 
-        async function addService(e) {
+        function editBarber(barber) {
+            document.getElementById('barberId').value = barber.id;
+            document.getElementById('barberName').value = barber.name;
+            document.getElementById('barberSpecialty').value = barber.specialty || '';
+            document.getElementById('barberBio').value = barber.biography || '';
+            document.getElementById('barberActive').value = barber.is_active ? 'true' : 'false';
+            document.getElementById('currentPhotoUrl').value = barber.photo_url || '';
+            document.getElementById('barberImagePreview').src = barber.photo_url || DEFAULT_PLACEHOLDER;
+        }
+
+        async function handleBarberSave(e) {
             e.preventDefault();
+            const id = document.getElementById('barberId').value;
+            const fileInput = document.getElementById('barberPhotoInput');
+            let photoUrl = document.getElementById('currentPhotoUrl').value || DEFAULT_PLACEHOLDER;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `barber_${Date.now()}.${fileExt}`;
+
+                const { data, error } = await supabaseClient.storage.from('barber-photos').upload(fileName, file);
+                if (!error) {
+                    const { data: publicUrlData } = supabaseClient.storage.from('barber-photos').getPublicUrl(fileName);
+                    photoUrl = publicUrlData.publicUrl;
+                }
+            }
+
             const payload = {
-                name: document.getElementById('srv-name').value,
-                category: document.getElementById('srv-cat').value,
-                price: parseFloat(document.getElementById('srv-price').value),
-                estimated_minutes: parseInt(document.getElementById('srv-mins').value),
-                active: true
+                name: document.getElementById('barberName').value,
+                specialty: document.getElementById('barberSpecialty').value,
+                biography: document.getElementById('barberBio').value,
+                is_active: document.getElementById('barberActive').value === 'true',
+                photo_url: photoUrl
             };
-            await supabaseClient.from('services').insert([payload]);
-            fetchServices(); loadAdminData(); e.target.reset();
-        }
 
-        async function addBarber(e) {
-            e.preventDefault();
-            const payload = {
-                name: document.getElementById('barber-name').value,
-                description: document.getElementById('barber-desc').value,
-                active: true
-            };
-            await supabaseClient.from('barbers').insert([payload]);
-            fetchBarbers(); loadAdminData(); e.target.reset();
-        }
+            if (id) {
+                await supabaseClient.from('barbers').update(payload).eq('id', id);
+            } else {
+                await supabaseClient.from('barbers').insert([payload]);
+            }
 
-        async function addReview(e) {
-            e.preventDefault();
-            const payload = {
-                customer_name: document.getElementById('rev-name').value,
-                rating: parseInt(document.getElementById('rev-rating').value),
-                review_text: document.getElementById('rev-text').value,
-                active: true
-            };
-            await supabaseClient.from('reviews').insert([payload]);
-            fetchReviews(); loadAdminData(); e.target.reset();
-        }
-
-        async function toggleServiceActive(id, active) { await supabaseClient.from('services').update({ active }).eq('id', id); fetchServices(); loadAdminData(); }
-        async function toggleBarberActive(id, active) { await supabaseClient.from('barbers').update({ active }).eq('id', id); fetchBarbers(); loadAdminData(); }
-        async function deleteReview(id) { await supabaseClient.from('reviews').delete().eq('id', id); fetchReviews(); loadAdminData(); }
-        async function updateStatus(id, newStatus) { await supabaseClient.from('appointments').update({ status: newStatus }).eq('id', id); loadAdminData(); }
-
-        function switchAdminTab(tab) {
-            ['appointments', 'business', 'services', 'barbers', 'reviews'].forEach(t => {
-                document.getElementById(`tab-${t}`).style.display = tab === t ? 'block' : 'none';
-                document.getElementById(`btn-tab-${t}`).classList.toggle('active', tab === t);
-            });
-        }
-
-        async function logoutAdmin() {
-            await supabaseClient.auth.signOut();
-            document.getElementById('admin-login-view').style.display = 'block';
-            document.getElementById('admin-dashboard-view').style.display = 'none';
+            // Reset form and reload
+            document.getElementById('barberForm').reset();
+            removeBarberPhoto();
+            document.getElementById('barberId').value = '';
+            await loadBarbers();
         }
     </script>
 </body>

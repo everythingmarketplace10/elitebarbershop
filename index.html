@@ -179,7 +179,7 @@
         <!-- Trust Features -->
         <div style="background: var(--bg-card); border-y: 1px solid var(--border-color); padding: 2rem 1.5rem;">
             <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem; text-align:center;">
-                <div><h4 class="gold-text" style="font-size:0.9rem;">MASTER BARBERS</h4><p style="font-size:0.8rem; color:var(--text-muted);">Skilled specialists</p></div>
+                <div><h4 class="gold-text" style="font-size:0.9rem;">MASTER BARBERS</h4><p style="font-size:0.8rem; color:var(--text-muted);">Skilled UK specialists</p></div>
                 <div><h4 class="gold-text" style="font-size:0.9rem;">PREMIUM PRODUCTS</h4><p style="font-size:0.8rem; color:var(--text-muted);">Luxury oils & pomades</p></div>
                 <div><h4 class="gold-text" style="font-size:0.9rem;">EASY ONLINE BOOKING</h4><p style="font-size:0.8rem; color:var(--text-muted);">Real-time availability</p></div>
                 <div><h4 class="gold-text" style="font-size:0.9rem;">PRISTINE SETUP</h4><p style="font-size:0.8rem; color:var(--text-muted);">Clean & comfortable</p></div>
@@ -276,7 +276,7 @@
                     <form onsubmit="handleBookingSubmit(event)">
                         <div class="form-group"><label>Full Name *</label><input type="text" id="book-name" required placeholder="John Doe"></div>
                         <div class="form-group"><label>Mobile Phone (WhatsApp) *</label><input type="tel" id="book-phone" required placeholder="+44 7123 456789"></div>
-                        <div class="form-group"><label>Email Address</label><input type="email" id="book-email" placeholder="john@example.com (Optional)"></div>
+                        <div class="form-group"><label>Email Address *</label><input type="email" id="book-email" required placeholder="john@example.com"></div>
                         <div class="form-group"><label>Notes / Preferences</label><textarea id="book-notes" rows="2" placeholder="Specific style requests..."></textarea></div>
 
                         <!-- CANCELLATION POLICY -->
@@ -298,11 +298,11 @@
                     <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">Thank you for choosing <span id="conf-shop-name">Elite Barber Studio</span>.</p>
                     
                     <div style="background:#0f0f12; border:1px solid var(--border-gold); padding:1.2rem; border-radius:4px; max-width:480px; margin:0 auto 1.5rem auto; text-align:left; font-size:0.88rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;"><span>Reference:</span><strong id="conf-ref" class="gold-text"></strong></div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;"><span>Customer:</span><strong id="conf-name"></strong></div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;"><span>Service:</span><strong id="conf-service"></strong></div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;"><span>Barber:</span><strong id="conf-barber"></strong></div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;"><span>Date & Time:</span><strong id="conf-datetime"></strong></div>
+                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Reference:</span><strong id="conf-ref" class="gold-text"></strong></div>
+                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Customer:</span><strong id="conf-name"></strong></div>
+                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Service:</span><strong id="conf-service"></strong></div>
+                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Barber:</span><strong id="conf-barber"></strong></div>
+                        <div style="display:flex; justify-space-between; margin-bottom:0.4rem;"><span>Date & Time:</span><strong id="conf-datetime"></strong></div>
                     </div>
 
                     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
@@ -323,7 +323,7 @@
                 <div>
                     <h3 id="about-shop-name" class="gold-text" style="font-size:1.1rem; margin-bottom:0.5rem;">Elite Barber Studio</h3>
                     <p id="about-address" style="color:var(--text-muted); margin-bottom:1rem;">12 High Street, London</p>
-                    <p id="about-hours" style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.85rem;">Mon - Sat: 9:00 AM - 7:00 PM | Sun: Closed</p>
+                    <p id="about-hours" style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.85rem;"></p>
                     <a id="about-directions-btn" href="#" target="_blank" class="btn btn-sm">GET DIRECTIONS</a>
                 </div>
                 <div style="background:#0f0f12; border:1px solid var(--border-color); border-radius:4px; padding:2rem; text-align:center; display:flex; flex-direction:column; justify-content:center;">
@@ -436,17 +436,25 @@
                     <h3>Add Barber</h3>
                     <form onsubmit="addBarber(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.8rem; margin-top:1rem;">
                         <input type="text" id="barber-name" placeholder="Name" required>
-                        <input type="text" id="barber-specialty" placeholder="Specialty" required>
-                        <input type="text" id="barber-bio" placeholder="Short Biography">
-                        <button type="submit" class="btn btn-sm" style="grid-column:span 2;">SAVE BARBER</button>
+                        <input type="text" id="barber-desc" placeholder="Specialty" required>
+                        <button type="submit" class="btn btn-sm">SAVE BARBER</button>
                     </form>
                 </div>
-                <div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Specialty</th><th>Bio</th><th>Status</th><th>Action</th></tr></thead><tbody id="admin-barbers-list"></tbody></table></div>
+                <div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Specialty</th><th>Status</th><th>Action</th></tr></thead><tbody id="admin-barbers-list"></tbody></table></div>
             </div>
 
             <!-- TAB 5: REVIEWS -->
             <div id="tab-reviews" style="display:none;">
-                <div class="table-responsive"><table class="table"><thead><tr><th>Author</th><th>Rating</th><th>Comment</th><th>Action</th></tr></thead><tbody id="admin-reviews-list"></tbody></table></div>
+                <div style="background:var(--bg-card); padding:1.5rem; border:1px solid var(--border-color); border-radius:4px; margin-bottom:1.5rem;">
+                    <h3>Add Review / Testimonial</h3>
+                    <form onsubmit="addReview(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.8rem; margin-top:1rem;">
+                        <input type="text" id="rev-name" placeholder="Customer Name" required>
+                        <select id="rev-rating"><option value="5">5 Stars</option><option value="4">4 Stars</option></select>
+                        <input type="text" id="rev-text" placeholder="Review Text" style="grid-column:span 2;" required>
+                        <button type="submit" class="btn btn-sm" style="grid-column:span 2;">PUBLISH REVIEW</button>
+                    </form>
+                </div>
+                <div class="table-responsive"><table class="table"><thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Action</th></tr></thead><tbody id="admin-reviews-list"></tbody></table></div>
             </div>
         </div>
     </div>
@@ -455,307 +463,508 @@
     <footer>
         <div class="footer-grid">
             <div>
-                <h3 class="gold-text" style="margin-bottom:0.8rem;">ELITE BARBER STUDIO</h3>
-                <p>Delivering top-tier haircuts and grooming standard services in a refined, traditional setting.</p>
+                <h3 id="ft-shop-name" class="gold-text" style="font-size:1rem; margin-bottom:0.8rem;">ELITE BARBER STUDIO</h3>
+                <p id="ft-desc">Authentic grooming excellence and executive facials.</p>
             </div>
             <div>
-                <h4 style="color:#fff; margin-bottom:0.8rem;">QUICK LINKS</h4>
-                <p><a href="#services" style="color:var(--text-muted); text-decoration:none;">Services Menu</a></p>
-                <p><a href="#barbers" style="color:var(--text-muted); text-decoration:none;">Meet Barbers</a></p>
-                <p><a href="#booking" style="color:var(--text-muted); text-decoration:none;">Book Appointment</a></p>
+                <h4>CONTACT & LOCATION</h4>
+                <p id="ft-address">12 High Street, London</p>
+                <p id="ft-phone">Phone: +44 20 7946 0912</p>
+                <p id="ft-email">info@elitebarberstudio.co.uk</p>
+            </div>
+            <div>
+                <h4>OPENING HOURS</h4>
+                <div id="ft-hours-list" style="font-size:0.8rem; color:var(--text-muted);"></div>
             </div>
         </div>
-        <div style="text-align:center; padding-top:1.5rem; border-top:1px solid var(--border-color); font-size:0.75rem;">
-            &copy; 2026 Elite Barber Studio. All rights reserved.
+        <div style="text-align: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+            <p>&copy; 2026 <span id="ft-copy-name">Elite Barber Studio</span>. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- LOGIC SCRIPT INTEGRATION -->
+    <!-- CONTROLLER SCRIPT -->
     <script>
-        const SUPABASE_URL = 'https://owrxpbbopaumnagzpmfs.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Ensure your full anon key is set here
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        let bizProfile = {};
+        let openingSchedule = [];
+        let allServices = [];
+        let allBarbers = [];
         let selectedService = null;
         let selectedBarber = null;
-        let selectedTime = null;
-        let businessProfile = {};
+        let selectedTimeSlot = null;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            initApp();
-        });
-
-        async function initApp() {
+        document.addEventListener('DOMContentLoaded', async () => {
             await fetchBusinessProfile();
+            await fetchOpeningHours();
             await fetchServices();
             await fetchBarbers();
             await fetchReviews();
+            initDateMin();
+
+            if (window.location.hash === '#backoffice') showBackoffice();
+        });
+
+        function initDateMin() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('book-date').min = today;
+            document.getElementById('book-date').value = today;
         }
 
+        /* ---------------- DYNAMIC BUSINESS PROFILE & HOURS ---------------- */
         async function fetchBusinessProfile() {
-            const { data } = await supabase.from('business_profile').select('*').single();
+            const { data } = await supabaseClient.from('business_profile').select('*').single();
             if (data) {
-                businessProfile = data;
-                document.getElementById('pub-banner-address').textContent = '📍 ' + (data.address || '12 High Street, London');
-                document.getElementById('pub-banner-phone').textContent = '📞 ' + (data.phone || '+44 7123 456789');
-                document.getElementById('pub-banner-whatsapp').href = 'https://wa.me/' + (data.whatsapp || '');
-                document.getElementById('pub-banner-maps').href = data.google_maps_url || '#';
-                document.getElementById('pub-policy-text').textContent = data.cancellation_policy || 'Please provide at least 24 hours notice when cancelling.';
+                bizProfile = data;
+                // Render Public Banners
+                document.getElementById('pub-banner-address').innerText = `📍 ${data.address}`;
+                document.getElementById('pub-banner-phone').innerText = `📞 ${data.phone}`;
+                document.getElementById('pub-banner-phone').setAttribute('href', `tel:${data.phone}`);
+                document.getElementById('pub-banner-whatsapp').setAttribute('href', `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(data.shop_name)},%20I%20would%20like%20to%20book%20an%20appointment.`);
+                document.getElementById('pub-banner-maps').setAttribute('href', data.google_maps_url || '#');
+
+                // Hero & Headers
+                document.getElementById('hero-title').innerText = `LOOK SHARP AT ${data.shop_name.toUpperCase()}`;
+                document.getElementById('hero-desc').innerText = data.description;
+                document.getElementById('site-logo-text').innerHTML = `${data.shop_name.split(' ')[0]} <span>${data.shop_name.split(' ').slice(1).join(' ')}</span>`;
                 
-                document.getElementById('about-shop-name').textContent = data.shop_name || 'Elite Barber Studio';
-                document.getElementById('about-address').textContent = data.address || '';
-                document.getElementById('about-directions-btn').href = data.google_maps_url || '#';
-                document.getElementById('about-map-link').href = data.google_maps_url || '#';
+                // Backoffice Bar
+                document.getElementById('adm-bar-shop-name').innerText = `${data.shop_name.toUpperCase()} — BACK OFFICE`;
+                document.getElementById('adm-bar-meta').innerText = `📍 ${data.address} | 📞 ${data.phone}`;
 
-                document.getElementById('pub-status-indicator').textContent = 'OPEN';
-                document.getElementById('pub-status-indicator').className = 'status-badge status-open';
+                // Policy & About
+                document.getElementById('pub-policy-text').innerText = data.cancellation_policy;
+                document.getElementById('about-shop-name').innerText = data.shop_name;
+                document.getElementById('about-address').innerText = data.address;
+                document.getElementById('about-directions-btn').setAttribute('href', data.google_maps_url || '#');
+                document.getElementById('about-map-link').setAttribute('href', data.google_maps_url || '#');
+
+                // Footer
+                document.getElementById('ft-shop-name').innerText = data.shop_name;
+                document.getElementById('ft-desc').innerText = data.description;
+                document.getElementById('ft-address').innerText = data.address;
+                document.getElementById('ft-phone').innerText = `Phone: ${data.phone}`;
+                document.getElementById('ft-email').innerText = data.email;
+                document.getElementById('ft-copy-name').innerText = data.shop_name;
+
+                // Form prefill
+                document.getElementById('prof-name').value = data.shop_name;
+                document.getElementById('prof-address').value = data.address;
+                document.getElementById('prof-phone').value = data.phone;
+                document.getElementById('prof-wa').value = data.whatsapp;
+                document.getElementById('prof-email').value = data.email;
+                document.getElementById('prof-maps').value = data.google_maps_url;
+                document.getElementById('prof-policy').value = data.cancellation_policy;
             }
         }
 
+        async function fetchOpeningHours() {
+            const { data } = await supabaseClient.from('opening_hours').select('*');
+            if (data) {
+                openingSchedule = data;
+                calculateOpenStatus(data);
+
+                // Footer Hours
+                const ftHours = document.getElementById('ft-hours-list');
+                const abtHours = document.getElementById('about-hours');
+                ftHours.innerHTML = '';
+                
+                let hoursSummary = [];
+                data.forEach(h => {
+                    const row = `<div>${h.day_of_week}: ${h.is_open ? `${h.open_time.slice(0,5)} - ${h.close_time.slice(0,5)}` : 'Closed'}</div>`;
+                    ftHours.innerHTML += row;
+                    if(h.is_open) hoursSummary.push(`${h.day_of_week.slice(0,3)}: ${h.open_time.slice(0,5)}-${h.close_time.slice(0,5)}`);
+                });
+                abtHours.innerText = hoursSummary.join(' | ');
+
+                // Admin Form List
+                const admHours = document.getElementById('admin-hours-list');
+                admHours.innerHTML = '';
+                data.forEach(h => {
+                    admHours.innerHTML += `
+                        <div style="display:flex; justify-space-between; align-items:center; background:#0f0f12; padding:0.6rem; border-radius:3px; font-size:0.8rem;">
+                            <strong>${h.day_of_week}</strong>
+                            <div style="display:flex; gap:0.5rem; align-items:center;">
+                                <input type="checkbox" ${h.is_open ? 'checked' : ''} onchange="updateHourStatus('${h.id}', this.checked)">
+                                <span>${h.is_open ? 'Open' : 'Closed'}</span>
+                            </div>
+                        </div>`;
+                });
+            }
+        }
+
+        function calculateOpenStatus(schedule) {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const now = new Date();
+            const todayName = days[now.getDay()];
+            const todaySched = schedule.find(s => s.day_of_week === todayName);
+
+            const badge = document.getElementById('pub-status-indicator');
+            if (todaySched && todaySched.is_open) {
+                badge.innerText = `🟢 OPEN TODAY: ${todaySched.open_time.slice(0,5)} - ${todaySched.close_time.slice(0,5)}`;
+                badge.className = 'status-badge status-open';
+            } else {
+                badge.innerText = `🔴 CLOSED TODAY`;
+                badge.className = 'status-badge status-closed';
+            }
+        }
+
+        /* ---------------- SERVICES, BARBERS, REVIEWS ---------------- */
         async function fetchServices() {
-            const { data } = await supabase.from('services').select('*');
+            const { data } = await supabaseClient.from('services').select('*').eq('active', true);
+            allServices = data || [];
+            renderServicesCatalog(allServices);
+            renderBookingServiceSelect(allServices);
+        }
+
+        function renderServicesCatalog(items) {
             const grid = document.getElementById('services-grid');
-            const selectGrid = document.getElementById('booking-service-select-grid');
-            
-            if (!data || data.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No services configured yet.</div>';
-                selectGrid.innerHTML = '';
-                return;
-            }
-
-            grid.innerHTML = data.map(s => `
-                <div class="card">
-                    <h3 style="font-size:1.1rem; margin-bottom:0.5rem;">${s.name}</h3>
-                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">${s.duration_minutes || 30} mins</p>
-                    <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:center;">
-                        <span class="gold-text" style="font-size:1.2rem; font-weight:700;">£${s.price}</span>
-                        <a href="#booking" onclick="selectServiceDirectly('${s.name}', ${s.price})" class="btn btn-sm">BOOK NOW</a>
-                    </div>
-                </div>
-            `).join('');
-
-            selectGrid.innerHTML = data.map(s => `
-                <div class="select-card" id="srv-card-${s.id}" onclick="selectServiceStep('${s.name}', ${s.price}, 'srv-card-${s.id}')">
-                    <strong style="display:block; font-size:0.95rem; color:#fff;">${s.name}</strong>
-                    <span style="color:var(--accent-gold); font-weight:bold;">£${s.price}</span>
-                </div>
-            `).join('');
-        }
-
-        function selectServiceStep(name, price, cardId) {
-            selectedService = { name, price };
-            document.querySelectorAll('#booking-service-select-grid .select-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById(cardId).classList.add('selected');
-            document.getElementById('btn-to-step-2').disabled = false;
-        }
-
-        function selectServiceDirectly(name, price) {
-            selectedService = { name, price };
-            goToBookingStep(2);
+            grid.innerHTML = '';
+            items.forEach(s => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="${s.image || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800'}" alt="${s.name}">
+                        <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:600; text-transform:uppercase;">${s.category}</div>
+                        <h3 style="font-size:1.1rem; color:#fff; font-family:'Cinzel', serif;">${s.name}</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">${s.description || 'Professional grooming service.'}</p>
+                        <div style="display:flex; justify-space-between; align-items:center; margin-top:auto; border-top:1px solid var(--border-color); padding-top:0.8rem;">
+                            <div><strong style="color:var(--accent-gold); font-size:1.2rem;">£${Number(s.price).toFixed(2)}</strong> <small style="color:var(--text-muted);">${s.estimated_minutes}m</small></div>
+                            <button onclick="quickSelectService('${s.id}')" class="btn btn-sm">BOOK</button>
+                        </div>
+                    </div>`;
+            });
         }
 
         async function fetchBarbers() {
-            const { data } = await supabase.from('barbers').select('*');
+            const { data } = await supabaseClient.from('barbers').select('*').eq('active', true);
+            allBarbers = data || [];
             const grid = document.getElementById('barbers-grid');
-            const selectGrid = document.getElementById('booking-barber-select-grid');
-
-            if (!data || data.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No barbers listed.</div>';
-                selectGrid.innerHTML = `<div class="select-card selected" onclick="selectBarberStep('Any Available', 'b-any')"><strong>Any Available Barber</strong></div>`;
-                selectedBarber = 'Any Available';
-                return;
-            }
-
-            grid.innerHTML = data.map(b => `
-                <div class="card">
-                    <img src="${b.photo_url || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=400'}" alt="${b.name}">
-                    <h3 style="font-size:1.1rem;">${b.name}</h3>
-                    <p class="gold-text" style="font-size:0.8rem; margin-bottom:0.5rem;">${b.specialty || 'Master Barber'}</p>
-                    <p style="font-size:0.8rem; color:var(--text-muted);">${b.biography || ''}</p>
-                </div>
-            `).join('');
-
-            let html = `<div class="select-card selected" id="b-any" onclick="selectBarberStep('Any Available', 'b-any')"><strong>Any Available Barber</strong></div>`;
-            html += data.map(b => `
-                <div class="select-card" id="barber-card-${b.id}" onclick="selectBarberStep('${b.name}', 'barber-card-${b.id}')">
-                    <strong>${b.name}</strong>
-                    <span style="display:block; font-size:0.75rem; color:var(--text-muted);">${b.specialty || ''}</span>
-                </div>
-            `).join('');
-            selectGrid.innerHTML = html;
-            selectedBarber = 'Any Available';
-        }
-
-        function selectBarberStep(name, cardId) {
-            selectedBarber = name;
-            document.querySelectorAll('#booking-barber-select-grid .select-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById(cardId).classList.add('selected');
-        }
-
-        function generateTimeSlots() {
-            const grid = document.getElementById('time-slots-grid');
-            const times = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM'];
-            
-            grid.innerHTML = times.map((t, idx) => `
-                <div class="select-card" id="time-slot-${idx}" onclick="selectTimeSlot('${t}', 'time-slot-${idx}')">${t}</div>
-            `).join('');
-        }
-
-        function selectTimeSlot(time, cardId) {
-            selectedTime = time;
-            document.querySelectorAll('#time-slots-grid .select-card').forEach(c => c.classList.remove('selected'));
-            document.getElementById(cardId).classList.add('selected');
-            document.getElementById('btn-to-step-4').disabled = false;
+            grid.innerHTML = '';
+            allBarbers.forEach(b => {
+                grid.innerHTML += `
+                    <div class="card" style="text-align:center;">
+                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}" style="border-radius:50%; width:120px; height:120px; margin:0 auto 1rem auto; object-fit:cover;">
+                        <h3 style="font-size:1.1rem; color:#fff; font-family:'Cinzel', serif;">${b.name}</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">${b.description || 'Barber Specialist'}</p>
+                    </div>`;
+            });
+            renderBookingBarberSelect(allBarbers);
         }
 
         async function fetchReviews() {
+            const { data } = await supabaseClient.from('reviews').select('*').eq('active', true);
             const grid = document.getElementById('reviews-grid');
-            grid.innerHTML = `
-                <div class="card">
-                    <p style="font-size:0.85rem; italic; margin-bottom:0.8rem;">"Best barber shop in town! Always top service and precise cuts."</p>
-                    <strong class="gold-text" style="font-size:0.85rem;">— James W. ★★★★★</strong>
-                </div>
-                <div class="card">
-                    <p style="font-size:0.85rem; italic; margin-bottom:0.8rem;">"Clean setup, friendly staff, highly recommend the full beard service."</p>
-                    <strong class="gold-text" style="font-size:0.85rem;">— Alex M. ★★★★★</strong>
-                </div>
-            `;
+            grid.innerHTML = '';
+            (data || []).forEach(r => {
+                grid.innerHTML += `
+                    <div class="card" style="padding:1.2rem;">
+                        <div style="color:var(--accent-gold); font-size:0.9rem; margin-bottom:0.4rem;">★★★★★</div>
+                        <p style="font-size:0.85rem; color:#fff; font-style:italic; margin-bottom:0.8rem;">"${r.review_text}"</p>
+                        <strong style="font-size:0.8rem; color:var(--text-muted);">— ${r.customer_name}</strong>
+                    </div>`;
+            });
         }
 
-        function goToBookingStep(step) {
-            for (let i = 1; i <= 4; i++) {
+        function filterCategory(cat) {
+            if (cat === 'ALL') renderServicesCatalog(allServices);
+            else renderServicesCatalog(allServices.filter(s => s.category === cat));
+        }
+
+        /* ---------------- WIZARD BOOKING LOGIC ---------------- */
+        function renderBookingServiceSelect(items) {
+            const container = document.getElementById('booking-service-select-grid');
+            container.innerHTML = '';
+            items.forEach(s => {
+                container.innerHTML += `
+                    <div class="select-card" id="srv-card-${s.id}" onclick="selectServiceForBooking('${s.id}')">
+                        <strong style="color:#fff; font-size:0.9rem;">${s.name}</strong>
+                        <div style="color:var(--accent-gold); font-size:0.8rem; font-weight:bold; margin-top:0.3rem;">£${Number(s.price).toFixed(2)} (${s.estimated_minutes}m)</div>
+                    </div>`;
+            });
+        }
+
+        function selectServiceForBooking(id) {
+            selectedService = allServices.find(s => s.id === id);
+            document.querySelectorAll('#booking-service-select-grid .select-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`srv-card-${id}`).classList.add('selected');
+            document.getElementById('btn-to-step-2').disabled = false;
+        }
+
+        function quickSelectService(id) {
+            selectServiceForBooking(id);
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+            goToBookingStep(2);
+        }
+
+        function renderBookingBarberSelect(barbers) {
+            const container = document.getElementById('booking-barber-select-grid');
+            container.innerHTML = `
+                <div class="select-card selected" id="barber-card-any" onclick="selectBarberForBooking(null)">
+                    <strong style="color:#fff;">Any Available Barber</strong>
+                </div>`;
+            barbers.forEach(b => {
+                container.innerHTML += `
+                    <div class="select-card" id="barber-card-${b.id}" onclick="selectBarberForBooking('${b.id}')">
+                        <strong style="color:#fff;">${b.name}</strong>
+                    </div>`;
+            });
+        }
+
+        function selectBarberForBooking(id) {
+            if (!id) selectedBarber = { id: null, name: 'Any Available Barber' };
+            else selectedBarber = allBarbers.find(b => b.id === id);
+
+            document.querySelectorAll('#booking-barber-select-grid .select-card').forEach(el => el.classList.remove('selected'));
+            const selId = id ? `barber-card-${id}` : 'barber-card-any';
+            document.getElementById(selId).classList.add('selected');
+        }
+
+        function generateTimeSlots() {
+            const container = document.getElementById('time-slots-grid');
+            container.innerHTML = '';
+            const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+            times.forEach(t => {
+                container.innerHTML += `
+                    <div class="select-card" id="slot-${t.replace(':','')}" onclick="selectTimeSlot('${t}')">
+                        <strong style="color:#fff;">${t}</strong>
+                    </div>`;
+            });
+        }
+
+        function selectTimeSlot(t) {
+            selectedTimeSlot = t;
+            document.querySelectorAll('#time-slots-grid .select-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`slot-${t.replace(':','')}`).classList.add('selected');
+            document.getElementById('btn-to-step-4').disabled = false;
+        }
+
+        function goToBookingStep(stepNum) {
+            [1, 2, 3, 4].forEach(i => {
                 document.getElementById(`booking-step-${i}`).classList.remove('active');
                 document.getElementById(`step-indicator-${i}`).classList.remove('active');
-            }
-            document.getElementById(`booking-step-${step}`).classList.add('active');
-            document.getElementById(`step-indicator-${step}`).classList.add('active');
+            });
+            document.getElementById(`booking-step-${stepNum}`).classList.add('active');
+            document.getElementById(`step-indicator-${stepNum}`).classList.add('active');
 
-            if (step === 4) {
-                document.getElementById('sum-service').textContent = selectedService ? selectedService.name : '-';
-                document.getElementById('sum-barber').textContent = selectedBarber || 'Any Available';
-                document.getElementById('sum-datetime').textContent = `${document.getElementById('book-date').value} at ${selectedTime}`;
-                document.getElementById('sum-price').textContent = `£${selectedService ? selectedService.price : '0.00'}`;
+            if (stepNum === 3 && (!document.querySelectorAll('#time-slots-grid .select-card').length)) generateTimeSlots();
+
+            if (stepNum === 4) {
+                document.getElementById('sum-service').innerText = selectedService ? `${selectedService.name} (£${selectedService.price})` : '-';
+                document.getElementById('sum-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Barber';
+                document.getElementById('sum-datetime').innerText = `${document.getElementById('book-date').value} @ ${selectedTimeSlot}`;
+                document.getElementById('sum-price').innerText = selectedService ? `£${Number(selectedService.price).toFixed(2)}` : '-';
             }
         }
 
         async function handleBookingSubmit(e) {
             e.preventDefault();
-            const ref = 'ELITE-' + Math.floor(100000 + Math.random() * 900000);
-            const name = document.getElementById('book-name').value;
-            const phone = document.getElementById('book-phone').value;
-            const email = document.getElementById('book-email').value;
-            const notes = document.getElementById('book-notes').value;
-            const date = document.getElementById('book-date').value;
+            const btn = document.getElementById('btn-submit-booking');
+            btn.disabled = true; btn.innerText = 'RESERVING...';
+
+            const dateStr = document.getElementById('book-date').value.replace(/-/g, '');
+            const ref = `EBS-${dateStr}-${Math.floor(1000 + Math.random() * 9000)}`;
 
             const payload = {
                 booking_ref: ref,
-                customer_name: name,
-                customer_phone: phone,
-                customer_email: email,
-                treatment: selectedService ? selectedService.name : 'Haircut',
-                barber_id: selectedBarber || 'Any Available',
-                appointment_date: date,
-                appointment_time: selectedTime,
-                price: selectedService ? selectedService.price : 0,
-                notes: notes,
-                status: 'NEW'
+                customer_name: document.getElementById('book-name').value,
+                customer_phone: document.getElementById('book-phone').value,
+                customer_email: document.getElementById('book-email').value,
+                service_id: selectedService ? selectedService.id : null,
+                barber_id: (selectedBarber && selectedBarber.id) ? selectedBarber.id : null,
+                appointment_date: document.getElementById('book-date').value,
+                start_time: selectedTimeSlot,
+                end_time: selectedTimeSlot,
+                status: 'New'
             };
 
-            const { error } = await supabase.from('appointments').insert([payload]);
+            const { error } = await supabaseClient.from('appointments').insert([payload]);
+            btn.disabled = false; btn.innerText = 'CONFIRM RESERVATION';
 
             if (error) {
-                alert('Error submitting booking: ' + error.message);
-                return;
-            }
+                alert("Booking Error: " + error.message);
+            } else {
+                [1, 2, 3, 4].forEach(i => document.getElementById(`booking-step-${i}`).classList.remove('active'));
+                document.getElementById('booking-confirmation-pane').classList.add('active');
 
-            document.getElementById('conf-ref').textContent = ref;
-            document.getElementById('conf-name').textContent = name;
-            document.getElementById('conf-service').textContent = payload.treatment;
-            document.getElementById('conf-barber').textContent = payload.barber_id;
-            document.getElementById('conf-datetime').textContent = `${date} at ${selectedTime}`;
-            
-            document.getElementById('conf-call-btn').href = 'tel:' + (businessProfile.phone || '');
-            document.getElementById('conf-wa-btn').href = 'https://wa.me/' + (businessProfile.whatsapp || '');
-            document.getElementById('conf-map-btn').href = businessProfile.google_maps_url || '#';
-
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`booking-step-${i}`).classList.remove('active');
+                document.getElementById('conf-shop-name').innerText = bizProfile.shop_name;
+                document.getElementById('conf-ref').innerText = ref;
+                document.getElementById('conf-name').innerText = payload.customer_name;
+                document.getElementById('conf-service').innerText = selectedService ? selectedService.name : 'Grooming';
+                document.getElementById('conf-barber').innerText = selectedBarber ? selectedBarber.name : 'Any Barber';
+                document.getElementById('conf-datetime').innerText = `${payload.appointment_date} @ ${payload.start_time}`;
+                document.getElementById('conf-call-btn').setAttribute('href', `tel:${bizProfile.phone}`);
+                document.getElementById('conf-wa-btn').setAttribute('href', `https://wa.me/${bizProfile.whatsapp.replace(/[^0-9]/g, '')}`);
+                document.getElementById('conf-map-btn').setAttribute('href', bizProfile.google_maps_url || '#');
             }
-            document.getElementById('booking-confirmation-pane').classList.add('active');
         }
 
         function resetBookingWizard() {
-            selectedService = null;
-            selectedBarber = null;
-            selectedTime = null;
+            selectedService = null; selectedBarber = null; selectedTimeSlot = null;
             document.getElementById('booking-confirmation-pane').classList.remove('active');
             goToBookingStep(1);
         }
 
-        /* BACK OFFICE NAVIGATION */
+        /* ---------------- BACK OFFICE OPERATIONS ---------------- */
         function showBackoffice(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
+            window.location.hash = 'backoffice';
             document.getElementById('backoffice-container').style.display = 'block';
+
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                if (session) {
+                    document.getElementById('admin-login-view').style.display = 'none';
+                    document.getElementById('admin-dashboard-view').style.display = 'block';
+                    loadAdminData();
+                } else {
+                    document.getElementById('admin-login-view').style.display = 'block';
+                    document.getElementById('admin-dashboard-view').style.display = 'none';
+                }
+            });
         }
 
-        function hideBackoffice() {
-            document.getElementById('backoffice-container').style.display = 'none';
+        function hideBackoffice() { window.location.hash = ''; document.getElementById('backoffice-container').style.display = 'none'; }
+
+        async function loginAdmin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) alert("Login Failed: " + error.message);
+            else {
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'block';
+                loadAdminData();
+            }
         }
 
-        function loginAdmin() {
-            document.getElementById('admin-login-view').style.display = 'none';
-            document.getElementById('admin-dashboard-view').style.display = 'block';
-            loadAdminAppointments();
+        async function loadAdminData() {
+            const { data: appointments } = await supabaseClient.from('appointments').select('*').order('created_at', { ascending: false });
+            const appList = appointments || [];
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('stat-today').innerText = appList.filter(a => a.appointment_date === todayStr).length;
+            document.getElementById('stat-new').innerText = appList.filter(a => a.status === 'New').length;
+            document.getElementById('stat-confirmed').innerText = appList.filter(a => a.status === 'Confirmed').length;
+            document.getElementById('stat-customers').innerText = new Set(appList.map(a => a.customer_phone)).size;
+            document.getElementById('admin-unread-count').innerText = appList.filter(a => a.status === 'New').length;
+
+            const appBody = document.getElementById('admin-appointments-list');
+            appBody.innerHTML = '';
+            appList.forEach(a => {
+                const srv = allServices.find(s => s.id === a.service_id);
+                const barb = allBarbers.find(b => b.id === a.barber_id);
+                appBody.innerHTML += `
+                    <tr>
+                        <td style="color:var(--accent-gold); font-weight:bold;">${a.booking_ref}</td>
+                        <td><strong>${a.customer_name}</strong><br><small style="color:var(--text-muted);">${a.customer_phone}</small></td>
+                        <td>${srv ? srv.name : 'Grooming'}</td>
+                        <td>${barb ? barb.name : 'Any Barber'}</td>
+                        <td>${a.appointment_date} ${a.start_time}</td>
+                        <td><span style="color:var(--accent-gold); font-weight:bold;">${a.status}</span></td>
+                        <td>
+                            <button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn btn-sm">Confirm</button>
+                            <button onclick="updateStatus('${a.id}', 'Cancelled')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Cancel</button>
+                        </td>
+                    </tr>`;
+            });
+
+            // Services Admin
+            const srvBody = document.getElementById('admin-services-list');
+            srvBody.innerHTML = '';
+            allServices.forEach(s => {
+                srvBody.innerHTML += `<tr><td>${s.name}</td><td>${s.category}</td><td>£${s.price}</td><td>${s.estimated_minutes}m</td><td>${s.active ? 'Active' : 'Inactive'}</td><td><button onclick="toggleServiceActive('${s.id}', ${!s.active})" class="btn btn-sm btn-outline">Toggle</button></td></tr>`;
+            });
+
+            // Barbers Admin
+            const barbBody = document.getElementById('admin-barbers-list');
+            barbBody.innerHTML = '';
+            allBarbers.forEach(b => {
+                barbBody.innerHTML += `<tr><td>${b.name}</td><td>${b.description}</td><td>${b.active ? 'Active' : 'Inactive'}</td><td><button onclick="toggleBarberActive('${b.id}', ${!b.active})" class="btn btn-sm btn-outline">Toggle</button></td></tr>`;
+            });
+
+            // Reviews Admin
+            const { data: revs } = await supabaseClient.from('reviews').select('*');
+            const revBody = document.getElementById('admin-reviews-list');
+            revBody.innerHTML = '';
+            (revs || []).forEach(r => {
+                revBody.innerHTML += `<tr><td>${r.customer_name}</td><td>${r.rating} Stars</td><td>${r.review_text}</td><td><button onclick="deleteReview('${r.id}')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Delete</button></td></tr>`;
+            });
         }
 
-        function logoutAdmin() {
-            document.getElementById('admin-login-view').style.display = 'block';
-            document.getElementById('admin-dashboard-view').style.display = 'none';
+        async function saveBusinessProfile(e) {
+            e.preventDefault();
+            const payload = {
+                shop_name: document.getElementById('prof-name').value,
+                address: document.getElementById('prof-address').value,
+                phone: document.getElementById('prof-phone').value,
+                whatsapp: document.getElementById('prof-wa').value,
+                email: document.getElementById('prof-email').value,
+                google_maps_url: document.getElementById('prof-maps').value,
+                cancellation_policy: document.getElementById('prof-policy').value
+            };
+            const { error } = await supabaseClient.from('business_profile').update(payload).eq('id', 1);
+            if (error) alert("Error saving profile: " + error.message);
+            else { alert("Business Profile updated successfully!"); fetchBusinessProfile(); }
         }
+
+        async function updateHourStatus(id, is_open) {
+            await supabaseClient.from('opening_hours').update({ is_open }).eq('id', id);
+            fetchOpeningHours();
+        }
+
+        async function addService(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('srv-name').value,
+                category: document.getElementById('srv-cat').value,
+                price: parseFloat(document.getElementById('srv-price').value),
+                estimated_minutes: parseInt(document.getElementById('srv-mins').value),
+                active: true
+            };
+            await supabaseClient.from('services').insert([payload]);
+            fetchServices(); loadAdminData(); e.target.reset();
+        }
+
+        async function addBarber(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('barber-name').value,
+                description: document.getElementById('barber-desc').value,
+                active: true
+            };
+            await supabaseClient.from('barbers').insert([payload]);
+            fetchBarbers(); loadAdminData(); e.target.reset();
+        }
+
+        async function addReview(e) {
+            e.preventDefault();
+            const payload = {
+                customer_name: document.getElementById('rev-name').value,
+                rating: parseInt(document.getElementById('rev-rating').value),
+                review_text: document.getElementById('rev-text').value,
+                active: true
+            };
+            await supabaseClient.from('reviews').insert([payload]);
+            fetchReviews(); loadAdminData(); e.target.reset();
+        }
+
+        async function toggleServiceActive(id, active) { await supabaseClient.from('services').update({ active }).eq('id', id); fetchServices(); loadAdminData(); }
+        async function toggleBarberActive(id, active) { await supabaseClient.from('barbers').update({ active }).eq('id', id); fetchBarbers(); loadAdminData(); }
+        async function deleteReview(id) { await supabaseClient.from('reviews').delete().eq('id', id); fetchReviews(); loadAdminData(); }
+        async function updateStatus(id, newStatus) { await supabaseClient.from('appointments').update({ status: newStatus }).eq('id', id); loadAdminData(); }
 
         function switchAdminTab(tab) {
-            const tabs = ['appointments', 'business', 'services', 'barbers', 'reviews'];
-            tabs.forEach(t => {
-                document.getElementById(`tab-${t}`).style.display = (t === tab) ? 'block' : 'none';
-                const btn = document.getElementById(`btn-tab-${t}`);
-                if (btn) btn.classList.toggle('active', t === tab);
+            ['appointments', 'business', 'services', 'barbers', 'reviews'].forEach(t => {
+                document.getElementById(`tab-${t}`).style.display = tab === t ? 'block' : 'none';
+                document.getElementById(`btn-tab-${t}`).classList.toggle('active', tab === t);
             });
-            if (tab === 'appointments') loadAdminAppointments();
         }
 
-        async function loadAdminAppointments() {
-            const { data } = await supabase.from('appointments').select('*').order('id', { ascending: false });
-            const tbody = document.getElementById('admin-appointments-list');
-            
-            if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No appointments found.</td></tr>';
-                return;
-            }
-
-            document.getElementById('stat-today').textContent = data.length;
-            document.getElementById('stat-new').textContent = data.filter(a => a.status === 'NEW').length;
-            document.getElementById('stat-confirmed').textContent = data.filter(a => a.status === 'DONE').length;
-            document.getElementById('stat-customers').textContent = data.length;
-
-            tbody.innerHTML = data.map(a => `
-                <tr>
-                    <td class="gold-text"><strong>${a.booking_ref}</strong></td>
-                    <td><strong>${a.customer_name}</strong><br><small style="color:var(--text-muted);">${a.customer_phone}</small></td>
-                    <td>${a.treatment}</td>
-                    <td>${a.barber_id || 'Any'}</td>
-                    <td>${a.appointment_date}<br><small>${a.appointment_time}</small></td>
-                    <td><span class="status-badge ${a.status === 'DONE' ? 'status-open' : 'status-closed'}">${a.status}</span></td>
-                    <td>
-                        <button onclick="updateStatus(${a.id}, 'DONE')" class="btn btn-sm">Complete</button>
-                        <button onclick="updateStatus(${a.id}, 'REJECTED')" class="btn btn-sm btn-outline" style="border-color:var(--danger); color:var(--danger);">Reject</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        async function updateStatus(id, newStatus) {
-            await supabase.from('appointments').update({ status: newStatus }).eq('id', id);
-            loadAdminAppointments();
+        async function logoutAdmin() {
+            await supabaseClient.auth.signOut();
+            document.getElementById('admin-login-view').style.display = 'block';
+            document.getElementById('admin-dashboard-view').style.display = 'none';
         }
     </script>
 </body>

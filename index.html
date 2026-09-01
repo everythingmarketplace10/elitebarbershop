@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Elite Barber Studio | Premium Grooming</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -16,49 +16,282 @@
             --text-muted: #a0a0ab;
             --border-color: #2a2a32;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; }
-        h1, h2, h3, .gold-text { font-family: 'Cinzel', serif; color: var(--accent-gold); }
         
-        header { background: rgba(15,15,17,0.95); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; }
-        .logo { font-size: 1.5rem; font-weight: 700; font-family: 'Cinzel', serif; letter-spacing: 2px; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Montserrat', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            line-height: 1.5; 
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .gold-text { 
+            font-family: 'Cinzel', serif; 
+            color: var(--accent-gold); 
+        }
+
+        /* Responsive Header & Navigation */
+        header { 
+            background: rgba(15,15,17,0.98); 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0.8rem 1.5rem; 
+        }
+
+        .logo { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            font-family: 'Cinzel', serif; 
+            letter-spacing: 2px; 
+            white-space: nowrap;
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 1.2rem; 
+            list-style: none; 
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 2px;
+        }
+
+        .nav-links a { 
+            color: var(--text-light); 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            transition: 0.3s; 
+            padding: 0.4rem 0.2rem;
+            display: inline-block;
+        }
+
         .nav-links a:hover { color: var(--accent-gold); }
-        .btn { background: var(--accent-gold); color: #000; padding: 0.75rem 1.5rem; border: none; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; border-radius: 2px; }
+
+        /* Touch-Friendly Buttons */
+        .btn { 
+            background: var(--accent-gold); 
+            color: #000; 
+            padding: 0.8rem 1.5rem; 
+            border: none; 
+            font-weight: 600; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s; 
+            border-radius: 4px; 
+            min-height: 44px; /* Touch target accessibility */
+            touch-action: manipulation;
+        }
+
         .btn:hover { background: var(--accent-gold-hover); }
         .btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
         .btn-outline:hover { background: var(--accent-gold); color: #000; }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; min-height: 36px; }
 
-        section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
-        .hero { height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600') center/cover; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; letter-spacing: 4px; }
-        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; }
-        .hero-btns { display: flex; gap: 1rem; }
+        section { padding: 4rem 1.2rem; max-width: 1200px; margin: 0 auto; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 4px; transition: 0.3s; }
-        .card:hover { border-color: var(--accent-gold); }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 2px; margin-bottom: 1rem; }
-        .price { font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); margin: 0.5rem 0; }
+        /* Hero Responsive Styling */
+        .hero { 
+            min-height: 75vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600') center/cover; 
+            padding-top: 6rem;
+        }
 
-        /* Booking Wizard */
-        .booking-step { display: none; }
-        .booking-step.active { display: block; }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
-        input, select, textarea { width: 100%; padding: 0.75rem; background: #222228; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; }
+        .hero h1 { 
+            font-size: clamp(1.8rem, 5vw, 3.5rem); 
+            margin-bottom: 1rem; 
+            letter-spacing: 2px; 
+            padding: 0 0.5rem;
+        }
+
+        .hero p { 
+            font-size: clamp(0.95rem, 2.5vw, 1.2rem); 
+            color: var(--text-muted); 
+            margin-bottom: 2rem; 
+            max-width: 600px; 
+            padding: 0 1rem;
+        }
+
+        .hero-btns { 
+            display: flex; 
+            gap: 1rem; 
+            width: 100%; 
+            max-width: 320px; 
+            justify-content: center;
+        }
+
+        .hero-btns .btn { width: 100%; }
+
+        /* Category Banners Section */
+        .banner-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1.2rem; 
+            margin-top: 1.5rem; 
+        }
+
+        .banner-card { 
+            position: relative; 
+            height: 220px; 
+            border-radius: 6px; 
+            overflow: hidden; 
+            border: 1px solid var(--border-color); 
+            cursor: pointer; 
+            transition: transform 0.3s ease, border-color 0.3s ease; 
+            touch-action: manipulation;
+        }
+
+        .banner-card:active { transform: scale(0.98); }
+        .banner-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); transition: filter 0.3s ease; }
+        .banner-card:hover img { filter: brightness(0.85); }
+        .banner-card .banner-text { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2rem; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+
+        /* General Grids */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+        }
+
+        .card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            padding: 1.2rem; 
+            border-radius: 6px; 
+            transition: 0.3s; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card img { width: 100%; height: 210px; object-fit: cover; border-radius: 4px; margin-bottom: 0.8rem; }
+        .price { font-size: 1.15rem; font-weight: 700; color: var(--accent-gold); margin: 0.5rem 0; }
+
+        /* Touch-Optimized Forms */
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 0.8rem; 
+            background: #222228; 
+            border: 1px solid var(--border-color); 
+            color: #fff; 
+            border-radius: 4px; 
+            font-size: 0.95rem; /* Prevents auto-zoom on iOS safari */
+            min-height: 44px;
+        }
+
         input:focus, select:focus { border-color: var(--accent-gold); outline: none; }
 
-        /* Backoffice */
-        #backoffice-container { display: none; background: #000; min-height: 100vh; position: fixed; top:0; left:0; width:100%; z-index: 2000; overflow-y: auto; padding: 2rem; }
-        .admin-nav { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .admin-nav button { background: transparent; color: var(--text-light); border: none; padding: 0.5rem 1rem; cursor: pointer; }
-        .admin-nav button.active { background: var(--accent-gold); color: #000; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .table th, .table td { padding: 0.75rem; border: 1px solid var(--border-color); text-align: left; }
+        /* Mobile Drag & Drop Upload Zone */
+        .drop-zone { 
+            border: 2px dashed var(--border-color); 
+            border-radius: 6px; 
+            padding: 1.2rem 0.8rem; 
+            text-align: center; 
+            background: #121215; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            touch-action: manipulation;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent-gold); background: #1c1c22; }
+        .drop-zone p { font-size: 0.85rem; color: var(--text-muted); }
+        .drop-zone img { max-height: 100px; margin-top: 0.8rem; display: none; border-radius: 4px; margin-left: auto; margin-right: auto; }
+
+        /* Responsive Backoffice */
+        #backoffice-container { 
+            display: none; 
+            background: #000; 
+            min-height: 100vh; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 2000; 
+            overflow-y: auto; 
+            padding: 1rem; 
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .admin-nav { 
+            display: flex; 
+            gap: 0.5rem; 
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 1rem; 
+            margin-bottom: 1.5rem; 
+            overflow-x: auto; 
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .admin-nav button { 
+            background: transparent; 
+            color: var(--text-light); 
+            border: 1px solid var(--border-color); 
+            padding: 0.6rem 1rem; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            font-size: 0.85rem;
+            white-space: nowrap;
+            min-height: 40px;
+        }
+
+        .admin-nav button.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); font-weight: bold; }
+
+        /* Responsive Table Wrapper */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 1rem; }
+        .table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .table th, .table td { padding: 0.75rem 0.5rem; border: 1px solid var(--border-color); text-align: left; font-size: 0.85rem; }
         .table th { background: var(--bg-card); color: var(--accent-gold); }
+
+        .admin-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.2rem; margin-bottom: 1.5rem; border-radius: 6px; }
+
+        /* Media Queries for Mobile & Touch Screen Devices */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1rem; }
+            section { padding: 3rem 1rem; }
+            .grid { grid-template-columns: 1fr; }
+            .banner-grid { grid-template-columns: 1fr; }
+            .admin-card form { grid-template-columns: 1fr !important; }
+            .admin-card form input, .admin-card form select, .admin-card form button, .admin-card form div { grid-column: span 1 !important; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.1rem; }
+            .nav-links { gap: 0.8rem; }
+            .nav-links a { font-size: 0.8rem; }
+            .hero h1 { font-size: 1.8rem; }
+            #backoffice-container { padding: 0.8rem 0.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -68,40 +301,78 @@
             <div class="logo">ELITE BARBER</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
+                <li><a href="#categories">Categories</a></li>
                 <li><a href="#services">Services</a></li>
                 <li><a href="#barbers">Barbers</a></li>
                 <li><a href="#booking">Book</a></li>
-                <li><a href="#backoffice" onclick="showBackoffice()">Admin</a></li>
+                <li><a href="#backoffice" onclick="showBackoffice(event)">Admin</a></li>
             </ul>
         </nav>
     </header>
 
     <main id="public-website">
+        <!-- Hero Section -->
         <section id="home" class="hero">
             <h1>LOOK SHARP. FEEL CONFIDENT.</h1>
-            <p>Premium haircuts, grooming and styling from professional barbers.</p>
+            <p>Premium haircuts, beard styling & rejuvenation treatments on your schedule.</p>
             <div class="hero-btns">
                 <a href="#booking" class="btn">BOOK AN APPOINTMENT</a>
-                <a href="#services" class="btn btn-outline">VIEW SERVICES</a>
             </div>
         </section>
 
-        <section id="services">
-            <h2>OUR SERVICES</h2>
-            <div id="services-grid" class="grid">Loading services...</div>
+        <!-- Category Banners -->
+        <section id="categories">
+            <h2>EXPLORE SERVICES BY CATEGORY</h2>
+            <div class="banner-grid">
+                <!-- Male Hairstyle Image -->
+                <div class="banner-card" onclick="filterCategory('Hairstyles')">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800" alt="Male Hairstyle">
+                    <div class="banner-text">
+                        <h3>HAIRSTYLES</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Fades, Cuts, & Custom Styles</p>
+                    </div>
+                </div>
+                <!-- Beard Care Image -->
+                <div class="banner-card" onclick="filterCategory('Beards')">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800" alt="Beards">
+                    <div class="banner-text">
+                        <h3>BEARDS</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Trims, Hot Towels & Shaves</p>
+                    </div>
+                </div>
+                <!-- Female Skin Care Image -->
+                <div class="banner-card" onclick="filterCategory('Skin Care')">
+                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800" alt="Female Skin Care">
+                    <div class="banner-text">
+                        <h3>SKIN CARE</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Facials, Scrubs & Treatments</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
+        <!-- Services Grid -->
+        <section id="services">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <h2 id="services-title">ALL SERVICES & TREATMENTS</h2>
+                <button onclick="filterCategory('ALL')" class="btn btn-outline btn-sm">Show All</button>
+            </div>
+            <div id="services-grid" class="grid">Loading options...</div>
+        </section>
+
+        <!-- Barbers Section -->
         <section id="barbers">
             <h2>OUR BARBERS</h2>
             <div id="barbers-grid" class="grid">Loading barbers...</div>
         </section>
 
-        <section id="booking" style="background: var(--bg-card); border-radius:4px;">
+        <!-- Booking Section -->
+        <section id="booking" style="background: var(--bg-card); border-radius:6px; margin-bottom: 2rem;">
             <h2>BOOK APPOINTMENT</h2>
-            <div id="booking-wizard" style="margin-top: 2rem;">
+            <div id="booking-wizard" style="margin-top: 1.5rem;">
                 <form id="appointment-form" onsubmit="handleBookingSubmit(event)">
                     <div class="form-group">
-                        <label>Select Service</label>
+                        <label>Select Service / Treatment</label>
                         <select id="book-service" required></select>
                     </div>
                     <div class="form-group">
@@ -133,19 +404,20 @@
             </div>
             <div id="booking-confirmation" style="display: none; text-align: center; padding: 2rem;">
                 <h3 class="gold-text">APPOINTMENT REQUEST RECEIVED</h3>
-                <p style="margin: 1rem 0;">Thank you for choosing Elite Barber Studio. Your reference: <strong id="conf-ref" class="gold-text"></strong></p>
+                <p style="margin: 1rem 0;">Thank you for choosing Elite Barber Studio. Reference code: <strong id="conf-ref" class="gold-text"></strong></p>
                 <button onclick="location.reload()" class="btn">Book Another</button>
             </div>
         </section>
     </main>
 
+    <!-- BACK OFFICE CONTAINER -->
     <div id="backoffice-container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="admin-header">
             <h2>BACK OFFICE MANAGEMENT</h2>
-            <button onclick="hideBackoffice()" class="btn btn-outline">Exit Admin</button>
+            <button onclick="hideBackoffice()" class="btn btn-outline btn-sm">Exit Admin</button>
         </div>
         
-        <div id="admin-login-view" style="max-width: 400px; margin: 4rem auto;">
+        <div id="admin-login-view" style="max-width: 400px; margin: 3rem auto;">
             <h3 style="margin-bottom: 1rem;">Staff Authentication</h3>
             <div class="form-group"><label>Email</label><input type="email" id="admin-email"></div>
             <div class="form-group"><label>Password</label><input type="password" id="admin-password"></div>
@@ -154,43 +426,120 @@
 
         <div id="admin-dashboard-view" style="display: none;">
             <div class="admin-nav">
-                <button class="active" onclick="switchAdminTab('appointments')">Appointments</button>
-                <button onclick="switchAdminTab('services')">Services Setup</button>
+                <button id="btn-tab-appointments" class="active" onclick="switchAdminTab('appointments')">Appointments</button>
+                <button id="btn-tab-services" onclick="switchAdminTab('services')">Treatments & Services</button>
+                <button id="btn-tab-barbers" onclick="switchAdminTab('barbers')">Barbers</button>
                 <button onclick="logoutAdmin()">Logout</button>
             </div>
+
+            <!-- APPOINTMENTS TAB -->
             <div id="tab-appointments">
                 <h3>Appointments Dashboard</h3>
-                <table class="table">
-                    <thead>
-                        <tr><th>Ref</th><th>Customer</th><th>Service</th><th>Barber</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="admin-appointments-list"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Ref</th><th>Customer</th><th>Service</th><th>Barber</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="admin-appointments-list"></tbody>
+                    </table>
+                </div>
             </div>
+
+            <!-- SERVICES TAB -->
             <div id="tab-services" style="display: none;">
-                <h3>Manage Services</h3>
-                <table class="table">
-                    <thead><tr><th>Name</th><th>Category</th><th>Price (£)</th><th>Mins</th></tr></thead>
-                    <tbody id="admin-services-list"></tbody>
-                </table>
+                <div class="admin-card">
+                    <h3>Add Treatment, Hairstyle, or Skin Care Item</h3>
+                    <form onsubmit="addService(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <input type="text" id="srv-name" placeholder="Item Name" required>
+                        <select id="srv-cat" required>
+                            <option value="Hairstyles">Category: Hairstyles</option>
+                            <option value="Beards">Category: Beards</option>
+                            <option value="Skin Care">Category: Skin Care</option>
+                        </select>
+                        <input type="number" step="0.01" id="srv-price" placeholder="Price (£)" required>
+                        <input type="number" id="srv-mins" placeholder="Duration (Minutes)" required>
+                        <input type="text" id="srv-desc" placeholder="Description" style="grid-column: span 2;">
+                        
+                        <!-- Drag & Drop Photo Area -->
+                        <div style="grid-column: span 2;">
+                            <label>Image (Tap to select or Drag & Drop photo)</label>
+                            <div class="drop-zone" id="srv-dropzone">
+                                <p>Tap here or drop image to upload</p>
+                                <img id="srv-preview" src="" alt="Preview">
+                                <input type="file" id="srv-file" accept="image/*" style="display:none">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">Save Item</button>
+                    </form>
+                </div>
+                <h3>Service Catalog</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead><tr><th>Name</th><th>Category</th><th>Price (£)</th><th>Mins</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="admin-services-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BARBERS TAB -->
+            <div id="tab-barbers" style="display: none;">
+                <div class="admin-card">
+                    <h3>Add New Barber</h3>
+                    <form onsubmit="addBarber(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <input type="text" id="barber-name" placeholder="Barber Name" required>
+                        <input type="text" id="barber-desc" placeholder="Specialty / Bio" required>
+                        
+                        <!-- Drag & Drop Photo Area for Barber -->
+                        <div style="grid-column: span 2;">
+                            <label>Photo (Tap to select or Drag & Drop photo)</label>
+                            <div class="drop-zone" id="barber-dropzone">
+                                <p>Tap here or drop photo to upload</p>
+                                <img id="barber-preview" src="" alt="Preview">
+                                <input type="file" id="barber-file" accept="image/*" style="display:none">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm" style="grid-column: span 2;">Save Barber</button>
+                    </form>
+                </div>
+                <h3>Barbers List</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead><tr><th>Photo</th><th>Name</th><th>Bio</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="admin-barbers-list"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ===============================
-        // SUPABASE CONFIGURATION
-        // ===============================
+        // SUPABASE SETUP
         const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let allServicesData = [];
+        let srvImageData = '';
+        let barberImageData = '';
 
-        // Core App Logic
+        // Gender-specific placeholder photos
+        const CATEGORY_PLACEHOLDERS = {
+            'Hairstyles': 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600', // Male haircut
+            'Beards': 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600',     // Beard styling
+            'Skin Care': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600'  // Female skin care facial
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             fetchServices();
             fetchBarbers();
             initDateMin();
+            setupDragAndDrop();
+
+            if (window.location.hash === '#backoffice') {
+                showBackoffice();
+            }
         });
 
         function initDateMin() {
@@ -198,29 +547,92 @@
             document.getElementById('book-date').min = today;
         }
 
-        async function fetchServices() {
-            const { data, error } = await supabase.from('services').select('*').eq('active', true);
-            if (error) return console.error(error);
+        /* Drag & Drop Upload Helper for Touch & Desktop */
+        function setupDragAndDrop() {
+            setupZone('srv-dropzone', 'srv-file', 'srv-preview', (base64) => srvImageData = base64);
+            setupZone('barber-dropzone', 'barber-file', 'barber-preview', (base64) => barberImageData = base64);
+        }
 
+        function setupZone(zoneId, inputId, previewId, callback) {
+            const zone = document.getElementById(zoneId);
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            zone.addEventListener('click', () => input.click());
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                zone.addEventListener(eventName, (e) => { e.preventDefault(); zone.classList.add('dragover'); }, false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                zone.addEventListener(eventName, (e) => { e.preventDefault(); zone.classList.remove('dragover'); }, false);
+            });
+
+            zone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length) handleFile(files[0], preview, callback);
+            });
+
+            input.addEventListener('change', () => {
+                if (input.files.length) handleFile(input.files[0], preview, callback);
+            });
+        }
+
+        function handleFile(file, previewEl, callback) {
+            if (!file.type.startsWith('image/')) return alert('Please upload an image file.');
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewEl.src = e.target.result;
+                previewEl.style.display = 'block';
+                callback(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* Fetch & Display Logic */
+        async function fetchServices() {
+            const { data, error } = await supabaseClient.from('services').select('*').eq('active', true);
+            if (error) return console.error('Error fetching services:', error);
+            allServicesData = data || [];
+            renderServices(allServicesData);
+        }
+
+        function renderServices(items) {
             const grid = document.getElementById('services-grid');
             const select = document.getElementById('book-service');
             grid.innerHTML = ''; select.innerHTML = '';
 
-            data.forEach(s => {
+            items.forEach(s => {
+                const fallbackImg = CATEGORY_PLACEHOLDERS[s.category] || CATEGORY_PLACEHOLDERS['Hairstyles'];
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${s.image}" alt="${s.name}">
-                        <h3>${s.name}</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${s.description}</p>
-                        <div class="price">£${s.price.toFixed(2)} (${s.estimated_minutes} mins)</div>
+                        <img src="${s.image || fallbackImg}" alt="${s.name}">
+                        <div>
+                            <h3>${s.name}</h3>
+                            <p style="font-size: 0.8rem; color: var(--accent-gold); font-weight: bold; margin-bottom:0.3rem;">${s.category}</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">${s.description || ''}</p>
+                        </div>
+                        <div class="price">£${Number(s.price).toFixed(2)} (${s.estimated_minutes} mins)</div>
                     </div>`;
-                select.innerHTML += `<option value="${s.id}">${s.name} - £${s.price}</option>`;
+                select.innerHTML += `<option value="${s.id}">${s.name} [${s.category}] - £${s.price}</option>`;
             });
         }
 
+        function filterCategory(cat) {
+            const title = document.getElementById('services-title');
+            if (cat === 'ALL') {
+                title.innerText = 'ALL SERVICES & TREATMENTS';
+                renderServices(allServicesData);
+            } else {
+                title.innerText = `${cat.toUpperCase()} CATALOG`;
+                const filtered = allServicesData.filter(s => s.category === cat);
+                renderServices(filtered);
+            }
+            document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+        }
+
         async function fetchBarbers() {
-            const { data, error } = await supabase.from('barbers').select('*').eq('active', true);
-            if (error) return console.error(error);
+            const { data, error } = await supabaseClient.from('barbers').select('*').eq('active', true);
+            if (error) return console.error('Error fetching barbers:', error);
 
             const grid = document.getElementById('barbers-grid');
             const select = document.getElementById('book-barber');
@@ -229,9 +641,9 @@
             data.forEach(b => {
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${b.photo}" alt="${b.name}">
+                        <img src="${b.photo || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" alt="${b.name}">
                         <h3>${b.name}</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${b.description}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${b.description || ''}</p>
                     </div>`;
                 select.innerHTML += `<option value="${b.id}">${b.name}</option>`;
             });
@@ -240,7 +652,6 @@
         function loadAvailableSlots() {
             const select = document.getElementById('book-time');
             select.innerHTML = '';
-            // Demo standard generation (09:00 - 18:00 hourly)
             const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
             times.forEach(t => { select.innerHTML += `<option value="${t}">${t}</option>`; });
         }
@@ -263,9 +674,9 @@
                 status: 'New'
             };
 
-            const { data, error } = await supabase.from('appointments').insert([payload]);
+            const { error } = await supabaseClient.from('appointments').insert([payload]);
             if (error) {
-                alert('Conflict or DB error: ' + error.message);
+                alert('Booking error: ' + error.message);
             } else {
                 document.getElementById('appointment-form').style.display = 'none';
                 document.getElementById('booking-confirmation').style.display = 'block';
@@ -273,16 +684,35 @@
             }
         }
 
-        /* Backoffice Control */
-        function showBackoffice() { document.getElementById('backoffice-container').style.display = 'block'; }
-        function hideBackoffice() { document.getElementById('backoffice-container').style.display = 'none'; }
+        /* Backoffice Logic */
+        function showBackoffice(e) {
+            if (e) e.preventDefault();
+            window.location.hash = 'backoffice';
+            document.getElementById('backoffice-container').style.display = 'block';
+            
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                if (session) {
+                    document.getElementById('admin-login-view').style.display = 'none';
+                    document.getElementById('admin-dashboard-view').style.display = 'block';
+                    loadAdminData();
+                } else {
+                    document.getElementById('admin-login-view').style.display = 'block';
+                    document.getElementById('admin-dashboard-view').style.display = 'none';
+                }
+            });
+        }
+
+        function hideBackoffice() {
+            window.location.hash = '';
+            document.getElementById('backoffice-container').style.display = 'none';
+        }
 
         async function loginAdmin() {
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-            if (error) { alert("Login failed: " + error.message); } 
+            if (error) alert("Login failed: " + error.message);
             else {
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
@@ -291,11 +721,12 @@
         }
 
         async function loadAdminData() {
-            const { data: appointments } = await supabase.from('appointments').select('*');
-            const tbody = document.getElementById('admin-appointments-list');
-            tbody.innerHTML = '';
+            // Appointments
+            const { data: appointments } = await supabaseClient.from('appointments').select('*');
+            const appBody = document.getElementById('admin-appointments-list');
+            appBody.innerHTML = '';
             (appointments || []).forEach(a => {
-                tbody.innerHTML += `
+                appBody.innerHTML += `
                     <tr>
                         <td>${a.booking_ref}</td>
                         <td>${a.customer_name}<br>${a.customer_phone}</td>
@@ -304,23 +735,108 @@
                         <td>${a.appointment_date}</td>
                         <td>${a.start_time}</td>
                         <td><strong>${a.status}</strong></td>
-                        <td><button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn" style="padding: 2px 5px;">Confirm</button></td>
+                        <td><button onclick="updateStatus('${a.id}', 'Confirmed')" class="btn btn-sm">Confirm</button></td>
+                    </tr>`;
+            });
+
+            // Services
+            const { data: services } = await supabaseClient.from('services').select('*');
+            const srvBody = document.getElementById('admin-services-list');
+            srvBody.innerHTML = '';
+            (services || []).forEach(s => {
+                srvBody.innerHTML += `
+                    <tr>
+                        <td>${s.name}</td>
+                        <td>${s.category}</td>
+                        <td>£${Number(s.price).toFixed(2)}</td>
+                        <td>${s.estimated_minutes} min</td>
+                        <td>${s.active ? 'Active' : 'Inactive'}</td>
+                        <td><button onclick="toggleServiceActive('${s.id}', ${!s.active})" class="btn btn-sm btn-outline">${s.active ? 'Deactivate' : 'Activate'}</button></td>
+                    </tr>`;
+            });
+
+            // Barbers
+            const { data: barbers } = await supabaseClient.from('barbers').select('*');
+            const barbBody = document.getElementById('admin-barbers-list');
+            barbBody.innerHTML = '';
+            (barbers || []).forEach(b => {
+                barbBody.innerHTML += `
+                    <tr>
+                        <td><img src="${b.photo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"></td>
+                        <td>${b.name}</td>
+                        <td>${b.description || ''}</td>
+                        <td>${b.active ? 'Active' : 'Inactive'}</td>
+                        <td><button onclick="toggleBarberActive('${b.id}', ${!b.active})" class="btn btn-sm btn-outline">${b.active ? 'Deactivate' : 'Activate'}</button></td>
                     </tr>`;
             });
         }
 
+        async function addService(e) {
+            e.preventDefault();
+            const category = document.getElementById('srv-cat').value;
+            const payload = {
+                name: document.getElementById('srv-name').value,
+                category: category,
+                price: parseFloat(document.getElementById('srv-price').value),
+                estimated_minutes: parseInt(document.getElementById('srv-mins').value),
+                description: document.getElementById('srv-desc').value,
+                image: srvImageData || CATEGORY_PLACEHOLDERS[category],
+                active: true
+            };
+
+            const { error } = await supabaseClient.from('services').insert([payload]);
+            if (error) alert("Error adding item: " + error.message);
+            else { 
+                alert("Item saved!"); 
+                srvImageData = '';
+                document.getElementById('srv-preview').style.display = 'none';
+                loadAdminData(); fetchServices(); e.target.reset(); 
+            }
+        }
+
+        async function addBarber(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('barber-name').value,
+                description: document.getElementById('barber-desc').value,
+                photo: barberImageData || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500',
+                active: true
+            };
+
+            const { error } = await supabaseClient.from('barbers').insert([payload]);
+            if (error) alert("Error adding barber: " + error.message);
+            else { 
+                alert("Barber saved!"); 
+                barberImageData = '';
+                document.getElementById('barber-preview').style.display = 'none';
+                loadAdminData(); fetchBarbers(); e.target.reset(); 
+            }
+        }
+
+        async function toggleServiceActive(id, active) {
+            await supabaseClient.from('services').update({ active }).eq('id', id);
+            loadAdminData(); fetchServices();
+        }
+
+        async function toggleBarberActive(id, active) {
+            await supabaseClient.from('barbers').update({ active }).eq('id', id);
+            loadAdminData(); fetchBarbers();
+        }
+
         async function updateStatus(id, newStatus) {
-            await supabase.from('appointments').update({ status: newStatus }).eq('id', id);
+            await supabaseClient.from('appointments').update({ status: newStatus }).eq('id', id);
             loadAdminData();
         }
 
         function switchAdminTab(tab) {
-            document.getElementById('tab-appointments').style.display = tab === 'appointments' ? 'block' : 'none';
-            document.getElementById('tab-services').style.display = tab === 'services' ? 'block' : 'none';
+            ['appointments', 'services', 'barbers'].forEach(t => {
+                document.getElementById(`tab-${t}`).style.display = tab === t ? 'block' : 'none';
+                document.getElementById(`btn-tab-${t}`).classList.toggle('active', tab === t);
+            });
         }
 
         async function logoutAdmin() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             document.getElementById('admin-login-view').style.display = 'block';
             document.getElementById('admin-dashboard-view').style.display = 'none';
         }

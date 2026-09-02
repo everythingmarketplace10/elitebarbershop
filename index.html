@@ -34,7 +34,7 @@
             <div id="public-banner-info" class="flex flex-wrap items-center gap-4 text-xs text-gray-300">
                 <span id="shop-phone-wrap"><i class="fas fa-phone text-amber-500 mr-1"></i><a id="shop-phone" href="#">--</a></span>
                 <span id="shop-wa-wrap"><i class="fab fa-whatsapp text-green-500 mr-1"></i><a id="shop-wa" href="#" target="_blank">--</a></span>
-                <span><i class="fas fa-clock text-amber-500 mr-1"></i><span id="shop-open-status">Checking hours...</span></span>
+                <span><i class="fas fa-clock text-amber-500 mr-1"></i><span id="shop-open-status">Open Today</span></span>
                 <button onclick="openBookingModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-4 rounded transition">BOOK NOW</button>
                 <a id="shop-directions-btn" href="#map-section" class="bg-gray-700 hover:bg-gray-600 text-gray-200 py-1.5 px-3 rounded transition">GET DIRECTIONS</a>
             </div>
@@ -92,7 +92,7 @@
                 <div class="bg-gray-900 p-4 rounded-lg flex flex-wrap justify-between items-center border border-gray-700">
                     <div>
                         <h2 id="bo-shop-name" class="text-lg font-bold text-amber-500">Elite Barber Studio</h2>
-                        <p id="bo-shop-sub" class="text-xs text-gray-400"></p>
+                        <p id="bo-shop-sub" class="text-xs text-gray-400">Management Console</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="switchAdminTab('profile')" class="bg-amber-600 hover:bg-amber-500 text-xs px-3 py-1.5 rounded font-bold">EDIT SHOP DETAILS</button>
@@ -269,9 +269,11 @@
     </div>
 
     <script>
-        // Insert existing Supabase project settings
+        // ===============================
+        // SUPABASE CONFIGURATION
+        // ===============================
         const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co"; 
-        const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93cnhwYmJvcGF1bW5hZ3pwbWZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzgwMTAsImV4cCI6MjA1NjgxNDAxMH0.8vS_3Uv5U8cQ1yY-E_1_04p9XU9fQ8sL6qG_7j69H7o";
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let mapInstance = null;
@@ -508,7 +510,7 @@
 
             const name = document.getElementById('book-name').value;
             const phone = document.getElementById('book-phone').value;
-            const email = document.getElementById('book-email').value || null; // Optional
+            const email = document.getElementById('book-email').value || null; // Optional field mapping
             const serviceId = document.getElementById('book-service').value;
             const barberId = document.getElementById('book-barber').value;
             const date = document.getElementById('book-date').value;

@@ -5,29 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Barber Studio</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Leaflet OpenStreetMap CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        .map-container { min-height: 400px; width: 100%; z-index: 10; }
+        .map-container { min-height: 420px; width: 100%; z-index: 10; }
         .tab-btn.active { border-bottom: 2px solid #D97706; color: #D97706; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
 
-    <!-- ========================================== -->
-    <!-- PUBLIC WEBSITE HEADER / BANNER            -->
-    <!-- ========================================== -->
     <header class="bg-gray-800 border-b border-gray-700">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
@@ -48,10 +41,8 @@
         </div>
     </header>
 
-    <!-- MAIN PUBLIC CONTENT -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-12">
         
-        <!-- SERVICES CATALOG -->
         <section id="services-section">
             <h2 class="text-xl font-bold text-amber-500 mb-4 border-b border-gray-800 pb-2">OUR SERVICES</h2>
             <div id="services-loading" class="text-center py-8 text-gray-400">Loading services...</div>
@@ -59,7 +50,6 @@
             <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
         </section>
 
-        <!-- BARBERS SECTION -->
         <section id="barbers-section">
             <h2 class="text-xl font-bold text-amber-500 mb-4 border-b border-gray-800 pb-2">OUR TEAM</h2>
             <div id="barbers-loading" class="text-center py-8 text-gray-400">Loading barbers...</div>
@@ -67,7 +57,6 @@
             <div id="barbers-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 hidden"></div>
         </section>
 
-        <!-- REVIEWS SECTION -->
         <section id="reviews-section">
             <h2 class="text-xl font-bold text-amber-500 mb-4 border-b border-gray-800 pb-2">CLIENT REVIEWS</h2>
             <div id="reviews-loading" class="text-center py-8 text-gray-400">Loading reviews...</div>
@@ -75,7 +64,6 @@
             <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden"></div>
         </section>
 
-        <!-- MAP SECTION -->
         <section id="map-section" class="space-y-4">
             <h2 class="text-xl font-bold text-amber-500 border-b border-gray-800 pb-2">FIND OUR SHOP</h2>
             <div id="map-container" class="map-container rounded-lg border border-gray-700 bg-gray-800"></div>
@@ -84,19 +72,14 @@
 
     </main>
 
-    <!-- BACK OFFICE LOGIN / PANEL TOGGLE -->
     <div class="bg-gray-950 border-t border-gray-800 py-4 text-center">
         <button onclick="toggleBackOffice()" class="text-xs text-gray-500 hover:text-amber-500 underline">Back Office Access</button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- BACK OFFICE MODAL / SECTION                -->
-    <!-- ========================================== -->
     <div id="backoffice-modal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-gray-800 rounded-lg max-w-6xl w-full p-6 text-gray-100 max-h-[90vh] overflow-y-auto relative">
             <button onclick="toggleBackOffice()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
             
-            <!-- Auth Login State -->
             <div id="admin-login-view" class="max-w-md mx-auto py-8 space-y-4">
                 <h2 class="text-xl font-bold text-amber-500 text-center">Staff Login</h2>
                 <input type="email" id="admin-email" placeholder="Email" class="w-full bg-gray-700 p-2.5 rounded border border-gray-600 text-white">
@@ -105,9 +88,7 @@
                 <div id="login-error" class="text-red-400 text-xs text-center hidden">Invalid login credentials.</div>
             </div>
 
-            <!-- Authenticated Admin View -->
             <div id="admin-panel-view" class="hidden space-y-6">
-                <!-- Top Back Office Banner -->
                 <div class="bg-gray-900 p-4 rounded-lg flex flex-wrap justify-between items-center border border-gray-700">
                     <div>
                         <h2 id="bo-shop-name" class="text-lg font-bold text-amber-500">Elite Barber Studio</h2>
@@ -119,7 +100,6 @@
                     </div>
                 </div>
 
-                <!-- Navigation Tabs -->
                 <div class="flex border-b border-gray-700 gap-4 text-sm font-bold">
                     <button onclick="switchAdminTab('dashboard')" class="tab-btn active py-2 px-1" id="tab-dashboard">Dashboard</button>
                     <button onclick="switchAdminTab('appointments')" class="tab-btn py-2 px-1" id="tab-appointments">Appointments</button>
@@ -127,7 +107,6 @@
                     <button onclick="switchAdminTab('profile')" class="tab-btn py-2 px-1" id="tab-profile">Shop Profile</button>
                 </div>
 
-                <!-- TAB: DASHBOARD -->
                 <div id="admin-tab-dashboard" class="space-y-6">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="bg-gray-900 p-4 rounded border border-gray-700"><p class="text-xs text-gray-400">Today's Appointments</p><p id="dash-today" class="text-2xl font-bold text-amber-500">0</p></div>
@@ -141,7 +120,6 @@
                     </div>
                 </div>
 
-                <!-- TAB: APPOINTMENTS -->
                 <div id="admin-tab-appointments" class="hidden space-y-4">
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-left text-gray-300">
@@ -150,7 +128,6 @@
                                     <th class="p-2">Ref</th>
                                     <th class="p-2">Customer</th>
                                     <th class="p-2">Phone</th>
-                                    <th class="p-2">Service</th>
                                     <th class="p-2">Date / Time</th>
                                     <th class="p-2">Price</th>
                                     <th class="p-2">Appt Status</th>
@@ -163,28 +140,24 @@
                     </div>
                 </div>
 
-                <!-- TAB: BARBERS -->
                 <div id="admin-tab-barbers" class="hidden space-y-4">
                     <div class="bg-gray-900 p-4 rounded border border-gray-700 max-w-md space-y-3">
-                        <h3 class="font-bold text-amber-500">Add / Edit Barber</h3>
-                        <input type="hidden" id="barber-edit-id">
+                        <h3 class="font-bold text-amber-500">Add Barber Profile</h3>
                         <input type="text" id="barber-name" placeholder="Name" class="w-full bg-gray-800 p-2 rounded border border-gray-600">
                         <input type="text" id="barber-specialty" placeholder="Specialty" class="w-full bg-gray-800 p-2 rounded border border-gray-600">
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">Barber Photo</label>
                             <input type="file" id="barber-photo-input" accept="image/*" class="w-full bg-gray-800 p-1.5 rounded border border-gray-600 text-xs">
-                            <img id="barber-photo-preview" src="" class="w-16 h-16 rounded object-cover mt-2 hidden border border-gray-600">
                         </div>
                         <button onclick="saveBarber()" class="bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded text-xs font-bold">Save Barber</button>
                     </div>
                     <div id="bo-barbers-list" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                 </div>
 
-                <!-- TAB: PROFILE & PAYMENT SETTINGS -->
                 <div id="admin-tab-profile" class="hidden space-y-6">
                     <form id="profile-form" onsubmit="saveProfile(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         <div class="space-y-3 bg-gray-900 p-4 rounded border border-gray-700">
-                            <h3 class="font-bold text-amber-500 text-sm">Shop Information</h3>
+                            <h3 class="font-bold text-amber-500 text-sm">Shop Details</h3>
                             <div><label>Shop Name</label><input type="text" id="prof-shop-name" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             <div><label>Address</label><input type="text" id="prof-address" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             <div><label>Postcode</label><input type="text" id="prof-postcode" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
@@ -213,9 +186,9 @@
                             </div>
                             <div><label>Deposit Amount (£)</label><input type="number" step="0.01" id="prof-dep-amt" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             <div><label>Deposit Percentage (%)</label><input type="number" step="0.01" id="prof-dep-pct" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
-                            <div><label>Payment Provider Link (Stripe/PayPal)</label><input type="text" id="prof-pay-link" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
+                            <div><label>Payment Link (Stripe/PayPal)</label><input type="text" id="prof-pay-link" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             
-                            <h4 class="font-bold text-amber-500 mt-4">Bank Transfer Settings</h4>
+                            <h4 class="font-bold text-amber-500 mt-4">Bank Transfer Details</h4>
                             <div>
                                 <label>Enable Bank Transfer</label>
                                 <select id="prof-bank-enabled" class="w-full bg-gray-800 p-2 rounded border border-gray-600">
@@ -227,11 +200,11 @@
                             <div><label>Bank Name</label><input type="text" id="prof-bank-name" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             <div><label>Sort Code</label><input type="text" id="prof-bank-sort" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                             <div><label>Account Number</label><input type="text" id="prof-bank-acc" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
-                            <div><label>Payment Reference Instructions</label><input type="text" id="prof-bank-instr" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
+                            <div><label>Payment Instructions</label><input type="text" id="prof-bank-instr" class="w-full bg-gray-800 p-2 rounded border border-gray-600"></div>
                         </div>
 
                         <div class="md:col-span-2">
-                            <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white px-6 py-2 rounded font-bold">SAVE ALL CHANGES</button>
+                            <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white px-6 py-2 rounded font-bold">SAVE PROFILE</button>
                         </div>
                     </form>
                 </div>
@@ -239,7 +212,6 @@
         </div>
     </div>
 
-    <!-- BOOKING MODAL (No Login Required, Email Optional) -->
     <div id="booking-modal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-gray-800 rounded-lg max-w-lg w-full p-6 text-gray-100 relative space-y-4">
             <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
@@ -268,19 +240,18 @@
                 <div><label>Notes / Special Requirements (Optional)</label><textarea id="book-notes" class="w-full bg-gray-700 p-2 rounded border border-gray-600 h-16"></textarea></div>
 
                 <div id="booking-deposit-summary" class="bg-gray-900 p-3 rounded border border-gray-700 space-y-1 hidden">
-                    <p class="font-bold text-amber-500">Payment Details</p>
-                    <p>Total Price: <span id="summary-total">£0.00</span></p>
-                    <p>Deposit Due: <span id="summary-deposit" class="text-green-400 font-bold">£0.00</span></p>
+                    <p class="font-bold text-amber-500">Payment Breakdown</p>
+                    <p>Total Service Price: <span id="summary-total">£0.00</span></p>
+                    <p>Deposit Required: <span id="summary-deposit" class="text-green-400 font-bold">£0.00</span></p>
                 </div>
 
                 <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 py-2.5 rounded font-bold text-sm">CONFIRM BOOKING</button>
             </form>
 
-            <!-- Confirmation & Payment Options -->
             <div id="booking-success" class="hidden space-y-4 text-center py-4">
                 <i class="fas fa-check-circle text-4xl text-green-500"></i>
-                <h4 class="text-lg font-bold text-white">Booking Submitted!</h4>
-                <p class="text-xs text-gray-300">Your Reference Code: <span id="conf-ref" class="font-mono text-amber-500 font-bold"></span></p>
+                <h4 class="text-lg font-bold text-white">Booking Confirmed!</h4>
+                <p class="text-xs text-gray-300">Your Booking Reference: <span id="conf-ref" class="font-mono text-amber-500 font-bold"></span></p>
 
                 <div id="conf-payment-actions" class="space-y-2 pt-2 border-t border-gray-700 hidden">
                     <a id="pay-link-btn" href="#" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded text-xs">PAY DEPOSIT NOW</a>
@@ -297,11 +268,10 @@
         </div>
     </div>
 
-    <!-- SCRIPT APPLICATION CORE -->
     <script>
-        // SUPABASE CLIENT CONFIGURATION
-        const SUPABASE_URL = "https://YOUR-SUPABASE-URL.supabase.co"; 
-        const SUPABASE_ANON_KEY = "YOUR-SUPABASE-ANON-KEY";
+        // Insert existing Supabase project settings
+        const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co"; 
+        const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let mapInstance = null;
@@ -309,7 +279,6 @@
         let servicesList = [];
         let barbersList = [];
 
-        // INITIALIZATION
         window.addEventListener('DOMContentLoaded', async () => {
             await loadBusinessProfile();
             await loadServices();
@@ -318,7 +287,6 @@
             checkAuth();
         });
 
-        // 1. LOAD BUSINESS PROFILE & INITIALIZE MAP
         async function loadBusinessProfile() {
             try {
                 const { data, error } = await db.from('business_profile').select('*').limit(1).single();
@@ -326,6 +294,7 @@
                 if (data) {
                     globalProfile = data;
                     document.getElementById('shop-name').innerText = data.shop_name || 'Elite Barber Studio';
+                    document.getElementById('bo-shop-name').innerText = data.shop_name || 'Elite Barber Studio';
                     document.getElementById('shop-address-text').innerText = `${data.address || ''} ${data.postcode || ''}`;
                     document.getElementById('shop-phone').innerText = data.phone || '--';
                     document.getElementById('shop-phone').href = `tel:${data.phone || ''}`;
@@ -348,7 +317,6 @@
             }
         }
 
-        // MAP RENDERER (OpenStreetMap + Leaflet)
         function renderMap(lat, lng, name, address) {
             const container = document.getElementById('map-container');
             const unconfig = document.getElementById('map-unconfigured');
@@ -368,7 +336,7 @@
                 const popupContent = `
                     <div style="color:#000;">
                         <strong>${name || 'Elite Barber Studio'}</strong><br>${address || ''}<br>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" style="color:#d97706;font-weight:bold;">GET DIRECTIONS</a>
+                        <a href="https://maps.google.com/?q=${lat},${lng}" target="_blank" style="color:#d97706;font-weight:bold;">GET DIRECTIONS</a>
                     </div>
                 `;
                 L.marker([lat, lng]).addTo(mapInstance).bindPopup(popupContent).openPopup();
@@ -378,7 +346,6 @@
             }
         }
 
-        // 2. LOAD SERVICES
         async function loadServices() {
             const loadEl = document.getElementById('services-loading');
             const errEl = document.getElementById('services-error');
@@ -393,7 +360,7 @@
                 gridEl.innerHTML = '';
 
                 if (servicesList.length === 0) {
-                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No services currently listed.</div>`;
+                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No active services listed.</div>`;
                 } else {
                     servicesList.forEach(s => {
                         gridEl.innerHTML += `
@@ -418,7 +385,6 @@
             }
         }
 
-        // 3. LOAD BARBERS
         async function loadBarbers() {
             const loadEl = document.getElementById('barbers-loading');
             const errEl = document.getElementById('barbers-error');
@@ -433,7 +399,7 @@
                 gridEl.innerHTML = '';
 
                 if (barbersList.length === 0) {
-                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No barbers found.</div>`;
+                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No available barbers found.</div>`;
                 } else {
                     barbersList.forEach(b => {
                         const photo = b.photo_url || 'https://via.placeholder.com/300x300?text=Barber';
@@ -456,7 +422,6 @@
             }
         }
 
-        // 4. LOAD REVIEWS
         async function loadReviews() {
             const loadEl = document.getElementById('reviews-loading');
             const errEl = document.getElementById('reviews-error');
@@ -470,7 +435,7 @@
                 gridEl.innerHTML = '';
 
                 if (!data || data.length === 0) {
-                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No reviews published yet.</div>`;
+                    gridEl.innerHTML = `<div class="col-span-full text-center text-gray-400">No published reviews yet.</div>`;
                 } else {
                     data.forEach(r => {
                         const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
@@ -491,7 +456,6 @@
             }
         }
 
-        // BOOKING MODAL LOGIC
         function openBookingModal() {
             document.getElementById('booking-form').reset();
             document.getElementById('booking-form').classList.remove('hidden');
@@ -544,7 +508,7 @@
 
             const name = document.getElementById('book-name').value;
             const phone = document.getElementById('book-phone').value;
-            const email = document.getElementById('book-email').value || null; // Email optional
+            const email = document.getElementById('book-email').value || null; // Optional
             const serviceId = document.getElementById('book-service').value;
             const barberId = document.getElementById('book-barber').value;
             const date = document.getElementById('book-date').value;
@@ -613,7 +577,6 @@
             }
         }
 
-        // BACK OFFICE LOGIC
         function toggleBackOffice() {
             document.getElementById('backoffice-modal').classList.toggle('hidden');
         }
@@ -697,7 +660,6 @@
             if (!data) return;
 
             data.forEach(a => {
-                const emailDisplay = a.customer_email || '<span class="text-gray-500 italic">Not provided</span>';
                 tbody.innerHTML += `
                     <tr>
                         <td class="p-2 font-mono">${a.booking_reference || a.reference_code || ''}</td>
@@ -760,7 +722,7 @@
             const done = data.filter(a => a.appointment_status === 'DONE').length;
             const rejected = data.filter(a => a.appointment_status === 'REJECTED').length;
 
-            alert(`Customer History (${phone}):\nTotal Appointments: ${total}\nCompleted: ${done}\nRejected: ${rejected}`);
+            alert(`Customer Phone (${phone}):\nTotal Appointments: ${total}\nCompleted: ${done}\nRejected: ${rejected}`);
         }
 
         async function loadAdminBarbers() {

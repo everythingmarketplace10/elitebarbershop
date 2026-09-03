@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Barber Studio | Premium Grooming & Appointments</title>
-    <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
@@ -49,7 +45,6 @@
             overflow-x: hidden;
         }
 
-        /* Typography & Utility */
         h1, h2, h3, h4, .brand-font {
             font-family: var(--font-heading);
             letter-spacing: 0.5px;
@@ -65,7 +60,6 @@
             padding: 2rem 0;
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -114,7 +108,6 @@
             font-size: 0.85rem;
         }
 
-        /* Header / Navbar */
         header {
             position: sticky;
             top: 0;
@@ -176,7 +169,6 @@
             color: var(--accent-gold);
         }
 
-        /* Banner Temporary Closed */
         .closed-banner {
             background: var(--danger);
             color: white;
@@ -188,7 +180,6 @@
             z-index: 1001;
         }
 
-        /* Hero Section */
         .hero {
             position: relative;
             padding: 8rem 1rem 6rem;
@@ -218,7 +209,6 @@
             flex-wrap: wrap;
         }
 
-        /* Section Global */
         section {
             padding: 5rem 0;
             border-bottom: 1px solid var(--border-color);
@@ -242,14 +232,12 @@
             letter-spacing: 2px;
         }
 
-        /* Grid Layouts */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -273,7 +261,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Category Filter */
         .filter-tabs {
             display: flex;
             justify-content: center;
@@ -298,7 +285,42 @@
             border-color: var(--accent-gold);
         }
 
-        /* Booking Wizard Interface */
+        .category-hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 180px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .category-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(11,14,20,0.95) 0%, rgba(11,14,20,0.3) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1.2rem;
+        }
+
         .booking-wizard {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -358,7 +380,6 @@
             text-decoration: line-through;
         }
 
-        /* Forms */
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -385,7 +406,30 @@
             border-color: var(--accent-gold);
         }
 
-        /* Reviews Accordion & FAQ */
+        .drag-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            background: var(--bg-main);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .drag-drop-area.dragover {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        .drag-drop-preview {
+            max-height: 120px;
+            border-radius: var(--radius);
+            margin-top: 0.75rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .faq-item {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -413,7 +457,6 @@
             display: block;
         }
 
-        /* Map */
         #shop-map {
             height: 350px;
             width: 100%;
@@ -421,7 +464,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Back Office Admin Portal */
         .admin-layout {
             display: grid;
             grid-template-columns: 240px 1fr;
@@ -468,7 +510,6 @@
             max-height: 85vh;
         }
 
-        /* Tables */
         .table-responsive {
             overflow-x: auto;
         }
@@ -490,7 +531,6 @@
             color: var(--accent-gold);
         }
 
-        /* Status Badges */
         .badge {
             padding: 0.25rem 0.6rem;
             border-radius: 12px;
@@ -502,31 +542,8 @@
         .badge-NEW { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
         .badge-DONE { background: rgba(16, 185, 129, 0.2); color: #34D399; }
         .badge-REJECTED { background: rgba(239, 68, 68, 0.2); color: #F87171; }
+        .badge-CANCELLED { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; }
 
-        /* Realtime Notification Popup */
-        .notification-toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--accent-gold);
-            color: #000;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-weight: 600;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Modal Overlay */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -549,19 +566,10 @@
             padding: 2rem;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 900px) {
-            .admin-layout {
-                grid-template-columns: 1fr;
-            }
-            .admin-sidebar {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .admin-menu {
-                flex-direction: row;
-                overflow-x: auto;
-            }
+            .admin-layout { grid-template-columns: 1fr; }
+            .admin-sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
+            .admin-menu { flex-direction: row; overflow-x: auto; }
         }
 
         @media (max-width: 768px) {
@@ -569,8 +577,7 @@
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 100%;
-                left: 0; right: 0;
+                top: 100%; left: 0; right: 0;
                 background: var(--bg-main);
                 padding: 1.5rem;
                 border-bottom: 1px solid var(--border-color);
@@ -583,12 +590,10 @@
 </head>
 <body>
 
-    <!-- Emergency Shop Closure Banner -->
     <div id="closed-banner" class="closed-banner hidden">
         <i class="fa-solid fa-store-slash"></i> <span id="closed-banner-text">We are temporarily closed for scheduled maintenance.</span>
     </div>
 
-    <!-- Navigation Header -->
     <header>
         <div class="nav-container">
             <a href="#home" class="logo-area">
@@ -606,17 +611,15 @@
                     <li><a href="#about" onclick="closeNav()">About</a></li>
                     <li><a href="#location" onclick="closeNav()">Location</a></li>
                     <li><a href="#faqs" onclick="closeNav()">FAQs</a></li>
-                    <li><a href="#admin" onclick="closeNav()"><i class="fa-solid fa-lock"></i> Admin</a></li>
+                    <li><a href="javascript:void(0)" onclick="openBackOffice(); closeNav();"><i class="fa-solid fa-lock"></i> Admin</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- MAIN PUBLIC CONTENT -->
     <main id="public-main">
         
-        <!-- Hero Section -->
-        <section id="home" class="hero">
+        <section id="home" class="hero" id="hero-section">
             <div class="container">
                 <h1 id="hero-title">LOOK SHARP. FEEL CONFIDENT.</h1>
                 <p id="hero-tagline">Experience precision haircuts, traditional beard styling, and supreme grooming care in a luxury studio atmosphere.</p>
@@ -627,7 +630,40 @@
             </div>
         </section>
 
-        <!-- Services Section -->
+        <section style="padding: 3rem 0 0 0; border: none;">
+            <div class="container">
+                <div class="category-hero-grid">
+                    <div class="category-card" onclick="filterServices('Hair', document.querySelectorAll('.tab-btn')[1])">
+                        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=600&q=80" alt="Hair Treatments">
+                        <div class="category-overlay">
+                            <div>
+                                <h3 class="gold-text">HAIR ARTISTRY</h3>
+                                <p style="font-size: 0.85rem; color: #E5E7EB;">Fades, Scissor Cuts & Styling</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="filterServices('Beard', document.querySelectorAll('.tab-btn')[2])">
+                        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=600&q=80" alt="Beard Treatments">
+                        <div class="category-overlay">
+                            <div>
+                                <h3 class="gold-text">BEARD CRAFT</h3>
+                                <p style="font-size: 0.85rem; color: #E5E7EB;">Trims, Hot Towel & Shaves</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="filterServices('Skin / Cleansing', document.querySelectorAll('.tab-btn')[3])">
+                        <img src="https://images.unsplash.com/photo-1512290900673-700200053752?auto=format&fit=crop&w=600&q=80" alt="Skin Treatments">
+                        <div class="category-overlay">
+                            <div>
+                                <h3 class="gold-text">SKIN & CLEANSING</h3>
+                                <p style="font-size: 0.85rem; color: #E5E7EB;">Facials, Scrubs & Treatments</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="services">
             <div class="container">
                 <div class="section-title">
@@ -641,12 +677,10 @@
                     <button class="tab-btn" onclick="filterServices('Skin / Cleansing', this)">Skin & Cleansing</button>
                 </div>
                 <div class="grid-3" id="services-grid">
-                    <!-- Loaded dynamically from database -->
-                </div>
+                    </div>
             </div>
         </section>
 
-        <!-- Barbers Section -->
         <section id="barbers">
             <div class="container">
                 <div class="section-title">
@@ -654,19 +688,16 @@
                     <h2>Meet Our Barbers</h2>
                 </div>
                 <div class="grid-3" id="barbers-grid">
-                    <!-- Loaded dynamically from database -->
-                </div>
+                    </div>
             </div>
         </section>
 
-        <!-- Interactive Booking Wizard -->
         <section id="booking">
             <div class="container">
                 <div class="section-title">
                     <p>RESERVE YOUR SLOT</p>
                     <h2>Online Appointment Booking</h2>
                 </div>
-
                 <div class="booking-wizard">
                     <div class="wizard-steps">
                         <div class="step-node active" id="node-1">1. Service</div>
@@ -675,1082 +706,1628 @@
                         <div class="step-node" id="node-4">4. Details</div>
                     </div>
 
-                    <!-- Step 1: Service Selection -->
-                    <div id="step-1" class="wizard-step">
-                        <h3 class="gold-text" style="margin-bottom:1rem;">Select a Service</h3>
+                    <div id="booking-step-1">
+                        <h4 style="margin-bottom: 1rem;">Select a Service</h4>
                         <div class="form-group">
-                            <select id="book-service-select" class="form-control" onchange="onServiceSelect(this.value)">
+                            <select id="booking-service-select" class="form-control" onchange="onBookingServiceChange()">
                                 <option value="">-- Choose Treatment --</option>
                             </select>
                         </div>
-                        <div id="selected-service-summary" class="hidden" style="margin:1rem 0; padding:1rem; background:var(--bg-main); border-radius:var(--radius);"></div>
-                        <button class="btn btn-gold" style="width:100%;" onclick="nextStep(2)">Continue to Barber Choice <i class="fa-solid fa-arrow-right"></i></button>
+                        <div class="text-center" style="margin-top: 1.5rem;">
+                            <button class="btn btn-gold" onclick="goToStep(2)">Next: Choose Barber <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
                     </div>
 
-                    <!-- Step 2: Barber Selection -->
-                    <div id="step-2" class="wizard-step hidden">
-                        <h3 class="gold-text" style="margin-bottom:1rem;">Choose Your Specialist</h3>
+                    <div id="booking-step-2" class="hidden">
+                        <h4 style="margin-bottom: 1rem;">Select Your Barber</h4>
                         <div class="form-group">
-                            <select id="book-barber-select" class="form-control" onchange="onBarberSelect(this.value)">
-                                <option value="">-- Choose Barber --</option>
+                            <select id="booking-barber-select" class="form-control" onchange="onBookingBarberChange()">
+                                <option value="">-- Any Available Barber --</option>
                             </select>
                         </div>
-                        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                            <button class="btn btn-outline" style="flex:1;" onclick="nextStep(1)">Back</button>
-                            <button class="btn btn-gold" style="flex:1;" onclick="nextStep(3)">Continue to Schedule <i class="fa-solid fa-arrow-right"></i></button>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                            <button class="btn btn-outline" onclick="goToStep(1)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                            <button class="btn btn-gold" onclick="goToStep(3)">Next: Date & Time <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </div>
 
-                    <!-- Step 3: Date & Slots -->
-                    <div id="step-3" class="wizard-step hidden">
-                        <h3 class="gold-text" style="margin-bottom:1rem;">Select Date & Time</h3>
+                    <div id="booking-step-3" class="hidden">
+                        <h4 style="margin-bottom: 1rem;">Select Date & Time Slot</h4>
                         <div class="form-group">
                             <label>Appointment Date</label>
-                            <input type="date" id="book-date-input" class="form-control" onchange="loadAvailableSlots()">
+                            <input type="date" id="booking-date" class="form-control" onchange="fetchAvailableSlots()">
                         </div>
                         <label>Available Slots</label>
                         <div id="time-slots-container" class="time-slots">
-                            <p style="color:var(--text-muted); grid-column:1/-1;">Select a valid date to render open slots.</p>
+                            <p style="color: var(--text-muted); grid-column: 1/-1;">Please select a date first.</p>
                         </div>
-                        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                            <button class="btn btn-outline" style="flex:1;" onclick="nextStep(2)">Back</button>
-                            <button class="btn btn-gold" style="flex:1;" onclick="nextStep(4)">Continue to Details <i class="fa-solid fa-arrow-right"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Customer Details & Confirmation -->
-                    <div id="step-4" class="wizard-step hidden">
-                        <h3 class="gold-text" style="margin-bottom:1rem;">Customer Information</h3>
-                        <form id="booking-form" onsubmit="handleBookingSubmit(event)">
-                            <div class="form-group">
-                                <label>Full Name *</label>
-                                <input type="text" id="cust-name" class="form-control" required placeholder="John Doe">
-                            </div>
-                            <div class="form-group">
-                                <label>Mobile / WhatsApp *</label>
-                                <input type="tel" id="cust-phone" class="form-control" required placeholder="+123456789">
-                            </div>
-                            <div class="form-group">
-                                <label>Email Address (Optional)</label>
-                                <input type="email" id="cust-email" class="form-control" placeholder="john@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label>Special Notes / Requests</label>
-                                <textarea id="cust-notes" class="form-control" rows="2" placeholder="Beard shaping preferences..."></textarea>
-                            </div>
-                            
-                            <!-- Payment Instructions Display if Enabled -->
-                            <div id="deposit-info-box" class="hidden" style="padding:1rem; background:rgba(212,175,55,0.1); border:1px solid var(--accent-gold); border-radius:var(--radius); margin-bottom:1rem;">
-                                <h4>Deposit Information</h4>
-                                <p id="deposit-summary-text" style="font-size:0.9rem; margin-top:0.3rem;"></p>
-                            </div>
-
-                            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                                <button type="button" class="btn btn-outline" style="flex:1;" onclick="nextStep(3)">Back</button>
-                                <button type="submit" id="btn-confirm-booking" class="btn btn-gold" style="flex:1;"><i class="fa-solid fa-check-circle"></i> Complete Booking</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Booking Ticket Modal / Success Screen -->
-                    <div id="booking-ticket-view" class="hidden" style="text-align:center; padding:1rem;">
-                        <i class="fa-solid fa-circle-check" style="font-size:3.5rem; color:var(--success); margin-bottom:1rem;"></i>
-                        <h2>Appointment Confirmed!</h2>
-                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Your reservation reference is <strong class="gold-text" id="ticket-ref">#00000</strong></p>
-                        
-                        <div style="background:var(--bg-main); border:1px dashed var(--accent-gold); border-radius:var(--radius); padding:1.5rem; text-align:left; margin-bottom:1.5rem;" id="ticket-details-box">
-                            <!-- Injected Dynamically -->
-                        </div>
-
-                        <div style="display:flex; gap:1rem; justify-center; flex-wrap:wrap;">
-                            <button class="btn btn-outline" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Ticket</button>
-                            <button class="btn btn-gold" onclick="resetBookingWizard()">Book Another Session</button>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                            <button class="btn btn-outline" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                            <button class="btn btn-gold" onclick="goToStep(4)">Next: Your Info <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </div>
 
+                    <div id="booking-step-4" class="hidden">
+                        <h4 style="margin-bottom: 1rem;">Customer Information</h4>
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="cust-name" class="form-control" placeholder="e.g. John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Phone / WhatsApp *</label>
+                            <input type="tel" id="cust-phone" class="form-control" placeholder="e.g. +44 7123 456789">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address (Optional)</label>
+                            <input type="email" id="cust-email" class="form-control" placeholder="e.g. john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Special Instructions / Notes (Optional)</label>
+                            <textarea id="cust-notes" class="form-control" rows="3" placeholder="Any preferences..."></textarea>
+                        </div>
+                        <div id="booking-summary-box" style="background: var(--bg-main); padding: 1rem; border-radius: var(--radius); margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+                            </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <button class="btn btn-outline" onclick="goToStep(3)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                            <button class="btn btn-gold" id="btn-submit-booking" onclick="submitBooking()"><i class="fa-solid fa-check-circle"></i> Confirm Booking</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Customer Reviews -->
         <section id="reviews">
             <div class="container">
                 <div class="section-title">
-                    <p>CLIENT FEEDBACK</p>
+                    <p>CLIENT REVIEWS</p>
                     <h2>What Our Clients Say</h2>
                 </div>
-                <div class="grid-3" id="reviews-grid">
-                    <!-- Approved Reviews -->
-                </div>
+                <div class="grid-3" id="reviews-grid" style="margin-bottom: 3rem;">
+                    </div>
                 
-                <!-- Review Form -->
-                <div style="max-width:600px; margin:3rem auto 0; background:var(--bg-card); padding:2rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-                    <h3 class="gold-text" style="margin-bottom:1rem;">Leave Your Review</h3>
-                    <form onsubmit="handleReviewSubmit(event)">
+                <div style="max-width: 600px; margin: 0 auto; background: var(--bg-card); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border-color);">
+                    <h3 class="gold-text" style="margin-bottom: 1rem; text-align: center;">Leave a Review</h3>
+                    <form onsubmit="submitReview(event)">
                         <div class="form-group">
                             <label>Your Name</label>
-                            <input type="text" id="rev-name" class="form-control" required placeholder="Alex Smith">
+                            <input type="text" id="review-name" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>Rating</label>
-                            <select id="rev-rating" class="form-control" required>
+                            <select id="review-rating" class="form-control" required>
                                 <option value="5">5 Stars - Outstanding</option>
                                 <option value="4">4 Stars - Excellent</option>
                                 <option value="3">3 Stars - Good</option>
-                                <option value="2">2 Stars - Fair</option>
+                                <option value="2">2 Stars - Average</option>
                                 <option value="1">1 Star - Poor</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Your Feedback</label>
-                            <textarea id="rev-comment" class="form-control" rows="3" required placeholder="Great service and atmosphere..."></textarea>
+                            <label>Comments</label>
+                            <textarea id="review-comment" class="form-control" rows="3" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-gold" style="width:100%;">Submit Review for Approval</button>
+                        <button type="submit" class="btn btn-gold" style="width: 100%;">Submit Review</button>
                     </form>
                 </div>
             </div>
         </section>
 
-        <!-- About Section -->
         <section id="about">
-            <div class="container" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:3rem; align-items:center;">
-                <div>
-                    <p class="gold-text" style="letter-spacing:2px; font-weight:600;">OUR HERITAGE</p>
-                    <h2 style="font-size:2.2rem; margin:0.5rem 0 1rem;">Mastering Modern Grooming</h2>
-                    <p id="about-description" style="color:var(--text-muted); margin-bottom:1.5rem;">Founded with a vision to merge classic barber craft with contemporary style. Our team delivers unrivaled precision cuts, razor shaves, and skin treatments in an upscale executive environment.</p>
-                    <a href="#booking" class="btn btn-gold">Experience The Best</a>
+            <div class="container">
+                <div class="section-title">
+                    <p>TRADITION & EXCELLENCE</p>
+                    <h2>About Our Studio</h2>
                 </div>
-                <div>
-                    <img id="about-cover-img" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800" alt="Studio Cover" style="width:100%; height:350px; object-fit:cover; border-radius:var(--radius); border:1px solid var(--border-color);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center;">
+                    <div>
+                        <img id="about-cover-img" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800" style="width: 100%; border-radius: var(--radius); border: 1px solid var(--border-color);" alt="Studio Cover">
+                    </div>
+                    <div>
+                        <h3 class="gold-text" id="about-shop-title" style="margin-bottom: 1rem;">Elite Barber Studio</h3>
+                        <p id="about-cancellation-policy" style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                            We take pride in dedicated craftsmanship, providing clean fades, sharp line-ups, and traditional hot towel shaves. 
+                        </p>
+                        <div id="opening-hours-display" style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border-color);">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--accent-gold);">Opening Hours</h4>
+                            <div id="hours-list-public" style="font-size: 0.85rem; color: var(--text-muted);">
+                                Loading hours...
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Location & Map -->
         <section id="location">
             <div class="container">
                 <div class="section-title">
-                    <p>VISIT OUR STUDIO</p>
-                    <h2>Find Us Here</h2>
+                    <p>VISIT US</p>
+                    <h2>Find Our Location</h2>
                 </div>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                     <div>
                         <div id="shop-map"></div>
                     </div>
-                    <div style="background:var(--bg-card); padding:2rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-                        <h3 class="gold-text" style="margin-bottom:1rem;" id="loc-shop-name">ELITE BARBER STUDIO</h3>
-                        <p style="margin-bottom:0.5rem;"><i class="fa-solid fa-location-dot gold-text"></i> <span id="loc-address">123 Main Street, Suite 100</span></p>
-                        <p style="margin-bottom:0.5rem;"><i class="fa-solid fa-phone gold-text"></i> <span id="loc-phone">+1 (555) 019-2834</span></p>
-                        <p style="margin-bottom:1.5rem;"><i class="fa-solid fa-envelope gold-text"></i> <span id="loc-email">contact@elitebarber.com</span></p>
-                        
-                        <h4 style="margin-bottom:0.5rem; color:var(--text-light);">Opening Hours</h4>
-                        <ul id="loc-hours-list" style="list-style:none; color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">
-                            <!-- Dynamically Injected -->
-                        </ul>
-
-                        <a id="loc-directions-btn" href="#" target="_blank" class="btn btn-gold" style="width:100%;"><i class="fa-solid fa-diamond-turn-right"></i> Get Directions</a>
+                    <div style="display: flex; flex-direction: column; justify-content: center; gap: 1rem;">
+                        <div>
+                            <h4 class="gold-text"><i class="fa-solid fa-location-dot"></i> Address</h4>
+                            <p id="loc-address" style="color: var(--text-muted);">123 High Street, City Center</p>
+                            <p id="loc-postcode" style="color: var(--text-muted);">AB12 3CD</p>
+                        </div>
+                        <div>
+                            <h4 class="gold-text"><i class="fa-solid fa-phone"></i> Contact</h4>
+                            <p id="loc-phone" style="color: var(--text-muted);">+44 1234 567890</p>
+                            <p id="loc-email" style="color: var(--text-muted);">info@elitebarber.com</p>
+                        </div>
+                        <div>
+                            <a id="loc-maps-link" href="#" target="_blank" class="btn btn-outline"><i class="fa-solid fa-map-location-dot"></i> Open in Google Maps</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FAQs -->
         <section id="faqs">
-            <div class="container" style="max-width:800px;">
+            <div class="container">
                 <div class="section-title">
-                    <p>QUESTIONS & ANSWERS</p>
+                    <p>HELP & INFORMATION</p>
                     <h2>Frequently Asked Questions</h2>
                 </div>
-                <div id="faqs-accordion">
-                    <!-- Dynamic FAQs -->
-                </div>
+                <div id="faqs-accordion-container" style="max-width: 800px; margin: 0 auto;">
+                    </div>
             </div>
         </section>
     </main>
 
-    <!-- ADMIN BACK OFFICE PORTAL -->
-    <section id="admin" class="container" style="padding-top:2rem;">
-        <div class="section-title">
-            <p>MANAGEMENT PORTAL</p>
-            <h2>Back Office Control Center</h2>
+    <div id="admin-view" class="container hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2><i class="fa-solid fa-user-shield gold-text"></i> Back Office Management</h2>
+            <button class="btn btn-outline btn-sm" onclick="closeBackOffice()"><i class="fa-solid fa-globe"></i> Back to Website</button>
         </div>
 
-        <!-- Admin Login Block -->
-        <div id="admin-login-card" style="max-width:400px; margin:0 auto; background:var(--bg-card); padding:2rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-            <h3 class="gold-text" style="margin-bottom:1.5rem; text-align:center;">Staff Authentication</h3>
+        <div id="admin-auth-card" class="card" style="max-width: 400px; margin: 4rem auto;">
+            <h3 class="gold-text text-center" style="margin-bottom: 1rem;">Staff Authentication</h3>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="admin-email" class="form-control" required placeholder="owner@elitebarber.com">
+                    <input type="email" id="admin-email-input" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="admin-password" class="form-control" required placeholder="••••••••">
+                    <input type="password" id="admin-pass-input" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-gold" style="width:100%;">Sign In</button>
+                <button type="submit" class="btn btn-gold" style="width: 100%;">Sign In</button>
             </form>
-            <p id="login-error" style="color:var(--danger); font-size:0.85rem; margin-top:1rem; text-align:center;" class="hidden"></p>
         </div>
 
-        <!-- Admin Portal Layout (Authenticated) -->
-        <div id="admin-dashboard-view" class="admin-layout hidden">
+        <div id="admin-dashboard" class="admin-layout hidden">
             <div class="admin-sidebar">
-                <div style="margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--border-color);">
-                    <div style="font-weight:700; color:var(--text-light);" id="admin-user-name">Staff User</div>
-                    <div style="font-size:0.75rem; color:var(--accent-gold);" id="admin-user-role">OWNER</div>
-                </div>
                 <ul class="admin-menu">
-                    <li class="admin-menu-item active" onclick="switchAdminTab('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
-                    <li class="admin-menu-item" onclick="switchAdminTab('appointments', this)"><i class="fa-solid fa-calendar-days"></i> Appointments</li>
-                    <li class="admin-menu-item" onclick="switchAdminTab('services-mgr', this)"><i class="fa-solid fa-scissors"></i> Services</li>
-                    <li class="admin-menu-item" onclick="switchAdminTab('barbers-mgr', this)"><i class="fa-solid fa-user-group"></i> Barbers</li>
-                    <li class="admin-menu-item" onclick="switchAdminTab('settings-mgr', this)"><i class="fa-solid fa-sliders"></i> Shop Profile</li>
-                    <li class="admin-menu-item" onclick="switchAdminTab('reviews-mgr', this)"><i class="fa-solid fa-star"></i> Reviews</li>
-                    <li class="admin-menu-item" onclick="handleAdminLogout()" style="color:var(--danger); margin-top:1rem;"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+                    <li class="admin-menu-item active" onclick="switchAdminTab('appointments', this)"><i class="fa-solid fa-calendar-days"></i> Appointments</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('services', this)"><i class="fa-solid fa-scissors"></i> Services</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('barbers', this)"><i class="fa-solid fa-user-tie"></i> Barbers</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('hours', this)"><i class="fa-solid fa-clock"></i> Shop Hours</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('business', this)"><i class="fa-solid fa-sliders"></i> Business Profile</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('faqs', this)"><i class="fa-solid fa-circle-question"></i> FAQs</li>
+                    <li class="admin-menu-item" onclick="switchAdminTab('reviews', this)"><i class="fa-solid fa-star"></i> Reviews</li>
+                    <li class="admin-menu-item" style="color: var(--danger);" onclick="handleAdminLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
                 </ul>
             </div>
-
             <div class="admin-content">
-                <!-- Tab 1: Dashboard -->
-                <div id="tab-dashboard" class="admin-tab">
-                    <h3 class="gold-text" style="margin-bottom:1.5rem;">Executive Overview</h3>
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:2rem;">
-                        <div style="background:var(--bg-card); padding:1rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-                            <p style="color:var(--text-muted); font-size:0.8rem;">TODAY'S BOOKINGS</p>
-                            <h2 style="color:var(--accent-gold);" id="dash-stat-today">0</h2>
-                        </div>
-                        <div style="background:var(--bg-card); padding:1rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-                            <p style="color:var(--text-muted); font-size:0.8rem;">NEW APPOINTMENTS</p>
-                            <h2 style="color:#60A5FA;" id="dash-stat-new">0</h2>
-                        </div>
-                        <div style="background:var(--bg-card); padding:1rem; border-radius:var(--radius); border:1px solid var(--border-color);">
-                            <p style="color:var(--text-muted); font-size:0.8rem;">COMPLETED</p>
-                            <h2 style="color:var(--success);" id="dash-stat-done">0</h2>
-                        </div>
-                    </div>
-
-                    <h4 style="margin-bottom:1rem;">Today's Live Schedule</h4>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Customer</th>
-                                    <th>Service</th>
-                                    <th>Barber</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dash-today-table">
-                                <!-- Loaded dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab 2: Appointments Management -->
-                <div id="tab-appointments" class="admin-tab hidden">
-                    <h3 class="gold-text" style="margin-bottom:1.5rem;">All Appointments Log</h3>
-                    <div class="table-responsive">
+                
+                <div id="tab-appointments" class="admin-tab-content">
+                    <h3>Appointments List</h3>
+                    <div class="table-responsive" style="margin-top: 1rem;">
                         <table>
                             <thead>
                                 <tr>
                                     <th>Ref</th>
-                                    <th>Customer / Phone</th>
+                                    <th>Customer</th>
                                     <th>Service</th>
                                     <th>Barber</th>
                                     <th>Date & Time</th>
+                                    <th>Price</th>
                                     <th>Status</th>
-                                    <th>Payment</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-appointments-table">
-                                <!-- Loaded dynamically -->
-                            </tbody>
+                            <tbody id="admin-appointments-tbody">
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Tab 3: Services Manager -->
-                <div id="tab-services-mgr" class="admin-tab hidden">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                        <h3 class="gold-text">Services Portfolio</h3>
+                <div id="tab-services" class="admin-tab-content hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Manage Services</h3>
                         <button class="btn btn-gold btn-sm" onclick="openServiceModal()"><i class="fa-solid fa-plus"></i> Add Service</button>
                     </div>
                     <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
+                                    <th>Photo</th>
                                     <th>Name</th>
                                     <th>Category</th>
-                                    <th>Price</th>
+                                    <th>Price (£)</th>
                                     <th>Duration</th>
-                                    <th>Status</th>
+                                    <th>Available</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-services-table">
-                                <!-- Loaded dynamically -->
-                            </tbody>
+                            <tbody id="admin-services-tbody">
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Tab 4: Barber Manager -->
-                <div id="tab-barbers-mgr" class="admin-tab hidden">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                        <h3 class="gold-text">Barber Staff Roster</h3>
+                <div id="tab-barbers" class="admin-tab-content hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Manage Barbers</h3>
                         <button class="btn btn-gold btn-sm" onclick="openBarberModal()"><i class="fa-solid fa-plus"></i> Add Barber</button>
                     </div>
-                    <div class="grid-3" id="admin-barbers-grid">
-                        <!-- Loaded dynamically -->
-                    </div>
-                </div>
-
-                <!-- Tab 5: Shop Settings -->
-                <div id="tab-settings-mgr" class="admin-tab hidden">
-                    <h3 class="gold-text" style="margin-bottom:1.5rem;">Business Settings & Closure</h3>
-                    <form onsubmit="handleSettingsSave(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
-                        <div class="form-group" style="grid-column:1/-1;">
-                            <label style="color:var(--danger); font-weight:700;">TEMPORARY SHOP CLOSURE</label>
-                            <select id="set-is-closed" class="form-control">
-                                <option value="false">Shop Open (Normal Operations)</option>
-                                <option value="true">Shop Closed (Disable Booking)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Shop Name</label>
-                            <input type="text" id="set-shop-name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="text" id="set-phone" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp Number (With Country Code)</label>
-                            <input type="text" id="set-whatsapp" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Latitude</label>
-                            <input type="number" step="any" id="set-lat" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Longitude</label>
-                            <input type="number" step="any" id="set-lng" class="form-control" required>
-                        </div>
-                        <div class="form-group" style="grid-column:1/-1;">
-                            <label>Full Address</label>
-                            <input type="text" id="set-address" class="form-control" required>
-                        </div>
-                        <div style="grid-column:1/-1;">
-                            <button type="submit" class="btn btn-gold">Save Profile Configuration</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Tab 6: Reviews Approval -->
-                <div id="tab-reviews-mgr" class="admin-tab hidden">
-                    <h3 class="gold-text" style="margin-bottom:1.5rem;">Manage Client Reviews</h3>
                     <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Client</th>
-                                    <th>Rating</th>
-                                    <th>Comment</th>
-                                    <th>Status</th>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Specialty</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-barbers-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-hours" class="admin-tab-content hidden">
+                    <h3>Shop Opening Hours & Breaks</h3>
+                    <div class="table-responsive" style="margin-top: 1rem;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Open?</th>
+                                    <th>Open Time</th>
+                                    <th>Close Time</th>
+                                    <th>Break?</th>
+                                    <th>Break Start</th>
+                                    <th>Break End</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-reviews-table">
-                                <!-- Loaded dynamically -->
-                            </tbody>
+                            <tbody id="admin-hours-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-business" class="admin-tab-content hidden">
+                    <h3>Business Details & Settings</h3>
+                    <form onsubmit="saveBusinessProfile(event)" style="margin-top: 1rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Shop Name</label>
+                                <input type="text" id="biz-shop-name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Tagline</label>
+                                <input type="text" id="biz-tagline" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="biz-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="text" id="biz-whatsapp" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="biz-email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" id="biz-address" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Postcode</label>
+                                <input type="text" id="biz-postcode" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Google Maps URL</label>
+                                <input type="text" id="biz-maps" class="form-control">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                            <div class="form-group">
+                                <label>Logo Image</label>
+                                <div class="drag-drop-area" id="drop-logo" onclick="document.getElementById('file-logo').click()">
+                                    <p>Click or Drag & Drop Logo Here</p>
+                                    <input type="file" id="file-logo" hidden accept="image/*" onchange="handleFileUpload(this.files[0], 'logos', 'biz-logo-url', 'preview-logo')">
+                                    <img id="preview-logo" class="drag-drop-preview hidden" src="" alt="Preview">
+                                </div>
+                                <input type="hidden" id="biz-logo-url">
+                            </div>
+                            <div class="form-group">
+                                <label>Cover Image</label>
+                                <div class="drag-drop-area" id="drop-cover" onclick="document.getElementById('file-cover').click()">
+                                    <p>Click or Drag & Drop Cover Here</p>
+                                    <input type="file" id="file-cover" hidden accept="image/*" onchange="handleFileUpload(this.files[0], 'covers', 'biz-cover-url', 'preview-cover')">
+                                    <img id="preview-cover" class="drag-drop-preview hidden" src="" alt="Preview">
+                                </div>
+                                <input type="hidden" id="biz-cover-url">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label>Cancellation Policy</label>
+                            <textarea id="biz-cancellation" class="form-control" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" id="biz-temp-closed"> Temporarily Closed</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Closed Message</label>
+                            <input type="text" id="biz-closed-msg" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-gold" style="margin-top: 1rem;">Save Profile Settings</button>
+                    </form>
+                </div>
+
+                <div id="tab-faqs" class="admin-tab-content hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>FAQ Management</h3>
+                        <button class="btn btn-gold btn-sm" onclick="openFaqModal()"><i class="fa-solid fa-plus"></i> Add FAQ</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Question</th>
+                                    <th>Answer</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-faqs-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-reviews" class="admin-tab-content hidden">
+                    <h3>Moderate Reviews</h3>
+                    <div class="table-responsive" style="margin-top: 1rem;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Rating</th>
+                                    <th>Comment</th>
+                                    <th>Approved?</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-reviews-tbody">
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- FOOTER -->
-    <footer style="background:var(--bg-card); border-top:1px solid var(--border-color); padding:3rem 0; text-align:center; color:var(--text-muted); font-size:0.9rem;">
+    <footer style="padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
         <div class="container">
-            <p style="margin-bottom:0.5rem;"><strong class="gold-text" id="footer-shop-name">ELITE BARBER STUDIO</strong></p>
-            <p>&copy; 2026 All Rights Reserved. Built for high-performance grooming booking.</p>
+            <p>&copy; <span id="footer-year">2026</span> <span id="footer-shop-name">Elite Barber Studio</span>. All rights reserved.</p>
         </div>
-    </footer>
+    </footer><!-- MODALS SECTION -->
 
-    <!-- Service Edit Modal -->
+    <!-- Service Modal -->
     <div id="modal-service" class="modal-overlay hidden">
         <div class="modal-card">
-            <h3 class="gold-text" style="margin-bottom:1rem;">Manage Service</h3>
-            <form onsubmit="handleServiceSave(event)">
-                <input type="hidden" id="modal-svc-id">
+            <h3 class="gold-text" style="margin-bottom: 1rem;" id="modal-service-title">Add / Edit Service</h3>
+            <form onsubmit="saveServiceForm(event)">
+                <input type="hidden" id="service-id">
                 <div class="form-group">
                     <label>Service Name</label>
-                    <input type="text" id="modal-svc-name" class="form-control" required>
+                    <input type="text" id="service-name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Category</label>
-                    <select id="modal-svc-cat" class="form-control">
+                    <select id="service-category" class="form-control" required>
                         <option value="Hair">Hair</option>
                         <option value="Beard">Beard</option>
                         <option value="Skin / Cleansing">Skin / Cleansing</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Price ($)</label>
-                    <input type="number" step="0.01" id="modal-svc-price" class="form-control" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Price (£)</label>
+                        <input type="number" step="0.01" id="service-price" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (Mins)</label>
+                        <input type="number" id="service-duration" class="form-control" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Duration (Minutes)</label>
-                    <input type="number" id="modal-svc-dur" class="form-control" value="30" required>
+                    <label>Description</label>
+                    <textarea id="service-description" class="form-control" rows="2"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="url" id="modal-svc-img" class="form-control" placeholder="https://images.unsplash.com/...">
+                    <label>Service Image</label>
+                    <div class="drag-drop-area" id="drop-service" onclick="document.getElementById('file-service').click()">
+                        <p>Click or Drag & Drop Image</p>
+                        <input type="file" id="file-service" hidden accept="image/*" onchange="handleFileUpload(this.files[0], 'services', 'service-image-url', 'preview-service')">
+                        <img id="preview-service" class="drag-drop-preview hidden" src="" alt="Preview">
+                    </div>
+                    <input type="hidden" id="service-image-url">
                 </div>
-                <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                    <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('modal-service')">Cancel</button>
-                    <button type="submit" class="btn btn-gold" style="flex:1;">Save Service</button>
+                <div class="form-group">
+                    <label><input type="checkbox" id="service-available" checked> Available for Booking</label>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('modal-service')">Cancel</button>
+                    <button type="submit" class="btn btn-gold">Save Service</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Barber Edit / Upload Modal -->
+    <!-- Barber Modal -->
     <div id="modal-barber" class="modal-overlay hidden">
         <div class="modal-card">
-            <h3 class="gold-text" style="margin-bottom:1rem;">Manage Barber</h3>
-            <form onsubmit="handleBarberSave(event)">
-                <input type="hidden" id="modal-barber-id">
+            <h3 class="gold-text" style="margin-bottom: 1rem;" id="modal-barber-title">Add / Edit Barber</h3>
+            <form onsubmit="saveBarberForm(event)">
+                <input type="hidden" id="barber-id">
                 <div class="form-group">
-                    <label>Barber Name</label>
-                    <input type="text" id="modal-barber-name" class="form-control" required>
+                    <label>Barber Full Name</label>
+                    <input type="text" id="barber-name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Specialty</label>
-                    <input type="text" id="modal-barber-spec" class="form-control" placeholder="Fade Specialist">
+                    <input type="text" id="barber-specialty" class="form-control" placeholder="e.g. Skin Fades & Hot Towel Shaves">
                 </div>
                 <div class="form-group">
-                    <label>Photo Upload (Supabase Storage)</label>
-                    <input type="file" id="modal-barber-file" class="form-control" accept="image/*">
+                    <label>Profile Photo</label>
+                    <div class="drag-drop-area" id="drop-barber" onclick="document.getElementById('file-barber').click()">
+                        <p>Click or Drag & Drop Photo</p>
+                        <input type="file" id="file-barber" hidden accept="image/*" onchange="handleFileUpload(this.files[0], 'barbers', 'barber-image-url', 'preview-barber')">
+                        <img id="preview-barber" class="drag-drop-preview hidden" src="" alt="Preview">
+                    </div>
+                    <input type="hidden" id="barber-image-url">
                 </div>
-                <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                    <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('modal-barber')">Cancel</button>
-                    <button type="submit" class="btn btn-gold" style="flex:1;">Save Barber</button>
+                <div class="form-group">
+                    <label><input type="checkbox" id="barber-available" checked> Available</label>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('modal-barber')">Cancel</button>
+                    <button type="submit" class="btn btn-gold">Save Barber</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT APPLICATION -->
+    <!-- FAQ Modal -->
+    <div id="modal-faq" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="gold-text" style="margin-bottom: 1rem;" id="modal-faq-title">Add / Edit FAQ</h3>
+            <form onsubmit="saveFaqForm(event)">
+                <input type="hidden" id="faq-id">
+                <div class="form-group">
+                    <label>Sort Order</label>
+                    <input type="number" id="faq-sort" class="form-control" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Question</label>
+                    <input type="text" id="faq-question" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Answer</label>
+                    <textarea id="faq-answer" class="form-control" rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('modal-faq')">Cancel</button>
+                    <button type="submit" class="btn btn-gold">Save FAQ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // ===============================
-        // SUPABASE CONFIGURATION
-        // ===============================
-        const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co";
+        /* ==========================================================================
+           SUPABASE INITIALIZATION & STATE MANAGEMENT
+           ========================================================================== */
+        // Configure Supabase credentials
+        const SUPABASE_URL = "https://owrxpbbopaumnagzpmfs.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2";
 
-        // Initialize single Supabase Client
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Global State Engine
+        // Global State
         let state = {
             profile: null,
-            openingHours: [],
             services: [],
             barbers: [],
+            hours: [],
+            faqs: [],
+            reviews: [],
+            appointments: [],
             selectedService: null,
             selectedBarber: null,
             selectedDate: null,
-            selectedTime: null,
-            currentUser: null,
-            mapInstance: null
+            selectedSlot: null,
+            map: null
         };
 
-        // DOM Initialization
+        /* ==========================================================================
+           LIFECYCLE INITIALIZATION
+           ========================================================================== */
         document.addEventListener("DOMContentLoaded", async () => {
-            await initializeApp();
-            setupRealtimeNotifications();
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
+            initDragAndDropHandlers();
+            await fetchAllData();
+            initMap();
+            checkAuthSession();
         });
 
-        // Application Bootstrapper
-        async function initializeApp() {
-            try {
-                await fetchBusinessProfile();
-                await fetchOpeningHours();
-                await fetchServices();
-                await fetchBarbers();
-                await fetchReviews();
-                await fetchFAQs();
-                initMap();
-            } catch (err) {
-                console.error("Initialization Error:", err);
-            }
+        async function fetchAllData() {
+            await Promise.all([
+                fetchProfile(),
+                fetchServices(),
+                fetchBarbers(),
+                fetchHours(),
+                fetchFaqs(),
+                fetchReviews()
+            ]);
         }
 
-        // ===============================
-        // DATA FETCHING FUNCTIONS
-        // ===============================
-        async function fetchBusinessProfile() {
+        /* ==========================================================================
+           SUPABASE DATA FETCHING
+           ========================================================================== */
+        async function fetchProfile() {
             try {
-                const { data, error } = await db.from('business_profile').select('*').limit(1).single();
-                if (error && error.code !== 'PGRST116') throw error;
+                const { data, error } = await supabase.from('business_profile').select('*').single();
                 if (data) {
                     state.profile = data;
-                    renderBusinessProfile();
+                    renderProfile();
                 }
             } catch (err) {
-                console.warn("Error fetching profile:", err.message);
-            }
-        }
-
-        function renderBusinessProfile() {
-            if (!state.profile) return;
-            const p = state.profile;
-            
-            document.getElementById('shop-name-nav').innerText = p.shop_name;
-            document.getElementById('footer-shop-name').innerText = p.shop_name;
-            document.getElementById('loc-shop-name').innerText = p.shop_name;
-            document.getElementById('hero-title').innerText = p.tagline || 'LOOK SHARP. FEEL CONFIDENT.';
-            document.getElementById('loc-address').innerText = `${p.address}, ${p.postcode}`;
-            document.getElementById('loc-phone').innerText = p.phone;
-            document.getElementById('loc-email').innerText = p.email;
-            document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${p.whatsapp.replace(/[^0-9]/g, '')}`;
-            
-            if (p.logo_url) document.getElementById('shop-logo-img').src = p.logo_url;
-            if (p.cover_image_url) document.getElementById('about-cover-img').src = p.cover_image_url;
-
-            // Handle Emergency Shop Closure Banner
-            const banner = document.getElementById('closed-banner');
-            if (p.is_temporarily_closed) {
-                banner.classList.remove('hidden');
-                document.getElementById('closed-banner-text').innerText = p.closed_message || "We are temporarily closed.";
-            } else {
-                banner.classList.add('hidden');
-            }
-        }
-
-        async function fetchOpeningHours() {
-            try {
-                const { data, error } = await db.from('opening_hours').select('*').order('day_of_week');
-                if (error) throw error;
-                state.openingHours = data || [];
-                
-                const list = document.getElementById('loc-hours-list');
-                list.innerHTML = state.openingHours.map(h => `
-                    <li style="display:flex; justify-content:space-between; padding:0.2rem 0;">
-                        <span>${h.day_name}:</span>
-                        <span>${h.is_open ? `${h.open_time.slice(0,5)} - ${h.close_time.slice(0,5)}` : '<strong style="color:var(--danger)">Closed</strong>'}</span>
-                    </li>
-                `).join('');
-            } catch (err) {
-                console.warn("Hours error:", err.message);
+                console.warn('Fallback profile used:', err);
+                renderProfile();
             }
         }
 
         async function fetchServices() {
             try {
-                const { data, error } = await db.from('services').select('*').eq('is_available', true);
-                if (error) throw error;
-                state.services = data || [];
-                renderServices('All');
-                populateBookingServices();
-            } catch (err) {
-                document.getElementById('services-grid').innerHTML = `<p style="color:var(--text-muted)">Unable to load services currently.</p>`;
-            }
-        }
-
-        function renderServices(category) {
-            const grid = document.getElementById('services-grid');
-            const filtered = category === 'All' ? state.services : state.services.filter(s => s.category === category);
-            
-            if (filtered.length === 0) {
-                grid.innerHTML = `<p style="color:var(--text-muted)">No services found in this category.</p>`;
-                return;
-            }
-
-            grid.innerHTML = filtered.map(s => `
-                <div class="card">
-                    <img src="${s.photo_url || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500'}" class="card-img" alt="${s.name}">
-                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem;">
-                        <h3 class="gold-text">${s.name}</h3>
-                        <span style="font-weight:700; font-size:1.1rem;">$${parseFloat(s.price).toFixed(2)}</span>
-                    </div>
-                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">${s.description || 'Professional grooming service.'}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:0.8rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${s.duration_minutes} mins</span>
-                        <a href="#booking" onclick="quickSelectService('${s.id}')" class="btn btn-outline btn-sm">Book Treatment</a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterServices(cat, btn) {
-            document.querySelectorAll('.filter-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderServices(cat);
+                const { data, error } = await supabase.from('services').select('*').order('created_at');
+                if (data) state.services = data;
+            } catch (err) { console.error(err); }
+            renderServicesPublic();
+            populateServiceDropdown();
         }
 
         async function fetchBarbers() {
             try {
-                const { data, error } = await db.from('barbers').select('*').eq('is_available', true);
-                if (error) throw error;
-                state.barbers = data || [];
-                renderBarbers();
-                populateBookingBarbers();
-            } catch (err) {
-                document.getElementById('barbers-grid').innerHTML = `<p style="color:var(--text-muted)">Unable to load barbers currently.</p>`;
-            }
+                const { data, error } = await supabase.from('barbers').select('*').order('created_at');
+                if (data) state.barbers = data;
+            } catch (err) { console.error(err); }
+            renderBarbersPublic();
+            populateBarberDropdown();
         }
 
-        function renderBarbers() {
-            const grid = document.getElementById('barbers-grid');
-            grid.innerHTML = state.barbers.map(b => `
-                <div class="card text-center">
-                    <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500'}" class="card-img" style="height:250px; object-fit:cover;" alt="${b.name}">
-                    <h3 class="gold-text" style="margin-bottom:0.2rem;">${b.name}</h3>
-                    <p style="color:var(--accent-gold); font-size:0.85rem; margin-bottom:0.5rem;">${b.specialty || 'Master Barber'}</p>
-                    <p style="color:var(--text-muted); font-size:0.85rem;">${b.description || 'Dedicated to modern cuts and craftsmanship.'}</p>
-                </div>
-            `).join('');
+        async function fetchHours() {
+            try {
+                const { data, error } = await supabase.from('shop_hours').select('*').order('day_index');
+                if (data && data.length > 0) state.hours = data;
+            } catch (err) { console.error(err); }
+            renderHoursPublic();
         }
 
-        // ===============================
-        // MAP ENGINE
-        // ===============================
-        function initMap() {
-            const lat = state.profile?.latitude || 40.712776;
-            const lng = state.profile?.longitude || -74.005974;
-
-            if (!state.mapInstance) {
-                state.mapInstance = L.map('shop-map').setView([lat, lng], 14);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap'
-                }).addTo(state.mapInstance);
-                L.marker([lat, lng]).addTo(state.mapInstance)
-                    .bindPopup(`<b>${state.profile?.shop_name || 'Studio'}</b>`)
-                    .openPopup();
-            }
-            document.getElementById('loc-directions-btn').href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        async function fetchFaqs() {
+            try {
+                const { data, error } = await supabase.from('faqs').select('*').order('sort_order');
+                if (data) state.faqs = data;
+            } catch (err) { console.error(err); }
+            renderFaqsPublic();
         }
 
-        // ===============================
-        // BOOKING WIZARD PIPELINE
-        // ===============================
-        function populateBookingServices() {
-            const sel = document.getElementById('book-service-select');
-            sel.innerHTML = `<option value="">-- Choose Treatment --</option>` + 
-                state.services.map(s => `<option value="${s.id}">${s.name} ($${s.price})</option>`).join('');
+        async function fetchReviews() {
+            try {
+                const { data, error } = await supabase.from('reviews').select('*').order('created_at', { ascending: false });
+                if (data) state.reviews = data;
+            } catch (err) { console.error(err); }
+            renderReviewsPublic();
         }
 
-        function populateBookingBarbers() {
-            const sel = document.getElementById('book-barber-select');
-            sel.innerHTML = `<option value="">-- Choose Specialist --</option>` + 
-                state.barbers.map(b => `<option value="${b.id}">${b.name} (${b.specialty || 'Barber'})</option>`).join('');
-        }
+        /* ==========================================================================
+           PUBLIC UI RENDERING FUNCTIONS
+           ========================================================================== */
+        function renderProfile() {
+            const p = state.profile || {
+                shop_name: "Elite Barber Studio",
+                tagline: "Look Sharp. Feel Confident.",
+                phone: "+44 1234 567890",
+                whatsapp_phone: "441234567890",
+                email: "info@elitebarber.com",
+                address: "123 High Street, City Center",
+                postcode: "AB12 3CD",
+                google_maps_url: "https://maps.google.com",
+                cancellation_policy: "We appreciate 24 hours notice for any booking cancellations or reschedules.",
+                is_temporarily_closed: false,
+                closed_message: "We are temporarily closed for staff training.",
+                logo_url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=100",
+                cover_image_url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600"
+            };
 
-        function quickSelectService(id) {
-            document.getElementById('book-service-select').value = id;
-            onServiceSelect(id);
-            nextStep(2);
-        }
+            document.getElementById('shop-name-nav').textContent = p.shop_name;
+            document.getElementById('footer-shop-name').textContent = p.shop_name;
+            document.getElementById('about-shop-title').textContent = p.shop_name;
+            document.getElementById('hero-title').textContent = p.tagline.toUpperCase();
+            document.getElementById('loc-address').textContent = p.address;
+            document.getElementById('loc-postcode').textContent = p.postcode;
+            document.getElementById('loc-phone').textContent = p.phone;
+            document.getElementById('loc-email').textContent = p.email;
+            document.getElementById('about-cancellation-policy').textContent = p.cancellation_policy;
 
-        function onServiceSelect(id) {
-            state.selectedService = state.services.find(s => s.id === id);
-            const box = document.getElementById('selected-service-summary');
-            if (state.selectedService) {
-                box.classList.remove('hidden');
-                box.innerHTML = `<strong>Selected:</strong> ${state.selectedService.name} &bull; $${state.selectedService.price} (${state.selectedService.duration_minutes} mins)`;
+            if (p.logo_url) document.getElementById('shop-logo-img').src = p.logo_url;
+            if (p.cover_image_url) document.getElementById('about-cover-img').src = p.cover_image_url;
+            if (p.google_maps_url) document.getElementById('loc-maps-link').href = p.google_maps_url;
+            if (p.whatsapp_phone) document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${p.whatsapp_phone.replace(/[^0-9]/g, '')}`;
+
+            const banner = document.getElementById('closed-banner');
+            if (p.is_temporarily_closed) {
+                banner.classList.remove('hidden');
+                document.getElementById('closed-banner-text').textContent = p.closed_message || "We are temporarily closed.";
             } else {
-                box.classList.add('hidden');
+                banner.classList.add('hidden');
             }
         }
 
-        function onBarberSelect(id) {
-            state.selectedBarber = state.barbers.find(b => b.id === id);
-        }
+        function renderServicesPublic(filter = 'All') {
+            const grid = document.getElementById('services-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'All' 
+                ? state.services 
+                : state.services.filter(s => s.category === filter);
 
-        function nextStep(stepNum) {
-            if (state.profile?.is_temporarily_closed) {
-                alert("The shop is currently closed for bookings.");
-                return;
-            }
-            if (stepNum === 2 && !state.selectedService) {
-                alert("Please select a service first.");
-                return;
-            }
-            if (stepNum === 3 && !state.selectedBarber) {
-                alert("Please select a barber.");
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No services available in this category.</p>`;
                 return;
             }
 
-            document.querySelectorAll('.wizard-step').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
-
-            document.querySelectorAll('.step-node').forEach((n, idx) => {
-                if (idx < stepNum) n.classList.add('active');
-                else n.classList.remove('active');
+            filtered.forEach(s => {
+                if (!s.is_available) return;
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${s.image_url || 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400'}" class="card-img" alt="${s.name}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <h3 class="gold-text">${s.name}</h3>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: #FFF;">£${parseFloat(s.price_gbp).toFixed(2)}</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                        <i class="fa-regular fa-clock"></i> ${s.duration_mins} mins
+                    </p>
+                    <p style="font-size: 0.9rem; color: #D1D5DB; margin-bottom: 1.5rem;">${s.description || ''}</p>
+                    <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="quickSelectService('${s.id}')">Book This Treatment</button>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        async function loadAvailableSlots() {
-            const dateVal = document.getElementById('book-date-input').value;
+        function filterServices(cat, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderServicesPublic(cat);
+        }
+
+        function renderBarbersPublic() {
+            const grid = document.getElementById('barbers-grid');
+            grid.innerHTML = '';
+
+            state.barbers.forEach(b => {
+                if (!b.is_available) return;
+                const card = document.createElement('div');
+                card.className = 'card text-center';
+                card.innerHTML = `
+                    <img src="${b.profile_image_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}" class="card-img" style="border-radius: 50%; width: 140px; height: 140px; margin: 0 auto 1rem auto;" alt="${b.name}">
+                    <h3>${b.name}</h3>
+                    <p style="color: var(--accent-gold); font-size: 0.85rem; margin-bottom: 1rem;">${b.specialty || 'Master Barber'}</p>
+                    <button class="btn btn-outline btn-sm" onclick="quickSelectBarber('${b.id}')">Select Barber</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderHoursPublic() {
+            const container = document.getElementById('hours-list-public');
+            if (!container) return;
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            let html = '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">';
+            if (state.hours.length === 0) {
+                html += `<p>Monday - Saturday: 09:00 - 18:00</p><p>Sunday: Closed</p>`;
+            } else {
+                state.hours.forEach(h => {
+                    const dayName = days[h.day_index] || 'Day';
+                    const status = h.is_open ? `${h.open_time} - ${h.close_time}` : '<span style="color: var(--danger)">Closed</span>';
+                    html += `<div><strong>${dayName}:</strong></div><div>${status}</div>`;
+                });
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderFaqsPublic() {
+            const container = document.getElementById('faqs-accordion-container');
+            container.innerHTML = '';
+
+            state.faqs.forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'faq-item';
+                item.innerHTML = `
+                    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>${f.question}</span>
+                        <i class="fa-solid fa-chevron-down gold-text"></i>
+                    </div>
+                    <div class="faq-answer">${f.answer}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderReviewsPublic() {
+            const grid = document.getElementById('reviews-grid');
+            grid.innerHTML = '';
+
+            const approved = state.reviews.filter(r => r.is_approved);
+            if (approved.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No reviews yet. Be the first to leave one!</p>`;
+                return;
+            }
+
+            approved.forEach(r => {
+                let starsHtml = '';
+                for (let i = 0; i < 5; i++) {
+                    starsHtml += `<i class="fa-solid fa-star ${i < r.rating ? 'gold-text' : ''}" style="opacity: ${i < r.rating ? 1 : 0.2}"></i>`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div style="margin-bottom: 0.5rem;">${starsHtml}</div>
+                    <p style="font-style: italic; font-size: 0.9rem; margin-bottom: 1rem;">"${r.comment}"</p>
+                    <p style="font-weight: 600; font-size: 0.85rem; color: var(--accent-gold);">- ${r.customer_name}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* ==========================================================================
+           BOOKING WIZARD WORKFLOW
+           ========================================================================== */
+        function populateServiceDropdown() {
+            const sel = document.getElementById('booking-service-select');
+            sel.innerHTML = '<option value="">-- Choose Treatment --</option>';
+            state.services.forEach(s => {
+                if (s.is_available) {
+                    sel.innerHTML += `<option value="${s.id}">${s.name} (£${parseFloat(s.price_gbp).toFixed(2)}) - ${s.duration_mins} mins</option>`;
+                }
+            });
+        }
+
+        function populateBarberDropdown() {
+            const sel = document.getElementById('booking-barber-select');
+            sel.innerHTML = '<option value="">-- Any Available Barber --</option>';
+            state.barbers.forEach(b => {
+                if (b.is_available) {
+                    sel.innerHTML += `<option value="${b.id}">${b.name} (${b.specialty || 'Barber'})</option>`;
+                }
+            });
+        }
+
+        function quickSelectService(id) {
+            document.getElementById('booking-service-select').value = id;
+            onBookingServiceChange();
+            goToStep(2);
+            window.location.hash = '#booking';
+        }
+
+        function quickSelectBarber(id) {
+            document.getElementById('booking-barber-select').value = id;
+            onBookingBarberChange();
+            goToStep(3);
+            window.location.hash = '#booking';
+        }
+
+        function onBookingServiceChange() {
+            const id = document.getElementById('booking-service-select').value;
+            state.selectedService = state.services.find(s => s.id === id) || null;
+            updateBookingSummary();
+        }
+
+        function onBookingBarberChange() {
+            const id = document.getElementById('booking-barber-select').value;
+            state.selectedBarber = state.barbers.find(b => b.id === id) || null;
+            updateBookingSummary();
+            if (state.selectedDate) fetchAvailableSlots();
+        }
+
+        function goToStep(stepNum) {
+            if (state.profile?.is_temporarily_closed) {
+                alert("Bookings are currently disabled while the studio is temporarily closed.");
+                return;
+            }
+
+            if (stepNum > 1 && !state.selectedService) {
+                alert("Please select a service first.");
+                return;
+            }
+            if (stepNum > 3 && (!state.selectedDate || !state.selectedSlot)) {
+                alert("Please select both a date and an available time slot.");
+                return;
+            }
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`booking-step-${i}`).classList.add('hidden');
+                document.getElementById(`node-${i}`).classList.remove('active');
+            }
+
+            document.getElementById(`booking-step-${stepNum}`).classList.remove('hidden');
+            document.getElementById(`node-${stepNum}`).classList.add('active');
+
+            if (stepNum === 3 && !state.selectedDate) {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('booking-date').min = today;
+                document.getElementById('booking-date').value = today;
+                fetchAvailableSlots();
+            }
+        }
+
+        async function fetchAvailableSlots() {
+            const dateVal = document.getElementById('booking-date').value;
+            state.selectedDate = dateVal;
+            state.selectedSlot = null;
             const container = document.getElementById('time-slots-container');
+            container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">Checking schedule...</p>';
+
             if (!dateVal) return;
 
-            state.selectedDate = dateVal;
-            const selectedDateObj = new Date(dateVal);
-            const dayOfWeek = selectedDateObj.getDay();
+            const dateObj = new Date(dateVal);
+            let dayIdx = dateObj.getDay() - 1; 
+            if (dayIdx === -1) dayIdx = 6; 
 
-            // Verify Shop Opening Hours
-            const daySchedule = state.openingHours.find(h => h.day_of_week === dayOfWeek);
-            if (!daySchedule || !daySchedule.is_open) {
-                container.innerHTML = `<p style="color:var(--danger); grid-column:1/-1;">The studio is closed on this day.</p>`;
+            const dayConfig = state.hours.find(h => h.day_index === dayIdx);
+            
+            if (!dayConfig || !dayConfig.is_open) {
+                container.innerHTML = `<p style="color: var(--danger); grid-column: 1/-1;"><i class="fa-solid fa-circle-exclamation"></i> We are closed on this day.</p>`;
                 return;
             }
 
-            // Fetch Existing Bookings for Anti-Double-Booking Check
-            const { data: existingAppts } = await db.from('appointments')
-                .select('appointment_time')
-                .eq('barber_id', state.selectedBarber.id)
-                .eq('appointment_date', dateVal)
-                .neq('status', 'REJECTED');
+            // Generate time slots based on open hours
+            const openHour = parseInt(dayConfig.open_time.split(':')[0]);
+            const closeHour = parseInt(dayConfig.close_time.split(':')[0]);
+            const breakStartHour = dayConfig.has_break ? parseInt(dayConfig.break_start_time.split(':')[0]) : null;
+            const breakEndHour = dayConfig.has_break ? parseInt(dayConfig.break_end_time.split(':')[0]) : null;
 
-            const bookedTimes = (existingAppts || []).map(a => a.appointment_time.slice(0,5));
+            // Fetch existing bookings to check for collisions
+            let existingBookings = [];
+            try {
+                const { data } = await supabase.from('appointments')
+                    .select('appointment_time, status')
+                    .eq('appointment_date', dateVal)
+                    .neq('status', 'CANCELLED')
+                    .neq('status', 'REJECTED');
+                if (data) existingBookings = data;
+            } catch (err) { console.error(err); }
 
-            // Generate Slot Intervals
-            const slots = [];
-            let current = new Date(`2000-01-01T${daySchedule.open_time}`);
-            const close = new Date(`2000-01-01T${daySchedule.close_time}`);
+            container.innerHTML = '';
+            let count = 0;
 
-            while (current < close) {
-                const timeStr = current.toTimeString().slice(0,5);
-                slots.push(timeStr);
-                current.setMinutes(current.getMinutes() + 30);
+            for (let hour = openHour; hour < closeHour; hour++) {
+                for (let min of ['00', '30']) {
+                    const timeStr = `${String(hour).padStart(2, '0')}:${min}:00`;
+                    const displayStr = `${String(hour).padStart(2, '0')}:${min}`;
+
+                    // Check break time
+                    if (breakStartHour !== null && hour >= breakStartHour && hour < breakEndHour) {
+                        continue;
+                    }
+
+                    // Check double booking collision
+                    const isBooked = existingBookings.some(b => b.appointment_time.startsWith(displayStr));
+
+                    const slotBtn = document.createElement('button');
+                    slotBtn.className = 'slot-btn';
+                    slotBtn.textContent = displayStr;
+                    
+                    if (isBooked) {
+                        slotBtn.disabled = true;
+                    } else {
+                        slotBtn.onclick = () => {
+                            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                            slotBtn.classList.add('selected');
+                            state.selectedSlot = timeStr;
+                            updateBookingSummary();
+                        };
+                        count++;
+                    }
+                    container.appendChild(slotBtn);
+                }
             }
 
-            container.innerHTML = slots.map(t => {
-                const isBooked = bookedTimes.includes(t);
-                return `<button type="button" class="slot-btn" ${isBooked ? 'disabled' : ''} onclick="selectSlot('${t}', this)">${t}</button>`;
-            }).join('');
+            if (count === 0 && container.children.length === 0) {
+                container.innerHTML = '<p style="color: var(--warning); grid-column: 1/-1;">No available time slots for this date.</p>';
+            }
         }
 
-        function selectSlot(timeStr, btn) {
-            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            state.selectedTime = timeStr;
+        function updateBookingSummary() {
+            const summary = document.getElementById('booking-summary-box');
+            summary.innerHTML = `
+                <p><strong>Treatment:</strong> ${state.selectedService ? state.selectedService.name : 'Not selected'}</p>
+                <p><strong>Price:</strong> ${state.selectedService ? '£' + parseFloat(state.selectedService.price_gbp).toFixed(2) : '-'}</p>
+                <p><strong>Barber:</strong> ${state.selectedBarber ? state.selectedBarber.name : 'Any Available Barber'}</p>
+                <p><strong>Date & Time:</strong> ${state.selectedDate || '-'} ${state.selectedSlot ? 'at ' + state.selectedSlot.substring(0, 5) : ''}</p>
+            `;
         }
 
-        async function handleBookingSubmit(e) {
-            e.preventDefault();
-            if (!state.selectedTime) {
-                alert("Please select an available time slot.");
+        async function submitBooking() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+
+            if (!name || !phone) {
+                alert("Please provide your name and phone number.");
                 return;
             }
 
-            const btn = document.getElementById('btn-confirm-booking');
+            const btn = document.getElementById('btn-submit-booking');
             btn.disabled = true;
-            btn.innerText = "Processing...";
+            btn.textContent = 'Confirming...';
 
-            const bookingRef = 'ELT-' + Math.floor(10000 + Math.random() * 90000);
-            const newAppointment = {
-                booking_ref: bookingRef,
-                customer_name: document.getElementById('cust-name').value,
-                customer_phone: document.getElementById('cust-phone').value,
-                customer_email: document.getElementById('cust-email').value || null,
-                notes: document.getElementById('cust-notes').value || null,
+            const payload = {
                 service_id: state.selectedService.id,
-                service_name: state.selectedService.name,
-                service_price: state.selectedService.price,
-                barber_id: state.selectedBarber.id,
-                barber_name: state.selectedBarber.name,
+                barber_id: state.selectedBarber ? state.selectedBarber.id : null,
                 appointment_date: state.selectedDate,
-                appointment_time: state.selectedTime,
-                status: 'NEW',
-                payment_status: 'UNPAID'
+                appointment_time: state.selectedSlot,
+                customer_name: name,
+                customer_phone: phone,
+                customer_email: email,
+                special_notes: notes,
+                price_gbp: state.selectedService.price_gbp,
+                status: 'NEW'
             };
 
             try {
-                const { error } = await db.from('appointments').insert([newAppointment]);
+                const { data, error } = await supabase.from('appointments').insert([payload]).select();
                 if (error) throw error;
 
-                // Display Ticket
-                document.getElementById('booking-form').classList.add('hidden');
-                document.getElementById('booking-ticket-view').classList.remove('hidden');
-                document.getElementById('ticket-ref').innerText = `#${bookingRef}`;
-                document.getElementById('ticket-details-box').innerHTML = `
-                    <p><strong>Customer:</strong> ${newAppointment.customer_name}</p>
-                    <p><strong>Service:</strong> ${newAppointment.service_name} ($${newAppointment.service_price})</p>
-                    <p><strong>Barber:</strong> ${newAppointment.barber_name}</p>
-                    <p><strong>Date & Time:</strong> ${newAppointment.appointment_date} @ ${newAppointment.appointment_time}</p>
-                    <p><strong>Status:</strong> NEW (Confirmed)</p>
-                `;
+                const bookingRef = data && data[0] ? data[0].id.substring(0, 8).toUpperCase() : 'CONFIRMED';
+                alert(`Appointment Reserved Successfully!\nYour Booking Reference: ${bookingRef}`);
+                
+                // Reset Wizard
+                state.selectedService = null;
+                state.selectedBarber = null;
+                state.selectedDate = null;
+                state.selectedSlot = null;
+                document.getElementById('booking-service-select').value = '';
+                document.getElementById('booking-barber-select').value = '';
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-phone').value = '';
+                document.getElementById('cust-email').value = '';
+                document.getElementById('cust-notes').value = '';
+                goToStep(1);
+
             } catch (err) {
-                alert("Failed to create booking: " + err.message);
+                console.error(err);
+                alert("Failed to confirm appointment. Please try again or contact us on WhatsApp.");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Complete Booking";
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Confirm Booking';
             }
         }
 
-        function resetBookingWizard() {
-            document.getElementById('booking-form').reset();
-            document.getElementById('booking-form').classList.remove('hidden');
-            document.getElementById('booking-ticket-view').classList.add('hidden');
-            state.selectedService = null;
-            state.selectedBarber = null;
-            state.selectedTime = null;
-            nextStep(1);
-        }
-
-        // ===============================
-        // REVIEWS & FAQS
-        // ===============================
-        async function fetchReviews() {
-            const { data } = await db.from('reviews').select('*').eq('is_approved', true).order('created_at', {ascending:false});
-            const grid = document.getElementById('reviews-grid');
-            if (!data || data.length === 0) {
-                grid.innerHTML = `<p style="color:var(--text-muted)">No reviews published yet.</p>`;
-                return;
-            }
-            grid.innerHTML = data.map(r => `
-                <div class="card">
-                    <div style="color:var(--accent-gold); margin-bottom:0.5rem;">${'★'.repeat(r.rating)}</div>
-                    <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:1rem;">"${r.comment}"</p>
-                    <p style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">- ${r.customer_name}</p>
-                </div>
-            `).join('');
-        }
-
-        async function handleReviewSubmit(e) {
+        async function submitReview(e) {
             e.preventDefault();
-            const name = document.getElementById('rev-name').value;
-            const rating = parseInt(document.getElementById('rev-rating').value);
-            const comment = document.getElementById('rev-comment').value;
+            const name = document.getElementById('review-name').value.trim();
+            const rating = parseInt(document.getElementById('review-rating').value);
+            const comment = document.getElementById('review-comment').value.trim();
 
-            const { error } = await db.from('reviews').insert([{ customer_name: name, rating, comment }]);
-            if (error) alert("Error submitting review.");
-            else {
-                alert("Thank you! Your review has been submitted for owner approval.");
+            try {
+                const { error } = await supabase.from('reviews').insert([{
+                    customer_name: name,
+                    rating: rating,
+                    comment: comment,
+                    is_approved: false
+                }]);
+                if (error) throw error;
+                alert("Thank you! Your review has been submitted for moderation.");
                 e.target.reset();
+            } catch (err) {
+                console.error(err);
+                alert("Failed to submit review.");
             }
         }
 
-        async function fetchFAQs() {
-            const { data } = await db.from('faqs').select('*').order('sort_order');
-            const box = document.getElementById('faqs-accordion');
-            if (!data || data.length === 0) return;
-            box.innerHTML = data.map(f => `
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question"><span>${f.question}</span> <i class="fa-solid fa-chevron-down gold-text"></i></div>
-                    <div class="faq-answer">${f.answer}</div>
-                </div>
-            `).join('');
+        /* ==========================================================================
+           LEAFLET MAP INTEGRATION
+           ========================================================================== */
+        function initMap() {
+            const defaultLat = 51.5074; // London fallback
+            const defaultLng = -0.1278;
+
+            if (state.map) return;
+            state.map = L.map('shop-map').setView([defaultLat, defaultLng], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(state.map);
+
+            L.marker([defaultLat, defaultLng]).addTo(state.map)
+                .bindPopup(`<b>${state.profile?.shop_name || 'Elite Barber Studio'}</b><br>123 High Street`)
+                .openPopup();
         }
 
-        // ===============================
-        // BACK OFFICE ADMIN AUTH & CONTROLLER
-        // ===============================
+        /* ==========================================================================
+           BACK OFFICE / ADMIN FUNCTIONALITY
+           ========================================================================== */
+        function openBackOffice() {
+            document.getElementById('public-main').classList.add('hidden');
+            document.getElementById('admin-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function closeBackOffice() {
+            document.getElementById('admin-view').classList.add('hidden');
+            document.getElementById('public-main').classList.remove('hidden');
+        }
+
+        async function checkAuthSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                showAdminDashboard();
+            }
+        }
+
         async function handleAdminLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            const errBox = document.getElementById('login-error');
+            const email = document.getElementById('admin-email-input').value;
+            const pass = document.getElementById('admin-pass-input').value;
 
-            const { data, error } = await db.auth.signInWithPassword({ email, password });
-            if (error) {
-                errBox.innerText = error.message;
-                errBox.classList.remove('hidden');
-            } else {
-                errBox.classList.add('hidden');
-                state.currentUser = data.user;
-                renderAdminDashboard();
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+                if (error) throw error;
+                showAdminDashboard();
+            } catch (err) {
+                alert("Authentication Failed: " + err.message);
             }
         }
 
-        async function renderAdminDashboard() {
-            document.getElementById('admin-login-card').classList.add('hidden');
-            document.getElementById('admin-dashboard-view').classList.remove('hidden');
-            
-            // Load Admin Tabs Data
-            loadAdminAppointments();
-            loadAdminServices();
-            loadAdminBarbers();
-            loadAdminReviews();
+        async function handleAdminLogout() {
+            await supabase.auth.signOut();
+            document.getElementById('admin-auth-card').classList.remove('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
         }
 
-        function switchAdminTab(tabName, item) {
-            document.querySelectorAll('.admin-menu-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+        function showAdminDashboard() {
+            document.getElementById('admin-auth-card').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            loadAdminAppointments();
+        }
 
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+        function switchAdminTab(tabName, el) {
+            document.querySelectorAll('.admin-menu-item').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.add('hidden'));
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            if (tabName === 'appointments') loadAdminAppointments();
+            if (tabName === 'services') loadAdminServices();
+            if (tabName === 'barbers') loadAdminBarbers();
+            if (tabName === 'hours') loadAdminHours();
+            if (tabName === 'business') populateAdminBusinessForm();
+            if (tabName === 'faqs') loadAdminFaqs();
+            if (tabName === 'reviews') loadAdminReviews();
         }
 
+        // Admin Appointments
         async function loadAdminAppointments() {
-            const { data } = await db.from('appointments').select('*').order('created_at', {ascending:false});
-            const tbody = document.getElementById('admin-appointments-table');
-            const dashTbody = document.getElementById('dash-today-table');
+            const tbody = document.getElementById('admin-appointments-tbody');
+            tbody.innerHTML = '<tr><td colspan="8">Loading appointments...</td></tr>';
 
-            if (!data) return;
+            try {
+                const { data, error } = await supabase
+                    .from('appointments')
+                    .select('*, services(name), barbers(name)')
+                    .order('appointment_date', { ascending: false });
 
-            // Stats
-            const todayStr = new Date().toISOString().slice(0,10);
-            const todayAppts = data.filter(a => a.appointment_date === todayStr);
-            document.getElementById('dash-stat-today').innerText = todayAppts.length;
-            document.getElementById('dash-stat-new').innerText = data.filter(a => a.status === 'NEW').length;
-            document.getElementById('dash-stat-done').innerText = data.filter(a => a.status === 'DONE').length;
+                if (error) throw error;
+                state.appointments = data || [];
 
-            // Render Live Table
-            dashTbody.innerHTML = todayAppts.map(a => `
-                <tr>
-                    <td>${a.appointment_time}</td>
-                    <td>${a.customer_name}<br><small style="color:var(--text-muted);">${a.customer_phone}</small></td>
-                    <td>${a.service_name}</td>
-                    <td>${a.barber_name}</td>
-                    <td><span class="badge badge-${a.status}">${a.status}</span></td>
-                    <td>
-                        <button class="btn btn-gold btn-sm" onclick="updateStatus('${a.id}', 'DONE')">Complete</button>
-                    </td>
-                </tr>
-            `).join('');
+                tbody.innerHTML = '';
+                if (state.appointments.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8">No appointments found.</td></tr>';
+                    return;
+                }
 
-            tbody.innerHTML = data.map(a => `
-                <tr>
-                    <td><strong>${a.booking_ref}</strong></td>
-                    <td>${a.customer_name}<br><small style="color:var(--text-muted);">${a.customer_phone}</small></td>
-                    <td>${a.service_name}</td>
-                    <td>${a.barber_name}</td>
-                    <td>${a.appointment_date} @ ${a.appointment_time}</td>
-                    <td><span class="badge badge-${a.status}">${a.status}</span></td>
-                    <td>${a.payment_status}</td>
-                    <td>
-                        <select onchange="updateStatus('${a.id}', this.value)" style="background:var(--bg-main); color:var(--text-light); border:1px solid var(--border-color); border-radius:4px; padding:2px 5px;">
-                            <option value="">Change Status</option>
-                            <option value="NEW">NEW</option>
-                            <option value="DONE">DONE</option>
-                            <option value="REJECTED">REJECTED</option>
-                        </select>
-                    </td>
-                </tr>
-            `).join('');
+                state.appointments.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><code>${a.id.substring(0, 6)}</code></td>
+                        <td><strong>${a.customer_name}</strong><br><small style="color: var(--text-muted);">${a.customer_phone}</small></td>
+                        <td>${a.services?.name || 'Service'}</td>
+                        <td>${a.barbers?.name || 'Any'}</td>
+                        <td>${a.appointment_date}<br><small>${a.appointment_time ? a.appointment_time.substring(0, 5) : ''}</small></td>
+                        <td>£${parseFloat(a.price_gbp).toFixed(2)}</td>
+                        <td><span class="badge badge-${a.status}">${a.status}</span></td>
+                        <td>
+                            <select class="form-control" style="padding: 0.2rem; font-size: 0.8rem;" onchange="updateAppointmentStatus('${a.id}', this.value)">
+                                <option value="NEW" ${a.status === 'NEW' ? 'selected' : ''}>NEW</option>
+                                <option value="DONE" ${a.status === 'DONE' ? 'selected' : ''}>DONE</option>
+                                <option value="REJECTED" ${a.status === 'REJECTED' ? 'selected' : ''}>REJECTED</option>
+                                <option value="CANCELLED" ${a.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+                            </select>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="8" style="color: var(--danger);">Failed to load appointments.</td></tr>';
+            }
         }
 
-        async function updateStatus(id, newStatus) {
-            if (!newStatus) return;
-            await db.from('appointments').update({ status: newStatus }).eq('id', id);
-            loadAdminAppointments();
+        async function updateAppointmentStatus(id, newStatus) {
+            try {
+                await supabase.from('appointments').update({ status: newStatus }).eq('id', id);
+                loadAdminAppointments();
+            } catch (err) {
+                alert("Failed to update status.");
+            }
         }
 
-        async function loadAdminServices() {
-            const { data } = await db.from('services').select('*');
-            const tbody = document.getElementById('admin-services-table');
-            tbody.innerHTML = (data || []).map(s => `
-                <tr>
-                    <td>${s.name}</td>
+        // Admin Services
+        function loadAdminServices() {
+            const tbody = document.getElementById('admin-services-tbody');
+            tbody.innerHTML = '';
+
+            state.services.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${s.image_url || 'https://via.placeholder.com/40'}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;"></td>
+                    <td><strong>${s.name}</strong></td>
                     <td>${s.category}</td>
-                    <td>$${s.price}</td>
-                    <td>${s.duration_minutes}m</td>
-                    <td>${s.is_available ? 'Active' : 'Disabled'}</td>
+                    <td>£${parseFloat(s.price_gbp).toFixed(2)}</td>
+                    <td>${s.duration_mins}m</td>
+                    <td>${s.is_available ? '<i class="fa-solid fa-check gold-text"></i>' : '<i class="fa-solid fa-xmark" style="color: var(--danger)"></i>'}</td>
                     <td>
-                        <button class="btn btn-outline btn-sm" onclick="deleteService('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn btn-outline btn-sm" onclick="editService('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteService('${s.id}')"><i class="fa-solid fa-trash"></i></button>
                     </td>
-                </tr>
-            `).join('');
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openServiceModal(s = null) {
+            document.getElementById('service-id').value = s ? s.id : '';
+            document.getElementById('service-name').value = s ? s.name : '';
+            document.getElementById('service-category').value = s ? s.category : 'Hair';
+            document.getElementById('service-price').value = s ? s.price_gbp : '';
+            document.getElementById('service-duration').value = s ? s.duration_mins : 30;
+            document.getElementById('service-description').value = s ? s.description : '';
+            document.getElementById('service-image-url').value = s ? s.image_url : '';
+            document.getElementById('service-available').checked = s ? s.is_available : true;
+
+            const preview = document.getElementById('preview-service');
+            if (s && s.image_url) {
+                preview.src = s.image_url;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+
+            document.getElementById('modal-service-title').textContent = s ? 'Edit Service' : 'Add Service';
+            document.getElementById('modal-service').classList.remove('hidden');
+        }
+
+        function editService(id) {
+            const s = state.services.find(item => item.id === id);
+            if (s) openServiceModal(s);
+        }
+
+        async function saveServiceForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('service-id').value;
+            const payload = {
+                name: document.getElementById('service-name').value.trim(),
+                category: document.getElementById('service-category').value,
+                price_gbp: parseFloat(document.getElementById('service-price').value),
+                duration_mins: parseInt(document.getElementById('service-duration').value),
+                description: document.getElementById('service-description').value.trim(),
+                image_url: document.getElementById('service-image-url').value,
+                is_available: document.getElementById('service-available').checked
+            };
+
+            try {
+                if (id) {
+                    await supabase.from('services').update(payload).eq('id', id);
+                } else {
+                    await supabase.from('services').insert([payload]);
+                }
+                closeModal('modal-service');
+                await fetchServices();
+                loadAdminServices();
+            } catch (err) {
+                alert("Error saving service: " + err.message);
+            }
         }
 
         async function deleteService(id) {
-            if (confirm("Delete this service?")) {
-                await db.from('services').delete().eq('id', id);
+            if (!confirm("Are you sure you want to delete this service?")) return;
+            try {
+                await supabase.from('services').delete().eq('id', id);
+                await fetchServices();
                 loadAdminServices();
-                fetchServices();
-            }
+            } catch (err) { alert("Delete failed."); }
         }
 
-        async function loadAdminBarbers() {
-            const { data } = await db.from('barbers').select('*');
-            const grid = document.getElementById('admin-barbers-grid');
-            grid.innerHTML = (data || []).map(b => `
-                <div class="card text-center">
-                    <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500'}" class="card-img" style="height:150px;">
-                    <h4>${b.name}</h4>
-                    <p style="font-size:0.8rem; color:var(--accent-gold);">${b.specialty}</p>
-                    <button class="btn btn-danger btn-sm" style="margin-top:0.5rem;" onclick="deleteBarber('${b.id}')">Remove</button>
-                </div>
-            `).join('');
+        // Admin Barbers
+        function loadAdminBarbers() {
+            const tbody = document.getElementById('admin-barbers-tbody');
+            tbody.innerHTML = '';
+
+            state.barbers.forEach(b => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${b.profile_image_url || 'https://via.placeholder.com/40'}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"></td>
+                    <td><strong>${b.name}</strong></td>
+                    <td>${b.specialty || '-'}</td>
+                    <td>${b.is_available ? '<i class="fa-solid fa-check gold-text"></i>' : '<i class="fa-solid fa-xmark" style="color: var(--danger)"></i>'}</td>
+                    <td>
+                        <button class="btn btn-outline btn-sm" onclick="editBarber('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBarber('${b.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openBarberModal(b = null) {
+            document.getElementById('barber-id').value = b ? b.id : '';
+            document.getElementById('barber-name').value = b ? b.name : '';
+            document.getElementById('barber-specialty').value = b ? b.specialty : '';
+            document.getElementById('barber-image-url').value = b ? b.profile_image_url : '';
+            document.getElementById('barber-available').checked = b ? b.is_available : true;
+
+            const preview = document.getElementById('preview-barber');
+            if (b && b.profile_image_url) {
+                preview.src = b.profile_image_url;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+
+            document.getElementById('modal-barber-title').textContent = b ? 'Edit Barber' : 'Add Barber';
+            document.getElementById('modal-barber').classList.remove('hidden');
+        }
+
+        function editBarber(id) {
+            const b = state.barbers.find(item => item.id === id);
+            if (b) openBarberModal(b);
+        }
+
+        async function saveBarberForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('barber-id').value;
+            const payload = {
+                name: document.getElementById('barber-name').value.trim(),
+                specialty: document.getElementById('barber-specialty').value.trim(),
+                profile_image_url: document.getElementById('barber-image-url').value,
+                is_available: document.getElementById('barber-available').checked
+            };
+
+            try {
+                if (id) {
+                    await supabase.from('barbers').update(payload).eq('id', id);
+                } else {
+                    await supabase.from('barbers').insert([payload]);
+                }
+                closeModal('modal-barber');
+                await fetchBarbers();
+                loadAdminBarbers();
+            } catch (err) { alert("Error saving barber."); }
         }
 
         async function deleteBarber(id) {
-            if (confirm("Remove barber?")) {
-                await db.from('barbers').delete().eq('id', id);
+            if (!confirm("Are you sure you want to remove this barber?")) return;
+            try {
+                await supabase.from('barbers').delete().eq('id', id);
+                await fetchBarbers();
                 loadAdminBarbers();
-                fetchBarbers();
+            } catch (err) { alert("Delete failed."); }
+        }
+
+        // Admin Hours
+        function loadAdminHours() {
+            const tbody = document.getElementById('admin-hours-tbody');
+            tbody.innerHTML = '';
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+            for (let i = 0; i < 7; i++) {
+                const h = state.hours.find(item => item.day_index === i) || {
+                    day_index: i,
+                    is_open: true,
+                    open_time: '09:00:00',
+                    close_time: '18:00:00',
+                    has_break: false,
+                    break_start_time: '13:00:00',
+                    break_end_time: '14:00:00'
+                };
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${days[i]}</strong></td>
+                    <td><input type="checkbox" id="h-open-${i}" ${h.is_open ? 'checked' : ''}></td>
+                    <td><input type="time" id="h-open-time-${i}" class="form-control" style="padding:0.2rem;" value="${h.open_time}"></td>
+                    <td><input type="time" id="h-close-time-${i}" class="form-control" style="padding:0.2rem;" value="${h.close_time}"></td>
+                    <td><input type="checkbox" id="h-break-${i}" ${h.has_break ? 'checked' : ''}></td>
+                    <td><input type="time" id="h-bstart-${i}" class="form-control" style="padding:0.2rem;" value="${h.break_start_time}"></td>
+                    <td><input type="time" id="h-bend-${i}" class="form-control" style="padding:0.2rem;" value="${h.break_end_time}"></td>
+                    <td><button class="btn btn-gold btn-sm" onclick="saveDayHours(${i}, ${h.id ? `'${h.id}'` : 'null'})">Save</button></td>
+                `;
+                tbody.appendChild(tr);
             }
         }
 
-        async function loadAdminReviews() {
-            const { data } = await db.from('reviews').select('*').order('created_at', {ascending:false});
-            const tbody = document.getElementById('admin-reviews-table');
-            tbody.innerHTML = (data || []).map(r => `
-                <tr>
-                    <td>${r.customer_name}</td>
-                    <td>${r.rating} Stars</td>
-                    <td>${r.comment}</td>
-                    <td>${r.is_approved ? '<span style="color:var(--success)">Approved</span>' : '<span style="color:var(--warning)">Pending</span>'}</td>
+        async function saveDayHours(dayIdx, id) {
+            const payload = {
+                day_index: dayIdx,
+                is_open: document.getElementById(`h-open-${dayIdx}`).checked,
+                open_time: document.getElementById(`h-open-time-${dayIdx}`).value,
+                close_time: document.getElementById(`h-close-time-${dayIdx}`).value,
+                has_break: document.getElementById(`h-break-${dayIdx}`).checked,
+                break_start_time: document.getElementById(`h-bstart-${dayIdx}`).value,
+                break_end_time: document.getElementById(`h-bend-${dayIdx}`).value
+            };
+
+            try {
+                if (id) {
+                    await supabase.from('shop_hours').update(payload).eq('id', id);
+                } else {
+                    await supabase.from('shop_hours').insert([payload]);
+                }
+                alert("Hours saved successfully.");
+                await fetchHours();
+            } catch (err) { alert("Failed to save hours."); }
+        }
+
+        // Admin Business Profile
+        function populateAdminBusinessForm() {
+            const p = state.profile || {};
+            document.getElementById('biz-shop-name').value = p.shop_name || '';
+            document.getElementById('biz-tagline').value = p.tagline || '';
+            document.getElementById('biz-phone').value = p.phone || '';
+            document.getElementById('biz-whatsapp').value = p.whatsapp_phone || '';
+            document.getElementById('biz-email').value = p.email || '';
+            document.getElementById('biz-address').value = p.address || '';
+            document.getElementById('biz-postcode').value = p.postcode || '';
+            document.getElementById('biz-maps').value = p.google_maps_url || '';
+            document.getElementById('biz-logo-url').value = p.logo_url || '';
+            document.getElementById('biz-cover-url').value = p.cover_image_url || '';
+            document.getElementById('biz-cancellation').value = p.cancellation_policy || '';
+            document.getElementById('biz-temp-closed').checked = p.is_temporarily_closed || false;
+            document.getElementById('biz-closed-msg').value = p.closed_message || '';
+
+            if (p.logo_url) {
+                const prev = document.getElementById('preview-logo');
+                prev.src = p.logo_url;
+                prev.classList.remove('hidden');
+            }
+            if (p.cover_image_url) {
+                const prev = document.getElementById('preview-cover');
+                prev.src = p.cover_image_url;
+                prev.classList.remove('hidden');
+            }
+        }
+
+        async function saveBusinessProfile(e) {
+            e.preventDefault();
+            const payload = {
+                shop_name: document.getElementById('biz-shop-name').value.trim(),
+                tagline: document.getElementById('biz-tagline').value.trim(),
+                phone: document.getElementById('biz-phone').value.trim(),
+                whatsapp_phone: document.getElementById('biz-whatsapp').value.trim(),
+                email: document.getElementById('biz-email').value.trim(),
+                address: document.getElementById('biz-address').value.trim(),
+                postcode: document.getElementById('biz-postcode').value.trim(),
+                google_maps_url: document.getElementById('biz-maps').value.trim(),
+                logo_url: document.getElementById('biz-logo-url').value,
+                cover_image_url: document.getElementById('biz-cover-url').value,
+                cancellation_policy: document.getElementById('biz-cancellation').value.trim(),
+                is_temporarily_closed: document.getElementById('biz-temp-closed').checked,
+                closed_message: document.getElementById('biz-closed-msg').value.trim()
+            };
+
+            try {
+                if (state.profile && state.profile.id) {
+                    await supabase.from('business_profile').update(payload).eq('id', state.profile.id);
+                } else {
+                    await supabase.from('business_profile').insert([payload]);
+                }
+                alert("Business profile updated!");
+                await fetchProfile();
+            } catch (err) { alert("Failed to save profile."); }
+        }
+
+        // Admin FAQs
+        function loadAdminFaqs() {
+            const tbody = document.getElementById('admin-faqs-tbody');
+            tbody.innerHTML = '';
+
+            state.faqs.forEach(f => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${f.sort_order}</td>
+                    <td><strong>${f.question}</strong></td>
+                    <td>${f.answer}</td>
                     <td>
-                        ${!r.is_approved ? `<button class="btn btn-gold btn-sm" onclick="approveReview('${r.id}')">Approve</button>` : ''}
+                        <button class="btn btn-outline btn-sm" onclick="editFaq('${f.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFaq('${f.id}')"><i class="fa-solid fa-trash"></i></button>
                     </td>
-                </tr>
-            `).join('');
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        async function approveReview(id) {
-            await db.from('reviews').update({ is_approved: true }).eq('id', id);
-            loadAdminReviews();
-            fetchReviews();
+        function openFaqModal(f = null) {
+            document.getElementById('faq-id').value = f ? f.id : '';
+            document.getElementById('faq-sort').value = f ? f.sort_order : 0;
+            document.getElementById('faq-question').value = f ? f.question : '';
+            document.getElementById('faq-answer').value = f ? f.answer : '';
+            document.getElementById('modal-faq-title').textContent = f ? 'Edit FAQ' : 'Add FAQ';
+            document.getElementById('modal-faq').classList.remove('hidden');
         }
 
-        // ===============================
-        // REALTIME AUDIO & VISUAL NOTIFICATIONS
-        // ===============================
-        function setupRealtimeNotifications() {
-            db.channel('public:appointments')
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'appointments' }, payload => {
-                    playAudioNotification();
-                    showNotificationToast(`New Booking! ${payload.new.customer_name} - ${payload.new.service_name}`);
-                    if (state.currentUser) loadAdminAppointments();
-                })
-                .subscribe();
+        function editFaq(id) {
+            const f = state.faqs.find(item => item.id === id);
+            if (f) openFaqModal(f);
         }
 
-        function playAudioNotification() {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.3);
+        async function saveFaqForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('faq-id').value;
+            const payload = {
+                sort_order: parseInt(document.getElementById('faq-sort').value),
+                question: document.getElementById('faq-question').value.trim(),
+                answer: document.getElementById('faq-answer').value.trim()
+            };
+
+            try {
+                if (id) {
+                    await supabase.from('faqs').update(payload).eq('id', id);
+                } else {
+                    await supabase.from('faqs').insert([payload]);
+                }
+                closeModal('modal-faq');
+                await fetchFaqs();
+                loadAdminFaqs();
+            } catch (err) { alert("Error saving FAQ."); }
         }
 
-        function showNotificationToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'notification-toast';
-            toast.innerHTML = `<i class="fa-solid fa-bell"></i> <span>${msg}</span>`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 5000);
+        async function deleteFaq(id) {
+            if (!confirm("Delete this FAQ?")) return;
+            try {
+                await supabase.from('faqs').delete().eq('id', id);
+                await fetchFaqs();
+                loadAdminFaqs();
+            } catch (err) { alert("Delete failed."); }
         }
 
-        // ===============================
-        // UTILITIES & MODALS
-        // ===============================
+        // Admin Reviews
+        function loadAdminReviews() {
+            const tbody = document.getElementById('admin-reviews-tbody');
+            tbody.innerHTML = '';
+
+            state.reviews.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${r.customer_name}</strong></td>
+                    <td>${r.rating} / 5</td>
+                    <td>${r.comment}</td>
+                    <td>${r.is_approved ? '<span style="color: var(--success)">Approved</span>' : '<span style="color: var(--warning)">Pending</span>'}</td>
+                    <td>
+                        <button class="btn btn-outline btn-sm" onclick="toggleReviewApproval('${r.id}', ${!r.is_approved})">${r.is_approved ? 'Unapprove' : 'Approve'}</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function toggleReviewApproval(id, newApproved) {
+            try {
+                await supabase.from('reviews').update({ is_approved: newApproved }).eq('id', id);
+                await fetchReviews();
+                loadAdminReviews();
+            } catch (err) { alert("Failed to update status."); }
+        }
+
+        async function deleteReview(id) {
+            if (!confirm("Delete this review permanently?")) return;
+            try {
+                await supabase.from('reviews').delete().eq('id', id);
+                await fetchReviews();
+                loadAdminReviews();
+            } catch (err) { alert("Delete failed."); }
+        }
+
+        /* ==========================================================================
+           SUPABASE STORAGE UPLOAD & DRAG/DROP
+           ========================================================================== */
+        function initDragAndDropHandlers() {
+            const areas = document.querySelectorAll('.drag-drop-area');
+            areas.forEach(area => {
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    area.addEventListener(eventName, (e) => { e.preventDefault(); area.classList.add('dragover'); }, false);
+                });
+                ['dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, (e) => { e.preventDefault(); area.classList.remove('dragover'); }, false);
+                });
+                area.addEventListener('drop', (e) => {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (files.length > 0) {
+                        const fileInput = area.querySelector('input[type="file"]');
+                        if (fileInput) {
+                            fileInput.files = files;
+                            fileInput.dispatchEvent(new Event('change'));
+                        }
+                    }
+                });
+            });
+        }
+
+        async function handleFileUpload(file, bucket, targetHiddenInputId, previewImgId) {
+            if (!file) return;
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            try {
+                const { error: uploadError } = await supabase.storage.from(bucket).upload(filePath, file);
+                if (uploadError) throw uploadError;
+
+                const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
+                if (data.publicUrl) {
+                    document.getElementById(targetHiddenInputId).value = data.publicUrl;
+                    const preview = document.getElementById(previewImgId);
+                    preview.src = data.publicUrl;
+                    preview.classList.remove('hidden');
+                }
+            } catch (err) {
+                alert("Image upload failed: " + err.message);
+            }
+        }
+
+        /* ==========================================================================
+           UTILITY FUNCTIONS
+           ========================================================================== */
         function toggleNav() {
             document.getElementById('nav-menu').classList.toggle('active');
         }
@@ -1759,72 +2336,8 @@
             document.getElementById('nav-menu').classList.remove('active');
         }
 
-        function openServiceModal() { document.getElementById('modal-service').classList.remove('hidden'); }
-        function openBarberModal() { document.getElementById('modal-barber').classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        async function handleBarberSave(e) {
-            e.preventDefault();
-            const name = document.getElementById('modal-barber-name').value;
-            const specialty = document.getElementById('modal-barber-spec').value;
-            const fileInput = document.getElementById('modal-barber-file');
-
-            let photo_url = null;
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${Math.random()}.${fileExt}`;
-                const { data, error } = await db.storage.from('barber-photos').upload(fileName, file);
-                if (!error) {
-                    const { data: pubUrl } = db.storage.from('barber-photos').getPublicUrl(fileName);
-                    photo_url = pubUrl.publicUrl;
-                }
-            }
-
-            await db.from('barbers').insert([{ name, specialty, photo_url }]);
-            closeModal('modal-barber');
-            loadAdminBarbers();
-            fetchBarbers();
-        }
-
-        async function handleServiceSave(e) {
-            e.preventDefault();
-            const name = document.getElementById('modal-svc-name').value;
-            const category = document.getElementById('modal-svc-cat').value;
-            const price = parseFloat(document.getElementById('modal-svc-price').value);
-            const duration_minutes = parseInt(document.getElementById('modal-svc-dur').value);
-            const photo_url = document.getElementById('modal-svc-img').value;
-
-            await db.from('services').insert([{ name, category, price, duration_minutes, photo_url }]);
-            closeModal('modal-service');
-            loadAdminServices();
-            fetchServices();
-        }
-
-        async function handleSettingsSave(e) {
-            e.preventDefault();
-            const is_closed = document.getElementById('set-is-closed').value === 'true';
-            const shop_name = document.getElementById('set-shop-name').value;
-            const phone = document.getElementById('set-phone').value;
-            const whatsapp = document.getElementById('set-whatsapp').value;
-            const latitude = parseFloat(document.getElementById('set-lat').value);
-            const longitude = parseFloat(document.getElementById('set-lng').value);
-            const address = document.getElementById('set-address').value;
-
-            await db.from('business_profile').update({
-                is_temporarily_closed: is_closed,
-                shop_name, phone, whatsapp, latitude, longitude, address
-            }).eq('id', state.profile.id);
-
-            alert("Settings updated successfully.");
-            await fetchBusinessProfile();
-        }
-
-        async function handleAdminLogout() {
-            await db.auth.signOut();
-            state.currentUser = null;
-            document.getElementById('admin-dashboard-view').classList.add('hidden');
-            document.getElementById('admin-login-card').classList.remove('hidden');
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
     </script>
 </body>

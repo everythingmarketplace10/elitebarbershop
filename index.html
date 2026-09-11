@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Barber Shop & Admin Backoffice</title>
+  <title>Luxury Barber Studio & Admin</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,6 +11,10 @@
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            carnivale: ['Carnivale Freakshow', 'serif'],
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          },
           colors: {
             brand: {
               bg: 'var(--brand-bg)',
@@ -33,60 +37,67 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    :root {
-      --brand-bg: #0d0d0d;
-      --brand-card: #171717;
+    @font-face {
+      font-family: 'Carnivale Freakshow';
+      src: url('https://fonts.cdnfonts.com/s/72922/CarnivaleFreakshow.woff') format('woff');
+      font-display: swap;
+    }
+
+    .font-carnivale {
+      font-family: 'Carnivale Freakshow', 'Times New Roman', serif;
+      letter-spacing: 0.05em;
+    }
+
+    /* THEME DEFINITIONS */
+    :root, .theme-1 { /* OBSIDIAN + GOLD */
+      --brand-bg: #0b0c10;
+      --brand-card: #14161d;
       --brand-primary: #d4af37;
-      --brand-secondary: #262626;
-      --brand-text: #f5f5f5;
+      --brand-secondary: #1f232d;
+      --brand-text: #f5f5f7;
       --brand-accent: #b38f24;
     }
-    
-    .theme-midnight-gold {
-      --brand-bg: #0a0a0a;
-      --brand-card: #141414;
-      --brand-primary: #dfb15b;
-      --brand-secondary: #262626;
+
+    .theme-2 { /* BLACK + COPPER */
+      --brand-bg: #09090b;
+      --brand-card: #18181b;
+      --brand-primary: #ea580c;
+      --brand-secondary: #27272a;
       --brand-text: #fafafa;
-      --brand-accent: #c49642;
+      --brand-accent: #c2410c;
     }
-    .theme-charcoal-silver {
-      --brand-bg: #121314;
-      --brand-card: #1c1e20;
-      --brand-primary: #e2e8f0;
-      --brand-secondary: #2d3139;
-      --brand-text: #f8fafc;
-      --brand-accent: #94a3b8;
+
+    .theme-3 { /* MIDNIGHT + CHAMPAGNE */
+      --brand-bg: #030712;
+      --brand-card: #111827;
+      --brand-primary: #fef08a;
+      --brand-secondary: #1f2937;
+      --brand-text: #f9fafb;
+      --brand-accent: #fde047;
     }
-    .theme-black-burgundy {
-      --brand-bg: #0d0506;
-      --brand-card: #180a0c;
-      --brand-primary: #9f1239;
-      --brand-secondary: #2e1015;
-      --brand-text: #fff1f2;
-      --brand-accent: #be123c;
+
+    .theme-4 { /* WHITE + BLUE */
+      --brand-bg: #f8fafc;
+      --brand-card: #ffffff;
+      --brand-primary: #2563eb;
+      --brand-secondary: #e2e8f0;
+      --brand-text: #0f172a;
+      --brand-accent: #1d4ed8;
     }
-    .theme-navy-copper {
-      --brand-bg: #070d19;
-      --brand-card: #0f172a;
-      --brand-primary: #d97706;
-      --brand-secondary: #1e293b;
-      --brand-text: #f8fafc;
-      --brand-accent: #b45309;
-    }
-    .theme-cream-darkbrown {
-      --brand-bg: #1c1917;
-      --brand-card: #292524;
-      --brand-primary: #f59e0b;
-      --brand-secondary: #44403c;
-      --brand-text: #fef3c7;
-      --brand-accent: #d97706;
+
+    .theme-5 { /* WHITE + GOLD */
+      --brand-bg: #fafaf9;
+      --brand-card: #ffffff;
+      --brand-primary: #ca8a04;
+      --brand-secondary: #e7e5e4;
+      --brand-text: #1c1917;
+      --brand-accent: #a16207;
     }
 
     body {
       background-color: var(--brand-bg);
       color: var(--brand-text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     
     .bg-brand-card { background-color: var(--brand-card); }
@@ -94,8 +105,21 @@
     .text-brand-primary { color: var(--brand-primary); }
     .border-brand-primary { border-color: var(--brand-primary); }
     .hover\:bg-brand-accent:hover { background-color: var(--brand-accent); }
+
+    /* Subtle Motion & Dynamic Alive Animations */
+    @media (prefers-reduced-motion: no-preference) {
+      .pulse-slow {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .float-gentle {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+    }
     
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--brand-bg); }
     ::-webkit-scrollbar-thumb { background: var(--brand-secondary); border-radius: 3px; }
@@ -104,68 +128,73 @@
 </head>
 <body class="h-full flex flex-col antialiased selection:bg-brand-primary selection:text-black">
 
-  <!-- CONFIGURATION WARNING MODAL (Show if Supabase credentials missing) -->
+  <!-- CONFIGURATION WARNING MODAL -->
   <div id="config-warning" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
     <div class="bg-neutral-900 border border-red-500/50 rounded-xl p-6 max-w-lg w-full text-center space-y-4 shadow-2xl">
       <i data-lucide="alert-triangle" class="w-12 h-12 text-red-500 mx-auto"></i>
       <h2 class="text-xl font-bold text-white">Supabase Configuration Required</h2>
-      <p class="text-neutral-400 text-sm">Please open <code class="text-amber-400 bg-neutral-800 px-2 py-1 rounded">index.html</code> and set your <code class="text-amber-400 bg-neutral-800 px-2 py-1 rounded">SUPABASE_URL</code> and <code class="text-amber-400 bg-neutral-800 px-2 py-1 rounded">SUPABASE_ANON_KEY</code> at the top of the script tag.</p>
+      <p class="text-neutral-400 text-sm">Please update <code class="text-amber-400 bg-neutral-800 px-2 py-1 rounded">SUPABASE_URL</code> and <code class="text-amber-400 bg-neutral-800 px-2 py-1 rounded">SUPABASE_ANON_KEY</code> inside index.html.</p>
     </div>
   </div>
 
   <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-  <!-- MAIN APP CONTAINER -->
+  <!-- MAIN CONTAINER -->
   <div class="flex-1 flex flex-col md:flex-row min-h-screen relative overflow-x-hidden">
 
-    <!-- ADMIN SIDEBAR / DRAWER -->
+    <!-- ADMIN SIDEBAR -->
     <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-neutral-900 border-r border-neutral-800 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
       <div class="p-4 border-b border-neutral-800 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i data-lucide="scissors" class="w-6 h-6 text-brand-primary"></i>
-          <span class="font-bold text-lg text-white">Admin Backoffice</span>
+          <span class="font-carnivale text-xl text-white">Backoffice</span>
         </div>
-        <button id="close-sidebar-btn" class="p-1 rounded lg:hidden hover:bg-neutral-800 text-neutral-400">
+        <button id="close-sidebar-btn" class="p-1 rounded hover:bg-neutral-800 text-neutral-400">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <!-- Auth State Navigation -->
       <div id="admin-nav-logged-in" class="hidden flex-1 overflow-y-auto p-4 space-y-1">
-        <button onclick="switchAdminTab('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-primary"></i> Dashboard
         </button>
-        <button onclick="switchAdminTab('bookings')" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('bookings')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <div class="flex items-center gap-3">
             <i data-lucide="calendar" class="w-4 h-4 text-brand-primary"></i> Bookings
           </div>
           <span id="nav-pending-badge" class="hidden bg-amber-500/20 text-amber-400 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
         </button>
-        <button onclick="switchAdminTab('barbers')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('barbers')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <i data-lucide="users" class="w-4 h-4 text-brand-primary"></i> Barbers
         </button>
-        <button onclick="switchAdminTab('services')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('services')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <i data-lucide="sparkles" class="w-4 h-4 text-brand-primary"></i> Services
         </button>
-        <button onclick="switchAdminTab('reviews')" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('reviews')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <div class="flex items-center gap-3">
             <i data-lucide="star" class="w-4 h-4 text-brand-primary"></i> Reviews
           </div>
           <span id="nav-review-badge" class="hidden bg-amber-500/20 text-amber-400 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
         </button>
-        <button onclick="promptShopProfilePin()" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
-          <i data-lucide="lock" class="w-4 h-4 text-brand-primary"></i> Shop Profile
+        <button onclick="switchAdminTab('shop-profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+          <i data-lucide="store" class="w-4 h-4 text-brand-primary"></i> Shop Profile
         </button>
-        <button onclick="switchAdminTab('appearance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
-          <i data-lucide="palette" class="w-4 h-4 text-brand-primary"></i> Themes & Styling
+        <button onclick="switchAdminTab('appearance')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+          <i data-lucide="palette" class="w-4 h-4 text-brand-primary"></i> Themes & Currency
         </button>
-        <button onclick="switchAdminTab('notifications')" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
+        <button onclick="switchAdminTab('notifications')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-300 hover:text-white hover:bg-neutral-800 transition">
           <div class="flex items-center gap-3">
             <i data-lucide="bell" class="w-4 h-4 text-brand-primary"></i> Notifications
           </div>
           <span id="nav-unread-notifications-badge" class="hidden bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
         </button>
+        
+        <div class="pt-4 mt-4 border-t border-neutral-800">
+          <button onclick="showPublicWebsite()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold text-amber-400 hover:bg-amber-400/10 transition">
+            <i data-lucide="globe" class="w-4 h-4"></i> Main Website
+          </button>
+        </div>
       </div>
 
       <div id="admin-nav-logged-out" class="p-4 space-y-3">
@@ -173,9 +202,11 @@
         <button onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 bg-brand-primary text-black font-semibold py-2 rounded-lg hover:bg-brand-accent transition">
           <i data-lucide="log-in" class="w-4 h-4"></i> Admin Login
         </button>
+        <button onclick="showPublicWebsite()" class="w-full flex items-center justify-center gap-2 bg-neutral-800 text-neutral-300 font-semibold py-2 rounded-lg hover:bg-neutral-700 transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Public Site
+        </button>
       </div>
 
-      <!-- Footer Logout Button -->
       <div id="admin-sidebar-footer" class="hidden p-4 border-t border-neutral-800">
         <button onclick="handleAdminLogout()" class="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 py-2 rounded-lg text-sm font-medium transition">
           <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
@@ -183,10 +214,10 @@
       </div>
     </aside>
 
-    <!-- MAIN CONTAINER -->
+    <!-- MAIN VIEW CONTAINER -->
     <div class="flex-1 flex flex-col min-w-0">
 
-      <!-- TOP PUBLIC / ADMIN HEADER -->
+      <!-- HEADER -->
       <header class="sticky top-0 z-30 bg-neutral-900/90 backdrop-blur border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <button id="toggle-sidebar-btn" class="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white">
@@ -194,13 +225,14 @@
           </button>
           <div class="flex items-center gap-2">
             <i data-lucide="scissors" class="w-6 h-6 text-brand-primary"></i>
-            <span id="header-shop-name" class="font-bold text-lg tracking-wider text-white uppercase">Barber Shop</span>
+            <span id="header-shop-name" class="font-carnivale text-2xl tracking-wider uppercase">Barber Shop</span>
           </div>
         </div>
 
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-300">
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium opacity-90">
           <a href="#hero" class="hover:text-brand-primary transition">Home</a>
           <a href="#treatments" class="hover:text-brand-primary transition">Categories</a>
+          <a href="#skin-section" class="hover:text-brand-primary transition">Skin Treatment</a>
           <a href="#services" class="hover:text-brand-primary transition">Services</a>
           <a href="#barbers" class="hover:text-brand-primary transition">Barbers</a>
           <a href="#reviews" class="hover:text-brand-primary transition">Reviews</a>
@@ -209,39 +241,38 @@
 
         <div class="flex items-center gap-2">
           <button onclick="openBookingLookupModal()" class="text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-200 px-3 py-2 rounded-lg border border-neutral-700 flex items-center gap-1.5 transition">
-            <i data-lucide="search" class="w-3.5 h-3.5"></i> My Booking
+            <i data-lucide="search" class="w-3.5 h-3.5"></i> Find Booking
           </button>
-          <a href="#booking-section" class="bg-brand-primary hover:bg-brand-accent text-black font-semibold text-xs px-3.5 py-2 rounded-lg transition">
+          <a href="#booking-step-container" class="bg-brand-primary hover:bg-brand-accent text-black font-bold text-xs px-3.5 py-2 rounded-lg transition shadow-md">
             Book Now
           </a>
         </div>
       </header>
 
-      <!-- VIEW RENDER CONTAINER -->
       <main id="app-viewport" class="flex-1">
 
         <!-- ================= PUBLIC WEBSITE ================= -->
         <div id="public-website" class="space-y-16 pb-16">
 
           <!-- HERO SECTION -->
-          <section id="hero" class="relative min-h-[75vh] flex items-center justify-center bg-neutral-900 overflow-hidden">
-            <div id="hero-banner-bg" class="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-700" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80');"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+          <section id="hero" class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+            <div id="hero-banner-bg" class="absolute inset-0 bg-cover bg-center opacity-30 transition-all duration-700" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--brand-bg)] via-[var(--brand-bg)]/60 to-transparent"></div>
             
             <div class="relative z-10 max-w-4xl mx-auto text-center px-4 space-y-6">
-              <div class="inline-flex items-center gap-2 bg-black/60 border border-brand-primary/30 px-4 py-1.5 rounded-full backdrop-blur-md">
+              <div class="inline-flex items-center gap-2 bg-black/40 border border-brand-primary/30 px-4 py-1.5 rounded-full backdrop-blur-md">
                 <i data-lucide="award" class="w-4 h-4 text-brand-primary"></i>
-                <span class="text-xs uppercase tracking-widest text-brand-primary font-semibold">Premium Grooming Experience</span>
+                <span class="text-xs uppercase tracking-widest text-brand-primary font-semibold">Luxury Grooming Studio</span>
               </div>
-              <h1 id="hero-shop-title" class="text-4xl md:text-7xl font-extrabold tracking-tight text-white uppercase">
+              <h1 id="hero-shop-title" class="font-carnivale text-5xl md:text-8xl tracking-tight uppercase drop-shadow-lg">
                 Barber Shop
               </h1>
-              <p id="hero-slogan" class="text-lg md:text-2xl font-light text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+              <p id="hero-slogan" class="text-lg md:text-2xl font-light opacity-90 max-w-2xl mx-auto leading-relaxed">
                 Precision Cuts & Traditional Grooming
               </p>
               <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#booking-section" class="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-accent text-black text-base font-bold px-8 py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
-                  <i data-lucide="calendar" class="w-5 h-5"></i> Book Appointment
+                <a href="#booking-step-container" class="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-accent text-black text-base font-bold px-8 py-4 rounded-xl shadow-xl transition transform hover:-translate-y-0.5">
+                  <i data-lucide="calendar" class="w-5 h-5"></i> Reserve Appointment
                 </a>
                 <a href="#services" class="inline-flex items-center justify-center gap-2 bg-neutral-800/80 hover:bg-neutral-800 text-white border border-neutral-700 text-base font-medium px-8 py-4 rounded-xl backdrop-blur transition">
                   Explore Services
@@ -250,12 +281,12 @@
             </div>
           </section>
 
-          <!-- TREATMENT CATEGORIES -->
+          <!-- CATEGORIES -->
           <section id="treatments" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-neutral-800 pb-6">
               <div>
-                <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Categories</h2>
-                <h3 class="text-3xl font-bold text-white">Treatment Offerings</h3>
+                <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Treatment Collections</h2>
+                <h3 class="font-carnivale text-4xl text-white">Select Category</h3>
               </div>
               <button onclick="filterServices('ALL')" id="filter-all-btn" class="self-start md:self-auto text-xs px-4 py-2 rounded-lg bg-brand-primary text-black font-semibold transition">
                 View All Services
@@ -263,129 +294,160 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- SKIN CARD -->
-              <div onclick="filterServices('SKIN')" class="category-card group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary/50 transition">
-                <img id="category-img-SKIN" src="https://images.unsplash.com/photo-1512290900673-2003887b4661?auto=format&fit=crop&q=80" alt="Skin Care" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+              <div onclick="filterServices('SKIN')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary transition">
+                <img id="category-img-SKIN" src="https://images.unsplash.com/photo-1512290900673-2003887b4661?auto=format&fit=crop&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 space-y-1">
                   <span class="text-xs uppercase tracking-wider text-brand-primary font-bold">Category</span>
-                  <h4 class="text-2xl font-bold text-white">SKIN</h4>
-                  <p class="text-xs text-neutral-300">Facials, Cleansing & Exfoliation</p>
+                  <h4 class="font-carnivale text-3xl text-white">SKIN</h4>
+                  <p class="text-xs text-neutral-300">Facials, Cleansing & Rejuvenation</p>
                 </div>
               </div>
 
-              <!-- HAIR CARD -->
-              <div onclick="filterServices('HAIR')" class="category-card group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary/50 transition">
-                <img id="category-img-HAIR" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80" alt="Hair Styling" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+              <div onclick="filterServices('HAIR')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary transition">
+                <img id="category-img-HAIR" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 space-y-1">
                   <span class="text-xs uppercase tracking-wider text-brand-primary font-bold">Category</span>
-                  <h4 class="text-2xl font-bold text-white">HAIR</h4>
+                  <h4 class="font-carnivale text-3xl text-white">HAIR</h4>
                   <p class="text-xs text-neutral-300">Precision Cuts, Styling & Color</p>
                 </div>
               </div>
 
-              <!-- BEARD CARD -->
-              <div onclick="filterServices('BEARD')" class="category-card group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary/50 transition">
-                <img id="category-img-BEARD" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80" alt="Beard Grooming" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+              <div onclick="filterServices('BEARD')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-neutral-800 hover:border-brand-primary transition">
+                <img id="category-img-BEARD" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 space-y-1">
                   <span class="text-xs uppercase tracking-wider text-brand-primary font-bold">Category</span>
-                  <h4 class="text-2xl font-bold text-white">BEARD</h4>
-                  <p class="text-xs text-neutral-300">Traditional Shaves & Beard Trims</p>
+                  <h4 class="font-carnivale text-3xl text-white">BEARD</h4>
+                  <p class="text-xs text-neutral-300">Hot Towel Shaves & Beard Sculpting</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <!-- SERVICES GRID -->
+          <!-- DEDICATED SKIN TREATMENT SECTION -->
+          <section id="skin-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-card border border-neutral-800 rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl">
+              <div class="p-8 md:p-12 space-y-6 flex flex-col justify-center">
+                <div class="inline-flex items-center gap-2 text-brand-primary font-semibold text-xs tracking-widest uppercase">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i> Luxury Rejuvenation
+                </div>
+                <h3 class="font-carnivale text-4xl text-white">Derma & Skin Care Treatments</h3>
+                <p class="text-sm text-neutral-300 leading-relaxed">
+                  Experience modern dermatological pampering integrated with classical grooming. Our skin therapy treatments purify, hydrate, and restore your skin using organic botanicals and hot-towel steam rituals.
+                </p>
+                <div class="pt-2 flex items-center gap-4">
+                  <button onclick="filterServices('SKIN'); document.getElementById('services').scrollIntoView({behavior: 'smooth'});" class="bg-brand-primary hover:bg-brand-accent text-black font-bold px-6 py-3 rounded-xl transition">
+                    View Skin Treatments
+                  </button>
+                </div>
+              </div>
+              <div class="relative min-h-[300px]">
+                <img src="https://images.unsplash.com/photo-1512290900673-2003887b4661?auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-[var(--brand-card)] via-transparent to-transparent lg:block hidden"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SERVICES CATALOG GRID -->
           <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex items-center justify-between border-b border-neutral-800 pb-6">
               <div>
                 <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Catalog</h2>
-                <h3 class="text-3xl font-bold text-white">Available Services</h3>
+                <h3 class="font-carnivale text-4xl text-white">Services Menu</h3>
               </div>
               <span id="active-category-label" class="text-xs bg-neutral-800 text-neutral-300 px-3 py-1 rounded-full border border-neutral-700">
                 Showing: All Categories
               </span>
             </div>
 
-            <!-- Public Services List Container -->
-            <div id="public-services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="public-services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
           </section>
 
-          <!-- BOOKING APPOINTMENT FORM -->
-          <section id="booking-section" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-brand-card border border-neutral-800 rounded-3xl p-6 md:p-10 shadow-2xl space-y-8">
-              <div class="text-center space-y-2">
-                <span class="text-xs uppercase tracking-widest text-brand-primary font-bold">Reservations</span>
-                <h3 class="text-3xl font-extrabold text-white">Book Your Appointment</h3>
-                <p class="text-sm text-neutral-400">Select your service, barber, and preferred time slot.</p>
-              </div>
-
-              <form id="public-booking-form" onsubmit="handlePublicBookingSubmit(event)" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <!-- Service Selection -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Service *</label>
-                    <select id="booking-service-select" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                      <option value="">Select Service...</option>
-                    </select>
-                  </div>
-
-                  <!-- Barber Selection -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Barber *</label>
-                    <select id="booking-barber-select" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                      <option value="">Select Barber...</option>
-                    </select>
-                  </div>
-
-                  <!-- Date Selection -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Date *</label>
-                    <input type="date" id="booking-date-input" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                  </div>
-
-                  <!-- Time Selection -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Time Slot *</label>
-                    <select id="booking-time-select" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                      <option value="">Select Date First...</option>
-                    </select>
-                  </div>
-
-                  <!-- Customer Name -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Your Full Name *</label>
-                    <input type="text" id="booking-customer-name" required placeholder="John Doe" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                  </div>
-
-                  <!-- Customer Phone -->
-                  <div class="space-y-2">
-                    <label class="text-xs font-semibold uppercase text-neutral-300">Phone Number *</label>
-                    <input type="tel" id="booking-customer-phone" required placeholder="+1 234 567 8900" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
-                  </div>
-                </div>
-
-                <button type="submit" id="booking-submit-btn" class="w-full bg-brand-primary hover:bg-brand-accent text-black font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
-                  <i data-lucide="check-circle-2" class="w-5 h-5"></i> Confirm Appointment Request
-                </button>
-              </form>
-            </div>
-          </section>
-
-          <!-- BARBERS SECTION -->
+          <!-- DEDICATED BARBERS SECTION -->
           <section id="barbers" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="border-b border-neutral-800 pb-6">
-              <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Our Team</h2>
-              <h3 class="text-3xl font-bold text-white">Master Barbers</h3>
+              <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Our Craftsmen</h2>
+              <h3 class="font-carnivale text-4xl text-white">Master Barbers</h3>
             </div>
 
-            <div id="public-barbers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <!-- Dynamically Populated -->
+            <div id="public-barbers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+          </section>
+
+          <!-- STEP-BY-STEP BOOKING EXPERIENCE -->
+          <section id="booking-step-container" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-card border border-neutral-800 rounded-3xl p-6 md:p-10 shadow-2xl space-y-8">
+              
+              <div class="text-center space-y-2">
+                <span class="text-xs uppercase tracking-widest text-brand-primary font-bold">Reservations</span>
+                <h3 class="font-carnivale text-4xl text-white">Book Your Experience</h3>
+              </div>
+
+              <!-- STEP INDICATOR HEADER -->
+              <div class="flex items-center justify-between max-w-md mx-auto border-b border-neutral-800 pb-4 text-xs font-semibold">
+                <span id="step-indicator-1" class="text-brand-primary border-b-2 border-brand-primary pb-1">1. Service</span>
+                <span id="step-indicator-2" class="text-neutral-500">2. Barber</span>
+                <span id="step-indicator-3" class="text-neutral-500">3. Date</span>
+                <span id="step-indicator-4" class="text-neutral-500">4. Time</span>
+                <span id="step-indicator-5" class="text-neutral-500">5. Details</span>
+                <span id="step-indicator-6" class="text-neutral-500">6. Confirm</span>
+              </div>
+
+              <!-- STEP 1: CHOOSE SERVICE -->
+              <div id="booking-step-1" class="booking-step space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 1: Choose Service</h4>
+                <div id="step-service-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+              </div>
+
+              <!-- STEP 2: CHOOSE BARBER -->
+              <div id="booking-step-2" class="booking-step hidden space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 2: Choose Barber</h4>
+                <div id="step-barber-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+              </div>
+
+              <!-- STEP 3: CHOOSE DATE -->
+              <div id="booking-step-3" class="booking-step hidden space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 3: Select Date</h4>
+                <input type="date" id="booking-step-date-input" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:border-brand-primary focus:outline-none">
+              </div>
+
+              <!-- STEP 4: CHOOSE TIME -->
+              <div id="booking-step-4" class="booking-step hidden space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 4: Select Time Slot</h4>
+                <div id="step-time-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+              </div>
+
+              <!-- STEP 5: CUSTOMER DETAILS -->
+              <div id="booking-step-5" class="booking-step hidden space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 5: Customer Details</h4>
+                <div class="space-y-4">
+                  <div>
+                    <label class="text-xs uppercase text-neutral-400 font-semibold">Your Name *</label>
+                    <input type="text" id="booking-step-name" placeholder="John Doe" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white">
+                  </div>
+                  <div>
+                    <label class="text-xs uppercase text-neutral-400 font-semibold">Phone Number *</label>
+                    <input type="tel" id="booking-step-phone" placeholder="+1 234 567 890" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white">
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 6: REVIEW & CONFIRM -->
+              <div id="booking-step-6" class="booking-step hidden space-y-4">
+                <h4 class="font-bold text-lg text-white">Step 6: Summary & Confirmation</h4>
+                <div id="booking-summary-box" class="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl space-y-2 text-sm text-neutral-300"></div>
+              </div>
+
+              <!-- NAVIGATION BUTTONS -->
+              <div class="flex items-center justify-between pt-4 border-t border-neutral-800">
+                <button id="booking-prev-btn" onclick="prevBookingStep()" class="hidden bg-neutral-800 hover:bg-neutral-700 text-white text-xs px-5 py-2.5 rounded-xl font-semibold transition">Back</button>
+                <div class="ml-auto">
+                  <button id="booking-next-btn" onclick="nextBookingStep()" class="bg-brand-primary hover:bg-brand-accent text-black font-bold text-xs px-6 py-2.5 rounded-xl transition">Continue</button>
+                  <button id="booking-confirm-btn" onclick="submitFinalBooking()" class="hidden bg-brand-primary hover:bg-brand-accent text-black font-bold text-xs px-6 py-2.5 rounded-xl transition">Confirm Booking</button>
+                </div>
+              </div>
+
             </div>
           </section>
 
@@ -393,35 +455,33 @@
           <section id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-neutral-800 pb-6">
               <div>
-                <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Testimonials</h2>
-                <h3 class="text-3xl font-bold text-white">Client Reviews</h3>
+                <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Client Feedback</h2>
+                <h3 class="font-carnivale text-4xl text-white">Verified Reviews</h3>
               </div>
               <button onclick="openReviewModal()" class="bg-neutral-800 hover:bg-neutral-700 text-white text-xs px-4 py-2.5 rounded-xl border border-neutral-700 transition flex items-center gap-2">
-                <i data-lucide="edit-3" class="w-4 h-4 text-brand-primary"></i> Leave a Review
+                <i data-lucide="edit-3" class="w-4 h-4 text-brand-primary"></i> Write a Review
               </button>
             </div>
 
-            <div id="public-reviews-list" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="public-reviews-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
           </section>
 
-          <!-- MAP & CONTACT SECTION -->
+          <!-- MAP & CONTACT -->
           <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="border-b border-neutral-800 pb-6">
-              <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Location</h2>
-              <h3 class="text-3xl font-bold text-white">Visit Our Shop</h3>
+              <h2 class="text-xs uppercase tracking-widest text-brand-primary font-bold">Location & Contact</h2>
+              <h3 class="font-carnivale text-4xl text-white">Visit Our Studio</h3>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
               <div class="bg-brand-card border border-neutral-800 p-6 rounded-2xl space-y-6">
-                <h4 class="text-xl font-bold text-white">Shop Details</h4>
-                <div class="space-y-4 text-sm text-neutral-300">
+                <h4 class="font-bold text-white text-lg">Shop Information</h4>
+                <div class="space-y-4 text-sm">
                   <div class="flex items-start gap-3">
                     <i data-lucide="map-pin" class="w-5 h-5 text-brand-primary shrink-0 mt-0.5"></i>
                     <div>
-                      <span class="block font-semibold text-white">Address / Coordinates</span>
-                      <span id="contact-coords-display" class="text-neutral-400">Lat: 0, Long: 0</span>
+                      <span class="block font-semibold text-white">Street Address</span>
+                      <span id="contact-address-display" class="text-neutral-400">Loading...</span>
                     </div>
                   </div>
                   <div class="flex items-center gap-3">
@@ -441,7 +501,6 @@
                 </div>
               </div>
 
-              <!-- GOOGLE MAP EMBED CONTAINER -->
               <div class="lg:col-span-2 h-80 rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900">
                 <iframe id="google-map-iframe" class="w-full h-full border-0" loading="lazy" allowfullscreen src="about:blank"></iframe>
               </div>
@@ -453,11 +512,11 @@
             <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
               <div class="flex items-center justify-center gap-2">
                 <i data-lucide="scissors" class="w-6 h-6 text-brand-primary"></i>
-                <span id="footer-shop-name" class="font-bold text-lg text-white uppercase tracking-wider">Barber Shop</span>
+                <span id="footer-shop-name" class="font-carnivale text-2xl text-white uppercase">Barber Shop</span>
               </div>
               <p id="footer-slogan" class="text-xs text-neutral-400"></p>
-              <div class="text-xs text-neutral-400">
-                &copy; <span id="footer-year">2026</span> All rights reserved. Built with Supabase.
+              <div class="text-xs text-neutral-500">
+                &copy; <span id="footer-year">2026</span> All rights reserved.
               </div>
             </div>
           </footer>
@@ -467,11 +526,11 @@
         <!-- ================= ADMIN BACKOFFICE VIEWS ================= -->
         <div id="admin-view-container" class="hidden p-4 md:p-8 max-w-7xl mx-auto space-y-8">
 
-          <!-- DASHBOARD VIEW -->
+          <!-- DASHBOARD -->
           <div id="admin-view-dashboard" class="admin-tab-content space-y-8">
             <div>
-              <h1 class="text-2xl font-bold text-white">Dashboard Overview</h1>
-              <p class="text-sm text-neutral-400">Real-time statistics & shop metrics.</p>
+              <h1 class="font-carnivale text-3xl text-white">Dashboard Overview</h1>
+              <p class="text-sm text-neutral-400">Real-time statistics & key shop metrics.</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -492,50 +551,29 @@
                 <div id="stat-completed-bookings" class="text-3xl font-extrabold text-blue-400">0</div>
               </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="bg-brand-card border border-neutral-800 p-5 rounded-2xl space-y-2">
-                <span class="text-xs font-semibold text-neutral-400">Active Barbers</span>
-                <div id="stat-active-barbers" class="text-2xl font-bold text-white">0</div>
-              </div>
-              <div class="bg-brand-card border border-neutral-800 p-5 rounded-2xl space-y-2">
-                <span class="text-xs font-semibold text-neutral-400">Active Services</span>
-                <div id="stat-active-services" class="text-2xl font-bold text-white">0</div>
-              </div>
-              <div class="bg-brand-card border border-neutral-800 p-5 rounded-2xl space-y-2">
-                <span class="text-xs font-semibold text-amber-400">Pending Reviews</span>
-                <div id="stat-pending-reviews" class="text-2xl font-bold text-amber-400">0</div>
-              </div>
-            </div>
           </div>
 
-          <!-- BOOKINGS MANAGEMENT VIEW -->
+          <!-- BOOKINGS -->
           <div id="admin-view-bookings" class="admin-tab-content hidden space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h1 class="text-2xl font-bold text-white">Appointment Bookings</h1>
-                <p class="text-sm text-neutral-400">Manage client appointment statuses.</p>
-              </div>
+            <div>
+              <h1 class="font-carnivale text-3xl text-white">Appointment Bookings</h1>
+              <p class="text-sm text-neutral-400">Search and filter client appointments.</p>
             </div>
 
-            <!-- Filters -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-brand-card p-4 rounded-xl border border-neutral-800">
-              <input type="text" id="booking-search-input" oninput="renderAdminBookingsTable()" placeholder="Search name, phone, ref..." class="bg-neutral-900 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm">
-              
+              <input type="text" id="booking-search-input" oninput="renderAdminBookingsTable()" placeholder="Search name, phone, ref, barber..." class="bg-neutral-900 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm">
               <select id="booking-status-filter" onchange="renderAdminBookingsTable()" class="bg-neutral-900 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm">
                 <option value="ALL">All Statuses</option>
-                <option value="PENDING">Pending</option>
-                <option value="ACCEPTED">Accepted</option>
-                <option value="DECLINED">Declined</option>
-                <option value="COMPLETED">Completed</option>
-                <option value="CANCELLED">Cancelled</option>
-                <option value="NO_SHOW">No Show</option>
+                <option value="PENDING">PENDING</option>
+                <option value="ACCEPTED">ACCEPTED</option>
+                <option value="DECLINED">DECLINED</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="CANCELLED">CANCELLED</option>
+                <option value="NO_SHOW">NO SHOW</option>
               </select>
-
               <input type="date" id="booking-date-filter" onchange="renderAdminBookingsTable()" class="bg-neutral-900 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm">
             </div>
 
-            <!-- Table Container -->
             <div class="overflow-x-auto bg-brand-card border border-neutral-800 rounded-2xl">
               <table class="w-full text-left text-sm text-neutral-300">
                 <thead class="bg-neutral-900 text-xs text-neutral-400 uppercase">
@@ -549,64 +587,53 @@
                     <th class="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-bookings-table-body" class="divide-y divide-neutral-800">
-                  <!-- Dynamically populated -->
-                </tbody>
+                <tbody id="admin-bookings-table-body" class="divide-y divide-neutral-800"></tbody>
               </table>
             </div>
           </div>
 
-          <!-- BARBERS MANAGEMENT VIEW -->
+          <!-- BARBERS -->
           <div id="admin-view-barbers" class="admin-tab-content hidden space-y-6">
             <div class="flex items-center justify-between">
               <div>
-                <h1 class="text-2xl font-bold text-white">Barber Staff</h1>
-                <p class="text-sm text-neutral-400">Add and manage barber profiles.</p>
+                <h1 class="font-carnivale text-3xl text-white">Barber Staff</h1>
+                <p class="text-sm text-neutral-400">Manage barber profiles & active state.</p>
               </div>
-              <button onclick="openBarberModal()" class="bg-brand-primary text-black font-semibold text-xs px-4 py-2.5 rounded-xl transition">
+              <button onclick="openBarberModal()" class="bg-brand-primary text-black font-bold text-xs px-4 py-2.5 rounded-xl transition">
                 + Add Barber
               </button>
             </div>
-
-            <div id="admin-barbers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="admin-barbers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
           </div>
 
-          <!-- SERVICES MANAGEMENT VIEW -->
+          <!-- SERVICES -->
           <div id="admin-view-services" class="admin-tab-content hidden space-y-6">
             <div class="flex items-center justify-between">
               <div>
-                <h1 class="text-2xl font-bold text-white">Services Catalog</h1>
-                <p class="text-sm text-neutral-400">Manage treatment offerings and pricing.</p>
+                <h1 class="font-carnivale text-3xl text-white">Services Catalog</h1>
+                <p class="text-sm text-neutral-400">Manage treatment offerings and prices.</p>
               </div>
-              <button onclick="openServiceModal()" class="bg-brand-primary text-black font-semibold text-xs px-4 py-2.5 rounded-xl transition">
+              <button onclick="openServiceModal()" class="bg-brand-primary text-black font-bold text-xs px-4 py-2.5 rounded-xl transition">
                 + Add Service
               </button>
             </div>
-
-            <div id="admin-services-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="admin-services-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
           </div>
 
-          <!-- REVIEWS MANAGEMENT VIEW -->
+          <!-- REVIEWS -->
           <div id="admin-view-reviews" class="admin-tab-content hidden space-y-6">
             <div>
-              <h1 class="text-2xl font-bold text-white">Review Moderation</h1>
-              <p class="text-sm text-neutral-400">Approve or discard client reviews.</p>
+              <h1 class="font-carnivale text-3xl text-white">Review Moderation</h1>
+              <p class="text-sm text-neutral-400">Publish or discard client reviews.</p>
             </div>
-
-            <div id="admin-reviews-list" class="space-y-4">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="admin-reviews-list" class="space-y-4"></div>
           </div>
 
-          <!-- SHOP PROFILE VIEW -->
+          <!-- SHOP PROFILE -->
           <div id="admin-view-shop-profile" class="admin-tab-content hidden space-y-6 max-w-2xl">
             <div>
-              <h1 class="text-2xl font-bold text-white">Shop Profile</h1>
-              <p class="text-sm text-neutral-400">Configure public details and visual banner.</p>
+              <h1 class="font-carnivale text-3xl text-white">Shop Profile</h1>
+              <p class="text-sm text-neutral-400">Configure public shop address and details.</p>
             </div>
 
             <form id="shop-profile-form" onsubmit="handleSaveShopProfile(event)" class="bg-brand-card p-6 border border-neutral-800 rounded-2xl space-y-6">
@@ -620,14 +647,19 @@
                 <input type="text" id="profile-slogan" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
               </div>
 
+              <div class="space-y-2">
+                <label class="text-xs uppercase font-semibold text-neutral-300">Street Address</label>
+                <input type="text" id="profile-street-address" placeholder="123 Luxury Avenue, Suite 100" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
+              </div>
+
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <label class="text-xs uppercase font-semibold text-neutral-300">Latitude (-90 to 90)</label>
-                  <input type="number" step="any" min="-90" max="90" id="profile-latitude" required class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Latitude</label>
+                  <input type="number" step="any" id="profile-latitude" required class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs uppercase font-semibold text-neutral-300">Longitude (-180 to 180)</label>
-                  <input type="number" step="any" min="-180" max="180" id="profile-longitude" required class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Longitude</label>
+                  <input type="number" step="any" id="profile-longitude" required class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
                 </div>
               </div>
 
@@ -642,7 +674,6 @@
                 </div>
               </div>
 
-              <!-- Banner Upload Component -->
               <div class="space-y-2">
                 <label class="text-xs uppercase font-semibold text-neutral-300">Banner Photo</label>
                 <div id="banner-uploader-container"></div>
@@ -654,91 +685,112 @@
             </form>
           </div>
 
-          <!-- APPEARANCE & THEMES VIEW -->
-          <div id="admin-view-appearance" class="admin-tab-content hidden space-y-6">
+          <!-- APPEARANCE, CURRENCY & HOURS -->
+          <div id="admin-view-appearance" class="admin-tab-content hidden space-y-8">
             <div>
-              <h1 class="text-2xl font-bold text-white">Appearance Settings</h1>
-              <p class="text-sm text-neutral-400">Select active shop color theme.</p>
+              <h1 class="font-carnivale text-3xl text-white">Appearance & Store Logic</h1>
+              <p class="text-sm text-neutral-400">Configure store themes, currency symbols, and business hours.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- Midnight Gold -->
-              <div onclick="selectTheme('theme-midnight-gold')" class="theme-card border-2 border-neutral-800 rounded-2xl p-5 bg-neutral-950 cursor-pointer hover:border-amber-400 transition space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white text-sm">Midnight Gold</span>
-                  <div class="flex gap-1.5">
-                    <span class="w-4 h-4 rounded-full bg-[#0a0a0a] border border-neutral-700"></span>
-                    <span class="w-4 h-4 rounded-full bg-[#dfb15b]"></span>
-                  </div>
+            <!-- CURRENCY & HOURS FORM -->
+            <div class="bg-brand-card p-6 border border-neutral-800 rounded-2xl space-y-6 max-w-2xl">
+              <h3 class="font-bold text-white text-lg">Store Currency & Business Hours</h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Display Currency</label>
+                  <select id="settings-currency" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
+                    <option value="PKR">PKR — ₨ / Rs</option>
+                    <option value="GBP">GBP — £</option>
+                    <option value="USD">USD — $</option>
+                  </select>
                 </div>
-                <p class="text-xs text-neutral-400">Ultra-dark background with premium gold highlights.</p>
               </div>
 
-              <!-- Charcoal Silver -->
-              <div onclick="selectTheme('theme-charcoal-silver')" class="theme-card border-2 border-neutral-800 rounded-2xl p-5 bg-[#121314] cursor-pointer hover:border-slate-300 transition space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white text-sm">Charcoal Silver</span>
-                  <div class="flex gap-1.5">
-                    <span class="w-4 h-4 rounded-full bg-[#121314] border border-neutral-700"></span>
-                    <span class="w-4 h-4 rounded-full bg-[#e2e8f0]"></span>
-                  </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div>
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Opening Time</label>
+                  <input type="time" id="settings-opening-time" value="10:00" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
                 </div>
-                <p class="text-xs text-neutral-400">Modern charcoal body paired with sleek silver accents.</p>
+                <div>
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Closing Time</label>
+                  <input type="time" id="settings-closing-time" value="20:00" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div>
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Break Start</label>
+                  <input type="time" id="settings-break-start" value="14:00" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div>
+                  <label class="text-xs uppercase font-semibold text-neutral-300">Break End</label>
+                  <input type="time" id="settings-break-end" value="15:00" class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
+                </div>
               </div>
 
-              <!-- Black Burgundy -->
-              <div onclick="selectTheme('theme-black-burgundy')" class="theme-card border-2 border-neutral-800 rounded-2xl p-5 bg-[#0d0506] cursor-pointer hover:border-rose-500 transition space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white text-sm">Black Burgundy</span>
-                  <div class="flex gap-1.5">
-                    <span class="w-4 h-4 rounded-full bg-[#0d0506] border border-neutral-700"></span>
-                    <span class="w-4 h-4 rounded-full bg-[#9f1239]"></span>
-                  </div>
-                </div>
-                <p class="text-xs text-neutral-400">Deep wine tones for a classic luxury barbershop.</p>
-              </div>
+              <button onclick="saveStoreSettings()" class="w-full bg-brand-primary text-black font-bold py-3 rounded-xl transition">
+                Save Currency & Business Hours
+              </button>
+            </div>
 
-              <!-- Deep Navy Copper -->
-              <div onclick="selectTheme('theme-navy-copper')" class="theme-card border-2 border-neutral-800 rounded-2xl p-5 bg-[#070d19] cursor-pointer hover:border-amber-600 transition space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white text-sm">Deep Navy & Copper</span>
-                  <div class="flex gap-1.5">
-                    <span class="w-4 h-4 rounded-full bg-[#070d19] border border-neutral-700"></span>
-                    <span class="w-4 h-4 rounded-full bg-[#d97706]"></span>
+            <!-- THEME SELECTION -->
+            <div class="space-y-4">
+              <h3 class="font-bold text-white text-lg">Select Active Theme</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="selectTheme('theme-1')" class="border-2 border-neutral-800 rounded-2xl p-5 bg-[#0b0c10] cursor-pointer hover:border-amber-400 transition space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-sm">1. OBSIDIAN + GOLD</span>
+                    <span class="w-4 h-4 rounded-full bg-[#d4af37]"></span>
                   </div>
+                  <p class="text-xs text-neutral-400">Dark obsidian background with gold accents.</p>
                 </div>
-                <p class="text-xs text-neutral-400">Midnight ocean palette with warm copper elements.</p>
-              </div>
 
-              <!-- Cream Dark Brown -->
-              <div onclick="selectTheme('theme-cream-darkbrown')" class="theme-card border-2 border-neutral-800 rounded-2xl p-5 bg-[#1c1917] cursor-pointer hover:border-amber-500 transition space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white text-sm">Espresso & Cream</span>
-                  <div class="flex gap-1.5">
-                    <span class="w-4 h-4 rounded-full bg-[#1c1917] border border-neutral-700"></span>
-                    <span class="w-4 h-4 rounded-full bg-[#f59e0b]"></span>
+                <div onclick="selectTheme('theme-2')" class="border-2 border-neutral-800 rounded-2xl p-5 bg-[#09090b] cursor-pointer hover:border-orange-500 transition space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-sm">2. BLACK + COPPER</span>
+                    <span class="w-4 h-4 rounded-full bg-[#ea580c]"></span>
                   </div>
+                  <p class="text-xs text-neutral-400">Sleek matte black with rich copper tones.</p>
                 </div>
-                <p class="text-xs text-neutral-400">Rich earth and wood tones with warm illumination.</p>
+
+                <div onclick="selectTheme('theme-3')" class="border-2 border-neutral-800 rounded-2xl p-5 bg-[#030712] cursor-pointer hover:border-yellow-200 transition space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-sm">3. MIDNIGHT + CHAMPAGNE</span>
+                    <span class="w-4 h-4 rounded-full bg-[#fef08a]"></span>
+                  </div>
+                  <p class="text-xs text-neutral-400">Deep midnight navy paired with champagne highlights.</p>
+                </div>
+
+                <div onclick="selectTheme('theme-4')" class="border-2 border-neutral-800 rounded-2xl p-5 bg-[#f8fafc] cursor-pointer hover:border-blue-600 transition space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900 text-sm">4. WHITE + BLUE</span>
+                    <span class="w-4 h-4 rounded-full bg-[#2563eb]"></span>
+                  </div>
+                  <p class="text-xs text-slate-600">Crisp clean light background with cobalt blue accents.</p>
+                </div>
+
+                <div onclick="selectTheme('theme-5')" class="border-2 border-neutral-800 rounded-2xl p-5 bg-[#fafaf9] cursor-pointer hover:border-yellow-600 transition space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-stone-900 text-sm">5. WHITE + GOLD</span>
+                    <span class="w-4 h-4 rounded-full bg-[#ca8a04]"></span>
+                  </div>
+                  <p class="text-xs text-stone-600">Luxury white aesthetic with antique gold highlights.</p>
+                </div>
               </div>
             </div>
+
           </div>
 
-          <!-- NOTIFICATIONS VIEW -->
+          <!-- NOTIFICATIONS -->
           <div id="admin-view-notifications" class="admin-tab-content hidden space-y-6">
             <div class="flex items-center justify-between">
               <div>
-                <h1 class="text-2xl font-bold text-white">System Notifications</h1>
-                <p class="text-sm text-neutral-400">Alerts for bookings and reviews.</p>
+                <h1 class="font-carnivale text-3xl text-white">System Notifications</h1>
+                <p class="text-sm text-neutral-400">Real-time alerts for incoming bookings.</p>
               </div>
               <button onclick="markAllNotificationsAsRead()" class="text-xs text-brand-primary hover:underline">
                 Mark All as Read
               </button>
             </div>
-
-            <div id="admin-notifications-list" class="space-y-3">
-              <!-- Dynamically Populated -->
-            </div>
+            <div id="admin-notifications-list" class="space-y-3"></div>
           </div>
 
         </div>
@@ -747,21 +799,21 @@
     </div>
   </div>
 
-  <!-- MODALS CONTAINER -->
+  <!-- MODALS -->
 
-  <!-- 1. ADMIN LOGIN MODAL -->
+  <!-- LOGIN MODAL -->
   <div id="modal-login" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-6 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h3 class="text-xl font-bold text-white">Backoffice Login</h3>
+        <h3 class="font-bold text-white text-lg">Backoffice Login</h3>
         <button onclick="closeLoginModal()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Email Address</label>
           <input type="email" id="login-email" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
         </div>
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Password</label>
           <input type="password" id="login-password" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm">
         </div>
@@ -772,41 +824,28 @@
     </div>
   </div>
 
-  <!-- 2. SHOP PROFILE PIN MODAL -->
-  <div id="modal-shop-pin" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-xs w-full text-center space-y-4 shadow-2xl">
-      <i data-lucide="shield-lock" class="w-10 h-10 text-brand-primary mx-auto"></i>
-      <h3 class="text-lg font-bold text-white">Enter Security PIN</h3>
-      <input type="password" id="shop-pin-input" maxlength="4" placeholder="••••" class="w-full bg-neutral-800 border border-neutral-700 text-center text-2xl tracking-widest text-white rounded-xl py-2">
-      <div class="flex gap-2">
-        <button onclick="closeShopPinModal()" class="w-1/2 bg-neutral-800 text-neutral-300 py-2 rounded-xl text-sm">Cancel</button>
-        <button onclick="verifyShopProfilePin()" class="w-1/2 bg-brand-primary text-black font-bold py-2 rounded-xl text-sm">Submit</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. BARBER MODAL (ADD / EDIT) -->
+  <!-- BARBER MODAL -->
   <div id="modal-barber" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm overflow-y-auto">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl my-8">
       <div class="flex items-center justify-between">
-        <h3 id="modal-barber-title" class="text-lg font-bold text-white">Add Barber</h3>
+        <h3 id="modal-barber-title" class="font-bold text-white text-lg">Add Barber</h3>
         <button onclick="closeBarberModal()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleSaveBarber(event)" class="space-y-4">
         <input type="hidden" id="barber-id">
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Full Name *</label>
           <input type="text" id="barber-name" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
         </div>
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Speciality *</label>
-          <input type="text" id="barber-speciality" required placeholder="Fade Specialist, Skin Fades" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
+          <input type="text" id="barber-speciality" required placeholder="Master Fade & Skin Care Specialist" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
         </div>
         <div class="flex items-center gap-2 pt-2">
-          <input type="checkbox" id="barber-active" checked class="w-4 h-4 rounded text-brand-primary focus:ring-0">
+          <input type="checkbox" id="barber-active" checked class="w-4 h-4 rounded text-brand-primary">
           <label class="text-sm text-neutral-300">Active Barber</label>
         </div>
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Barber Photo</label>
           <div id="barber-uploader-container"></div>
         </div>
@@ -817,21 +856,21 @@
     </div>
   </div>
 
-  <!-- 4. SERVICE MODAL (ADD / EDIT) -->
+  <!-- SERVICE MODAL -->
   <div id="modal-service" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm overflow-y-auto">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl my-8">
       <div class="flex items-center justify-between">
-        <h3 id="modal-service-title" class="text-lg font-bold text-white">Add Service</h3>
+        <h3 id="modal-service-title" class="font-bold text-white text-lg">Add Service</h3>
         <button onclick="closeServiceModal()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleSaveService(event)" class="space-y-4">
         <input type="hidden" id="service-id">
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Title *</label>
           <input type="text" id="service-title" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div class="space-y-1">
+          <div>
             <label class="text-xs uppercase text-neutral-400">Category *</label>
             <select id="service-category" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
               <option value="SKIN">SKIN</option>
@@ -839,16 +878,16 @@
               <option value="BEARD">BEARD</option>
             </select>
           </div>
-          <div class="space-y-1">
+          <div>
             <label class="text-xs uppercase text-neutral-400">Duration (min) *</label>
             <input type="number" id="service-duration" min="5" required value="30" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-3 py-2 text-sm">
           </div>
         </div>
-        <div class="space-y-1">
-          <label class="text-xs uppercase text-neutral-400">Price ($)</label>
-          <input type="number" step="0.01" id="service-price" placeholder="35.00" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
+        <div>
+          <label class="text-xs uppercase text-neutral-400">Price</label>
+          <input type="number" step="0.01" id="service-price" placeholder="2500" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
         </div>
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Description</label>
           <textarea id="service-description" rows="2" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm"></textarea>
         </div>
@@ -856,7 +895,7 @@
           <input type="checkbox" id="service-active" checked class="w-4 h-4 rounded text-brand-primary">
           <label class="text-sm text-neutral-300">Active Service</label>
         </div>
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Service Photo</label>
           <div id="service-uploader-container"></div>
         </div>
@@ -867,30 +906,30 @@
     </div>
   </div>
 
-  <!-- 5. ADD REVIEW MODAL -->
+  <!-- REVIEW MODAL -->
   <div id="modal-review" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold text-white">Leave a Review</h3>
+        <h3 class="font-bold text-white text-lg">Leave a Review</h3>
         <button onclick="closeReviewModal()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handlePublicReviewSubmit(event)" class="space-y-4">
-        <div class="space-y-1">
+        <div>
           <label class="text-xs uppercase text-neutral-400">Your Name *</label>
           <input type="text" id="review-customer-name" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
         </div>
-        <div class="space-y-1">
-          <label class="text-xs uppercase text-neutral-400">Rating (1 to 5 Stars) *</label>
+        <div>
+          <label class="text-xs uppercase text-neutral-400">Rating (1-5 Stars) *</label>
           <select id="review-rating" required class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm">
             <option value="5">5 Stars - Excellent</option>
             <option value="4">4 Stars - Good</option>
             <option value="3">3 Stars - Average</option>
-            <option value="2">2 Stars - Poor</option>
-            <option value="1">1 Star - Terrible</option>
+            <option value="2">2 Stars - Fair</option>
+            <option value="1">1 Star - Poor</option>
           </select>
         </div>
-        <div class="space-y-1">
-          <label class="text-xs uppercase text-neutral-400">Review Comments *</label>
+        <div>
+          <label class="text-xs uppercase text-neutral-400">Comments *</label>
           <textarea id="review-text" required rows="3" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 text-sm"></textarea>
         </div>
         <button type="submit" class="w-full bg-brand-primary text-black font-bold py-3 rounded-xl transition">
@@ -900,11 +939,11 @@
     </div>
   </div>
 
-  <!-- 6. BOOKING LOOKUP MODAL -->
+  <!-- BOOKING LOOKUP MODAL -->
   <div id="modal-booking-lookup" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold text-white">Check Appointment</h3>
+        <h3 class="font-bold text-white text-lg">Find Your Booking</h3>
         <button onclick="closeBookingLookupModal()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div class="space-y-3">
@@ -916,24 +955,24 @@
     </div>
   </div>
 
-  <!-- 7. BOOKING CONFIRMATION MODAL -->
+  <!-- BOOKING CONFIRMATION MODAL -->
   <div id="modal-booking-confirmation" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
     <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 text-center shadow-2xl">
       <i data-lucide="check-circle" class="w-12 h-12 text-emerald-400 mx-auto"></i>
-      <h3 class="text-xl font-bold text-white">Appointment Request Received</h3>
-      <div id="confirmation-details-box" class="bg-neutral-950 p-4 rounded-xl text-left text-xs space-y-2 text-neutral-300"></div>
-      <p class="text-xs text-neutral-400">Your appointment is pending approval. You will receive notification once confirmed.</p>
+      <h3 class="font-carnivale text-2xl text-white">Appointment Requested</h3>
+      <div id="confirmation-details-box" class="bg-neutral-950 p-4 rounded-xl text-left text-xs space-y-2 text-neutral-300 border border-neutral-800"></div>
+      <p class="text-xs text-neutral-400">Your appointment is currently pending confirmation.</p>
       <button onclick="closeBookingConfirmationModal()" class="w-full bg-brand-primary text-black font-bold py-2.5 rounded-xl text-sm">Done</button>
     </div>
   </div>
 
-  <!-- SCRIPT & BACKEND CLIENT ENGINE -->
+  <!-- SCRIPT ENGINE -->
   <script>
     // =========================================================================
     // 1. SUPABASE INITIALIZATION
     // =========================================================================
-    const SUPABASE_URL = 'https://tqzycvzmwwwdqweyyxbg.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_-lk8pi6hIifubLQOByguDg_wLX6DWtP';
+    const SUPABASE_URL = 'https://owrxpbbopaumnagzpmfs.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_6vPzSoxm8BChIyp_fzSAGQ_zlp48xi2';
 
     let db = null;
     let currentUser = null;
@@ -942,6 +981,14 @@
     // Application State Cache
     let state = {
       shopProfile: null,
+      shopSettings: {
+        currency_code: 'PKR',
+        currency_symbol: 'Rs',
+        opening_time: '10:00',
+        closing_time: '20:00',
+        break_start: '14:00',
+        break_end: '15:00'
+      },
       barbers: [],
       services: [],
       reviews: [],
@@ -949,15 +996,33 @@
       notifications: []
     };
 
-    // Initialize Supabase Client
+    // Step-by-Step Booking Flow State
+    let currentStep = 1;
+    let bookingSelection = {
+      serviceId: null,
+      barberId: null,
+      date: null,
+      time: null,
+      customerName: '',
+      customerPhone: ''
+    };
+
     if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY_HERE') {
       db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } else {
       document.getElementById('config-warning').classList.remove('hidden');
     }
 
+    // Currency Formatting Utility
+    function formatMoney(amount) {
+      if (amount === null || amount === undefined || isNaN(amount)) return '';
+      const num = parseFloat(amount).toLocaleString();
+      const symbol = state.shopSettings.currency_symbol || 'Rs';
+      return `${symbol} ${num}`;
+    }
+
     // =========================================================================
-    // 2. REUSABLE DRAG & DROP IMAGE UPLOADER COMPONENT
+    // 2. UPLOADER COMPONENT
     // =========================================================================
     class UniversalUploader {
       constructor(containerId, bucketName, onUploadSuccess) {
@@ -974,6 +1039,7 @@
       }
 
       render() {
+        if (!this.container) return;
         this.container.innerHTML = `
           <div class="uploader-box border-2 border-dashed border-neutral-700 hover:border-brand-primary rounded-xl p-4 text-center bg-neutral-900/50 transition cursor-pointer relative overflow-hidden">
             <input type="file" accept="image/*" class="uploader-file-input absolute inset-0 opacity-0 cursor-pointer z-10" />
@@ -1025,17 +1091,13 @@
               return;
             }
 
-            if (!db) {
-              showToast('Supabase not configured', 'error');
-              return;
-            }
+            if (!db) return;
 
             progressEl.classList.remove('hidden');
             const fileExt = file.name.split('.').pop();
             const filePath = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
             const { data, error } = await db.storage.from(this.bucket).upload(filePath, file);
-
             progressEl.classList.add('hidden');
 
             if (error) {
@@ -1052,22 +1114,32 @@
       }
     }
 
-    // Instantiate Uploaders
     let bannerUploader, barberUploader, serviceUploader;
     let tempBarberImg = '', tempServiceImg = '', tempBannerImg = '';
 
     // =========================================================================
-    // 3. UI STATE & VIEW MANAGEMENT
+    // 3. UI INITIALIZATION & NAVIGATION
     // =========================================================================
     window.addEventListener('DOMContentLoaded', async () => {
       lucide.createIcons();
       setupSidebarControls();
-      setupDatePickers();
 
-      // Setup Uploaders
+      // Initialize Uploaders
       bannerUploader = new UniversalUploader('banner-uploader-container', 'shop-assets', (url) => tempBannerImg = url);
       barberUploader = new UniversalUploader('barber-uploader-container', 'barber-images', (url) => tempBarberImg = url);
       serviceUploader = new UniversalUploader('service-uploader-container', 'service-images', (url) => tempServiceImg = url);
+
+      const today = new Date().toISOString().split('T')[0];
+      const stepDateInput = document.getElementById('booking-step-date-input');
+      if (stepDateInput) {
+        stepDateInput.min = today;
+        stepDateInput.value = today;
+        bookingSelection.date = today;
+        stepDateInput.addEventListener('change', (e) => {
+          bookingSelection.date = e.target.value;
+          renderStepTimeGrid();
+        });
+      }
 
       if (db) {
         await checkAuthSession();
@@ -1078,29 +1150,16 @@
 
     function setupSidebarControls() {
       const sidebar = document.getElementById('admin-sidebar');
-      const toggleBtn = document.getElementById('toggle-sidebar-btn');
-      const closeBtn = document.getElementById('close-sidebar-btn');
-
-      toggleBtn.addEventListener('click', () => {
+      document.getElementById('toggle-sidebar-btn').addEventListener('click', () => {
         sidebar.classList.toggle('-translate-x-full');
       });
-
-      closeBtn.addEventListener('click', () => {
+      document.getElementById('close-sidebar-btn').addEventListener('click', () => {
         sidebar.classList.add('-translate-x-full');
       });
     }
 
-    function setupDatePickers() {
-      const today = new Date().toISOString().split('T')[0];
-      const dateInput = document.getElementById('booking-date-input');
-      if (dateInput) {
-        dateInput.min = today;
-        dateInput.addEventListener('change', generateAvailableTimeSlots);
-      }
-    }
-
     function switchAdminTab(tabName) {
-      if (!currentUser && tabName !== 'dashboard') {
+      if (!currentUser) {
         openLoginModal();
         return;
       }
@@ -1112,7 +1171,6 @@
       const targetView = document.getElementById(`admin-view-${tabName}`);
       if (targetView) targetView.classList.remove('hidden');
 
-      // Close sidebar on mobile
       document.getElementById('admin-sidebar').classList.add('-translate-x-full');
 
       if (tabName === 'dashboard') renderAdminDashboard();
@@ -1121,15 +1179,17 @@
       if (tabName === 'services') renderAdminServicesGrid();
       if (tabName === 'reviews') renderAdminReviewsList();
       if (tabName === 'notifications') renderAdminNotificationsList();
+      if (tabName === 'shop-profile') populateShopProfileForm();
     }
 
     function showPublicWebsite() {
       document.getElementById('admin-view-container').classList.add('hidden');
       document.getElementById('public-website').classList.remove('hidden');
+      document.getElementById('admin-sidebar').classList.add('-translate-x-full');
     }
 
     // =========================================================================
-    // 4. AUTHENTICATION ENGINE
+    // 4. AUTHENTICATION & LOGOUT ENGINE
     // =========================================================================
     async function checkAuthSession() {
       const { data: { session } } = await db.auth.getSession();
@@ -1176,16 +1236,22 @@
 
     async function handleAdminLogout() {
       await db.auth.signOut();
-      showToast('Logged out successfully', 'info');
+      currentUser = null;
+      updateAuthUI(null);
+      showToast('Signed out successfully', 'info');
       showPublicWebsite();
     }
 
+    function openLoginModal() { document.getElementById('modal-login').classList.remove('hidden'); }
+    function closeLoginModal() { document.getElementById('modal-login').classList.add('hidden'); }
+
     // =========================================================================
-    // 5. DATA FETCHING & REALTIME ENGINE
+    // 5. DATA FETCHING & STORE SETTINGS persistence
     // =========================================================================
     async function fetchInitialData() {
       await Promise.all([
         fetchShopProfile(),
+        fetchShopSettings(),
         fetchBarbers(),
         fetchServices(),
         fetchReviews(),
@@ -1193,13 +1259,59 @@
         fetchNotifications()
       ]);
       renderPublicWebsite();
+      renderStepBookingExperience();
     }
 
     async function fetchShopProfile() {
-      const { data, error } = await db.from('shop_profile').select('*').limit(1).single();
+      const { data } = await db.from('shop_profile').select('*').limit(1).single();
       if (data) {
         state.shopProfile = data;
         applyShopProfileToUI();
+      }
+    }
+
+    async function fetchShopSettings() {
+      const { data } = await db.from('shop_settings').select('*').eq('id', 1).single();
+      if (data) {
+        state.shopSettings = { ...state.shopSettings, ...data };
+        document.getElementById('settings-currency').value = state.shopSettings.currency_code || 'PKR';
+        document.getElementById('settings-opening-time').value = (state.shopSettings.opening_time || '10:00').substring(0, 5);
+        document.getElementById('settings-closing-time').value = (state.shopSettings.closing_time || '20:00').substring(0, 5);
+        document.getElementById('settings-break-start').value = (state.shopSettings.break_start || '14:00').substring(0, 5);
+        document.getElementById('settings-break-end').value = (state.shopSettings.break_end || '15:00').substring(0, 5);
+      }
+    }
+
+    async function saveStoreSettings() {
+      const currCode = document.getElementById('settings-currency').value;
+      const symbols = { 'PKR': 'Rs', 'GBP': '£', 'USD': '$' };
+      const symbol = symbols[currCode] || 'Rs';
+
+      const opening = document.getElementById('settings-opening-time').value;
+      const closing = document.getElementById('settings-closing-time').value;
+      const breakStart = document.getElementById('settings-break-start').value;
+      const breakEnd = document.getElementById('settings-break-end').value;
+
+      const payload = {
+        id: 1,
+        currency_code: currCode,
+        currency_symbol: symbol,
+        opening_time: opening + ':00',
+        closing_time: closing + ':00',
+        break_start: breakStart + ':00',
+        break_end: breakEnd + ':00',
+        updated_at: new Date().toISOString()
+      };
+
+      const { error } = await db.from('shop_settings').upsert(payload);
+
+      if (error) {
+        showToast('Failed to save settings: ' + error.message, 'error');
+      } else {
+        state.shopSettings = { ...state.shopSettings, ...payload };
+        showToast('Store currency & hours saved', 'success');
+        renderPublicWebsite();
+        renderStepBookingExperience();
       }
     }
 
@@ -1239,32 +1351,29 @@
             renderAdminBookingsTable();
           }
         }).subscribe();
-
-      db.channel('public:reviews')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, async () => {
-          await fetchReviews();
-          renderPublicWebsite();
-          if (!document.getElementById('admin-view-container').classList.contains('hidden')) {
-            renderAdminReviewsList();
-          }
-        }).subscribe();
     }
 
     // =========================================================================
-    // 6. PUBLIC WEBSITE RENDERING
+    // 6. THEMES & PROFILE MANAGEMENT
     // =========================================================================
-    function renderPublicWebsite() {
-      renderPublicServices();
-      renderPublicBarbers();
-      renderPublicReviews();
-      populateBookingDropdowns();
+    function selectTheme(themeClass) {
+      applyThemeClass(themeClass);
+      showToast('Theme updated', 'success');
+      if (state.shopProfile) {
+        db.from('shop_profile').update({ theme_name: themeClass }).eq('id', state.shopProfile.id);
+      }
+    }
+
+    function applyThemeClass(themeClass) {
+      const root = document.documentElement;
+      root.classList.remove('theme-1', 'theme-2', 'theme-3', 'theme-4', 'theme-5');
+      root.classList.add(themeClass || 'theme-1');
     }
 
     function applyShopProfileToUI() {
       if (!state.shopProfile) return;
       const p = state.shopProfile;
 
-      // Shop Name & Slogan
       if (p.shop_name) {
         document.getElementById('header-shop-name').innerText = p.shop_name;
         document.getElementById('hero-shop-title').innerText = p.shop_name;
@@ -1274,27 +1383,71 @@
         document.getElementById('hero-slogan').innerText = p.slogan;
         document.getElementById('footer-slogan').innerText = p.slogan;
       }
-
-      // Banner Photo
       if (p.banner_url) {
         document.getElementById('hero-banner-bg').style.backgroundImage = `url('${p.banner_url}')`;
       }
 
-      // Contact Details
-      document.getElementById('contact-coords-display').innerText = `Lat: ${p.latitude}, Long: ${p.longitude}`;
+      document.getElementById('contact-address-display').innerText = p.street_address || `${p.latitude}, ${p.longitude}`;
       document.getElementById('contact-phone-link').innerText = p.phone || 'Not Configured';
       document.getElementById('contact-phone-link').href = p.phone ? `tel:${p.phone}` : '#';
       document.getElementById('contact-whatsapp-link').innerText = p.whatsapp || 'Not Configured';
       document.getElementById('contact-whatsapp-link').href = p.whatsapp ? `https://wa.me/${p.whatsapp.replace(/[^0-9]/g, '')}` : '#';
 
-      // Map Iframe
       const mapUrl = `https://maps.google.com/maps?q=${p.latitude},${p.longitude}&z=15&output=embed`;
       document.getElementById('google-map-iframe').src = mapUrl;
 
-      // Theme
-      if (p.theme_name) {
-        applyThemeClass(p.theme_name);
+      if (p.theme_name) applyThemeClass(p.theme_name);
+    }
+
+    function populateShopProfileForm() {
+      if (!state.shopProfile) return;
+      const p = state.shopProfile;
+      document.getElementById('profile-shop-name').value = p.shop_name || '';
+      document.getElementById('profile-slogan').value = p.slogan || '';
+      document.getElementById('profile-street-address').value = p.street_address || '';
+      document.getElementById('profile-latitude').value = p.latitude || 0;
+      document.getElementById('profile-longitude').value = p.longitude || 0;
+      document.getElementById('profile-phone').value = p.phone || '';
+      document.getElementById('profile-whatsapp').value = p.whatsapp || '';
+      tempBannerImg = p.banner_url || '';
+      bannerUploader.setUrl(tempBannerImg);
+    }
+
+    async function handleSaveShopProfile(e) {
+      e.preventDefault();
+      const payload = {
+        shop_name: document.getElementById('profile-shop-name').value,
+        slogan: document.getElementById('profile-slogan').value,
+        street_address: document.getElementById('profile-street-address').value,
+        latitude: parseFloat(document.getElementById('profile-latitude').value),
+        longitude: parseFloat(document.getElementById('profile-longitude').value),
+        phone: document.getElementById('profile-phone').value,
+        whatsapp: document.getElementById('profile-whatsapp').value,
+        banner_url: tempBannerImg
+      };
+
+      let res;
+      if (state.shopProfile) {
+        res = await db.from('shop_profile').update(payload).eq('id', state.shopProfile.id);
+      } else {
+        res = await db.from('shop_profile').insert([payload]);
       }
+
+      if (res.error) {
+        showToast('Failed to save profile: ' + res.error.message, 'error');
+      } else {
+        showToast('Shop profile saved successfully', 'success');
+        await fetchShopProfile();
+      }
+    }
+
+    // =========================================================================
+    // 7. PUBLIC WEBSITE RENDERING
+    // =========================================================================
+    function renderPublicWebsite() {
+      renderPublicServices();
+      renderPublicBarbers();
+      renderPublicReviews();
     }
 
     function filterServices(category) {
@@ -1310,19 +1463,13 @@
       const activeServices = state.services.filter(s => s.is_active && (selectedCategoryFilter === 'ALL' || s.category === selectedCategoryFilter));
 
       if (activeServices.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">
-            <i data-lucide="sparkles" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-            <p>No services available yet.</p>
-          </div>
-        `;
-        lucide.createIcons();
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No services available in this category.</div>`;
         return;
       }
 
       activeServices.forEach(s => {
         const card = document.createElement('div');
-        card.className = 'bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden hover:border-brand-primary/40 transition flex flex-col';
+        card.className = 'bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden hover:border-brand-primary/40 transition flex flex-col shadow-lg';
         card.innerHTML = `
           <div class="h-48 bg-neutral-900 relative">
             <img src="${s.photo_url || 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80'}" class="w-full h-full object-cover">
@@ -1332,13 +1479,13 @@
             <div>
               <div class="flex items-center justify-between gap-2 mb-1">
                 <h4 class="font-bold text-white text-lg">${s.title}</h4>
-                ${s.price !== null ? `<span class="text-brand-primary font-extrabold">$${parseFloat(s.price).toFixed(2)}</span>` : ''}
+                ${s.price !== null ? `<span class="text-brand-primary font-extrabold text-base">${formatMoney(s.price)}</span>` : ''}
               </div>
-              <p class="text-xs text-neutral-400 line-clamp-2">${s.description || 'Professional grooming service.'}</p>
+              <p class="text-xs text-neutral-400 line-clamp-2">${s.description || 'Premium barber service.'}</p>
             </div>
             <div class="pt-2 border-t border-neutral-800 flex items-center justify-between">
               <span class="text-xs text-neutral-400 flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5 text-brand-primary"></i> ${s.duration_minutes} mins</span>
-              <button onclick="selectServiceForBooking('${s.id}')" class="text-xs bg-brand-primary/10 hover:bg-brand-primary hover:text-black text-brand-primary font-semibold px-3 py-1.5 rounded-lg border border-brand-primary/30 transition">
+              <button onclick="selectServiceForStepBooking('${s.id}')" class="text-xs bg-brand-primary hover:bg-brand-accent text-black font-bold px-3 py-1.5 rounded-lg transition">
                 Book Now
               </button>
             </div>
@@ -1356,19 +1503,13 @@
       const activeBarbers = state.barbers.filter(b => b.is_active);
 
       if (activeBarbers.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">
-            <i data-lucide="users" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-            <p>No barbers added yet.</p>
-          </div>
-        `;
-        lucide.createIcons();
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No active barbers listed.</div>`;
         return;
       }
 
       activeBarbers.forEach(b => {
         const card = document.createElement('div');
-        card.className = 'group bg-brand-card border border-neutral-800 rounded-2xl p-4 text-center space-y-3 hover:border-brand-primary/50 transition cursor-pointer';
+        card.className = 'group bg-brand-card border border-neutral-800 rounded-2xl p-5 text-center space-y-3 hover:border-brand-primary transition shadow-lg';
         card.innerHTML = `
           <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-brand-primary/30 group-hover:border-brand-primary group-hover:scale-105 transition duration-300">
             <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80'}" class="w-full h-full object-cover">
@@ -1389,19 +1530,13 @@
       const published = state.reviews.filter(r => r.status === 'PUBLISHED');
 
       if (published.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">
-            <i data-lucide="star" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-            <p>No reviews yet. Be the first to leave feedback!</p>
-          </div>
-        `;
-        lucide.createIcons();
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No public reviews yet.</div>`;
         return;
       }
 
       published.forEach(r => {
         const card = document.createElement('div');
-        card.className = 'bg-brand-card border border-neutral-800 p-5 rounded-2xl space-y-3';
+        card.className = 'bg-brand-card border border-neutral-800 p-5 rounded-2xl space-y-3 shadow-lg';
         const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
         card.innerHTML = `
           <div class="flex items-center justify-between">
@@ -1416,92 +1551,230 @@
     }
 
     // =========================================================================
-    // 7. BOOKING SYSTEM & AVAILABILITY ENGINE
+    // 8. STEP-BY-STEP LUXURY BOOKING EXPERIENCE ENGINE
     // =========================================================================
-    function populateBookingDropdowns() {
-      const serviceSelect = document.getElementById('booking-service-select');
-      const barberSelect = document.getElementById('booking-barber-select');
-
-      serviceSelect.innerHTML = '<option value="">Select Service...</option>';
-      barberSelect.innerHTML = '<option value="">Select Barber...</option>';
-
-      state.services.filter(s => s.is_active).forEach(s => {
-        serviceSelect.innerHTML += `<option value="${s.id}">${s.title} (${s.duration_minutes} min ${s.price ? `- $${s.price}` : ''})</option>`;
-      });
-
-      state.barbers.filter(b => b.is_active).forEach(b => {
-        barberSelect.innerHTML += `<option value="${b.id}">${b.name} (${b.speciality})</option>`;
-      });
+    function selectServiceForStepBooking(serviceId) {
+      bookingSelection.serviceId = serviceId;
+      currentStep = 2;
+      renderStepBookingExperience();
+      document.getElementById('booking-step-container').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function selectServiceForBooking(serviceId) {
-      document.getElementById('booking-service-select').value = serviceId;
-      document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
-    }
+    function renderStepBookingExperience() {
+      document.querySelectorAll('.booking-step').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`booking-step-${currentStep}`).classList.remove('hidden');
 
-    function generateAvailableTimeSlots() {
-      const dateVal = document.getElementById('booking-date-input').value;
-      const barberVal = document.getElementById('booking-barber-select').value;
-      const timeSelect = document.getElementById('booking-time-select');
-
-      timeSelect.innerHTML = '<option value="">Select Time...</option>';
-
-      if (!dateVal) return;
-
-      // Business Hours: 09:00 to 18:00 (Hourly slots)
-      const slots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-
-      // Get existing non-cancelled bookings for selected date & barber
-      const bookedTimes = state.bookings
-        .filter(b => b.appointment_date === dateVal && b.barber_id === barberVal && b.status !== 'DECLINED' && b.status !== 'CANCELLED')
-        .map(b => b.appointment_time.substring(0, 5));
-
-      slots.forEach(slot => {
-        const isBooked = bookedTimes.includes(slot);
-        const option = document.createElement('option');
-        option.value = slot;
-        option.innerText = slot + (isBooked ? ' (Unavailable)' : '');
-        if (isBooked) option.disabled = true;
-        timeSelect.appendChild(option);
-      });
-    }
-
-    document.getElementById('booking-barber-select').addEventListener('change', generateAvailableTimeSlots);
-
-    async function handlePublicBookingSubmit(e) {
-      e.preventDefault();
-      const serviceId = document.getElementById('booking-service-select').value;
-      const barberId = document.getElementById('booking-barber-select').value;
-      const date = document.getElementById('booking-date-input').value;
-      const time = document.getElementById('booking-time-select').value;
-      const customerName = document.getElementById('booking-customer-name').value;
-      const customerPhone = document.getElementById('booking-customer-phone').value;
-
-      if (!serviceId || !barberId || !date || !time) {
-        showToast('Please fill all booking fields', 'error');
-        return;
+      // Update Header Indicator
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`step-indicator-${i}`);
+        if (i === currentStep) {
+          el.className = 'text-brand-primary border-b-2 border-brand-primary pb-1 font-bold';
+        } else if (i < currentStep) {
+          el.className = 'text-emerald-400 font-medium';
+        } else {
+          el.className = 'text-neutral-500';
+        }
       }
 
-      const submitBtn = document.getElementById('booking-submit-btn');
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'Checking Availability...';
+      // Prev/Next Button visibility
+      const prevBtn = document.getElementById('booking-prev-btn');
+      const nextBtn = document.getElementById('booking-next-btn');
+      const confirmBtn = document.getElementById('booking-confirm-btn');
 
-      // DOUBLE BOOKING PROTECTION CHECK
-      const { data: existing, error: checkErr } = await db
+      if (currentStep === 1) prevBtn.classList.add('hidden');
+      else prevBtn.classList.remove('hidden');
+
+      if (currentStep === 6) {
+        nextBtn.classList.add('hidden');
+        confirmBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        confirmBtn.classList.add('hidden');
+      }
+
+      // Render step specific content
+      if (currentStep === 1) renderStepServiceGrid();
+      if (currentStep === 2) renderStepBarberGrid();
+      if (currentStep === 4) renderStepTimeGrid();
+      if (currentStep === 6) renderBookingSummary();
+    }
+
+    function renderStepServiceGrid() {
+      const container = document.getElementById('step-service-grid');
+      container.innerHTML = '';
+
+      state.services.filter(s => s.is_active).forEach(s => {
+        const isSelected = bookingSelection.serviceId === s.id;
+        const item = document.createElement('div');
+        item.className = `p-4 rounded-xl border cursor-pointer transition flex items-center justify-between ${isSelected ? 'border-brand-primary bg-brand-primary/10' : 'border-neutral-800 bg-neutral-900 hover:border-neutral-700'}`;
+        item.onclick = () => {
+          bookingSelection.serviceId = s.id;
+          renderStepServiceGrid();
+        };
+        item.innerHTML = `
+          <div>
+            <span class="text-[10px] text-brand-primary uppercase font-bold tracking-wider">${s.category}</span>
+            <h5 class="font-bold text-white text-sm">${s.title}</h5>
+            <p class="text-xs text-neutral-400">${s.duration_minutes} mins</p>
+          </div>
+          <span class="font-extrabold text-brand-primary text-sm">${formatMoney(s.price)}</span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderStepBarberGrid() {
+      const container = document.getElementById('step-barber-grid');
+      container.innerHTML = '';
+
+      state.barbers.filter(b => b.is_active).forEach(b => {
+        const isSelected = bookingSelection.barberId === b.id;
+        const item = document.createElement('div');
+        item.className = `p-4 rounded-xl border cursor-pointer transition flex items-center gap-3 ${isSelected ? 'border-brand-primary bg-brand-primary/10' : 'border-neutral-800 bg-neutral-900 hover:border-neutral-700'}`;
+        item.onclick = () => {
+          bookingSelection.barberId = b.id;
+          renderStepBarberGrid();
+        };
+        item.innerHTML = `
+          <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80'}" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <h5 class="font-bold text-white text-sm">${b.name}</h5>
+            <p class="text-xs text-neutral-400">${b.speciality}</p>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderStepTimeGrid() {
+      const container = document.getElementById('step-time-grid');
+      container.innerHTML = '';
+
+      if (!bookingSelection.date) return;
+
+      const openingStr = state.shopSettings.opening_time || '10:00:00';
+      const closingStr = state.shopSettings.closing_time || '20:00:00';
+      const breakStartStr = state.shopSettings.break_start || '14:00:00';
+      const breakEndStr = state.shopSettings.break_end || '15:00:00';
+
+      const openMins = timeToMinutes(openingStr);
+      const closeMins = timeToMinutes(closingStr);
+      const breakStartMins = timeToMinutes(breakStartStr);
+      const breakEndMins = timeToMinutes(breakEndStr);
+
+      const serviceObj = state.services.find(s => s.id === bookingSelection.serviceId);
+      const serviceDuration = serviceObj ? parseInt(serviceObj.duration_minutes) || 30 : 30;
+
+      // Existing bookings for chosen date & barber
+      const bookedRanges = state.bookings
+        .filter(b => b.appointment_date === bookingSelection.date && b.barber_id === bookingSelection.barberId && b.status !== 'DECLINED' && b.status !== 'CANCELLED')
+        .map(b => {
+          const start = timeToMinutes(b.appointment_time);
+          const bService = state.services.find(s => s.id === b.service_id);
+          const duration = bService ? parseInt(bService.duration_minutes) || 30 : 30;
+          return { start, end: start + duration };
+        });
+
+      // Generate 30-minute time slots
+      for (let min = openMins; min + serviceDuration <= closeMins; min += 30) {
+        const slotEnd = min + serviceDuration;
+        
+        // Break overlapping check
+        const overlapsBreak = (min < breakEndMins && slotEnd > breakStartMins);
+        
+        // Existing booking overlap check
+        const isBooked = bookedRanges.some(r => (min < r.end && slotEnd > r.start));
+
+        const slotTimeStr = minutesToTimeStr(min);
+        const isAvailable = !overlapsBreak && !isBooked;
+        const isSelected = bookingSelection.time === slotTimeStr;
+
+        const btn = document.createElement('button');
+        btn.disabled = !isAvailable;
+        btn.className = `p-2.5 rounded-xl border text-xs font-semibold transition ${
+          !isAvailable ? 'opacity-30 border-neutral-800 bg-neutral-950 text-neutral-600 cursor-not-allowed' :
+          isSelected ? 'border-brand-primary bg-brand-primary text-black font-bold' :
+          'border-neutral-800 bg-neutral-900 text-white hover:border-neutral-700'
+        }`;
+        btn.innerText = slotTimeStr;
+        btn.onclick = () => {
+          bookingSelection.time = slotTimeStr;
+          renderStepTimeGrid();
+        };
+        container.appendChild(btn);
+      }
+    }
+
+    function timeToMinutes(timeStr) {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function minutesToTimeStr(mins) {
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
+
+    function renderBookingSummary() {
+      const serviceObj = state.services.find(s => s.id === bookingSelection.serviceId);
+      const barberObj = state.barbers.find(b => b.id === bookingSelection.barberId);
+
+      document.getElementById('booking-summary-box').innerHTML = `
+        <div><strong>Service:</strong> ${serviceObj ? serviceObj.title : 'N/A'} (${serviceObj ? serviceObj.duration_minutes : 0} mins)</div>
+        <div><strong>Barber:</strong> ${barberObj ? barberObj.name : 'N/A'}</div>
+        <div><strong>Date:</strong> ${bookingSelection.date}</div>
+        <div><strong>Time:</strong> ${bookingSelection.time}</div>
+        <div><strong>Customer Name:</strong> ${bookingSelection.customerName}</div>
+        <div><strong>Phone:</strong> ${bookingSelection.customerPhone}</div>
+        <div class="pt-2 border-t border-neutral-800 font-extrabold text-brand-primary text-base">Total Price: ${serviceObj ? formatMoney(serviceObj.price) : 'N/A'}</div>
+      `;
+    }
+
+    function nextBookingStep() {
+      if (currentStep === 1 && !bookingSelection.serviceId) return showToast('Select a service to continue', 'error');
+      if (currentStep === 2 && !bookingSelection.barberId) return showToast('Select a barber to continue', 'error');
+      if (currentStep === 3 && !bookingSelection.date) return showToast('Select a date to continue', 'error');
+      if (currentStep === 4 && !bookingSelection.time) return showToast('Select an available time slot', 'error');
+      if (currentStep === 5) {
+        const name = document.getElementById('booking-step-name').value.trim();
+        const phone = document.getElementById('booking-step-phone').value.trim();
+        if (!name || !phone) return showToast('Please enter your name and phone number', 'error');
+        bookingSelection.customerName = name;
+        bookingSelection.customerPhone = phone;
+      }
+
+      currentStep++;
+      renderStepBookingExperience();
+    }
+
+    function prevBookingStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        renderStepBookingExperience();
+      }
+    }
+
+    async function submitFinalBooking() {
+      const confirmBtn = document.getElementById('booking-confirm-btn');
+      confirmBtn.disabled = true;
+
+      // Double Booking Safeguard
+      const { data: existing } = await db
         .from('bookings')
         .select('id')
-        .eq('barber_id', barberId)
-        .eq('appointment_date', date)
-        .eq('appointment_time', time)
+        .eq('barber_id', bookingSelection.barberId)
+        .eq('appointment_date', bookingSelection.date)
+        .eq('appointment_time', bookingSelection.time)
         .neq('status', 'DECLINED')
         .neq('status', 'CANCELLED');
 
       if (existing && existing.length > 0) {
-        showToast('This appointment time is no longer available. Please select another time.', 'error');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5"></i> Confirm Appointment Request';
-        lucide.createIcons();
-        generateAvailableTimeSlots();
+        showToast('This slot was just taken. Please select another time.', 'error');
+        confirmBtn.disabled = false;
+        currentStep = 4;
+        renderStepBookingExperience();
         return;
       }
 
@@ -1509,42 +1782,44 @@
 
       const { data: newBooking, error } = await db.from('bookings').insert([{
         booking_ref: bookingRef,
-        service_id: serviceId,
-        barber_id: barberId,
-        appointment_date: date,
-        appointment_time: time,
-        customer_name: customerName,
-        customer_phone: customerPhone,
+        service_id: bookingSelection.serviceId,
+        barber_id: bookingSelection.barberId,
+        appointment_date: bookingSelection.date,
+        appointment_time: bookingSelection.time,
+        customer_name: bookingSelection.customerName,
+        customer_phone: bookingSelection.customerPhone,
         status: 'PENDING'
       }]).select().single();
 
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5"></i> Confirm Appointment Request';
-      lucide.createIcons();
+      confirmBtn.disabled = false;
 
       if (error) {
         showToast('Booking failed: ' + error.message, 'error');
       } else {
-        // Trigger notification
         await db.from('notifications').insert([{
           type: 'NEW_BOOKING',
-          message: `New booking request ${bookingRef} from ${customerName}`,
+          message: `New booking request ${bookingRef} from ${bookingSelection.customerName}`,
           booking_id: newBooking.id
         }]);
 
-        // Show confirmation screen
-        const serviceObj = state.services.find(s => s.id === serviceId);
-        const barberObj = state.barbers.find(b => b.id === barberId);
+        const serviceObj = state.services.find(s => s.id === bookingSelection.serviceId);
+        const barberObj = state.barbers.find(b => b.id === bookingSelection.barberId);
 
         document.getElementById('confirmation-details-box').innerHTML = `
-          <div><strong>Reference:</strong> <span class="text-brand-primary">${bookingRef}</span></div>
-          <div><strong>Customer:</strong> ${customerName} (${customerPhone})</div>
-          <div><strong>Service:</strong> ${serviceObj ? serviceObj.title : 'Service'}</div>
-          <div><strong>Barber:</strong> ${barberObj ? barberObj.name : 'Barber'}</div>
-          <div><strong>Date & Time:</strong> ${date} at ${time}</div>
+          <div><strong>Ref:</strong> <span class="text-brand-primary">${bookingRef}</span></div>
+          <div><strong>Name:</strong> ${bookingSelection.customerName}</div>
+          <div><strong>Service:</strong> ${serviceObj ? serviceObj.title : ''}</div>
+          <div><strong>Barber:</strong> ${barberObj ? barberObj.name : ''}</div>
+          <div><strong>Date & Time:</strong> ${bookingSelection.date} at ${bookingSelection.time}</div>
+          <div><strong>Price:</strong> ${serviceObj ? formatMoney(serviceObj.price) : ''}</div>
         `;
+
         document.getElementById('modal-booking-confirmation').classList.remove('hidden');
-        document.getElementById('public-booking-form').reset();
+
+        // Reset Booking Flow
+        currentStep = 1;
+        bookingSelection = { serviceId: null, barberId: null, date: null, time: null, customerName: '', customerPhone: '' };
+        renderStepBookingExperience();
       }
     }
 
@@ -1553,17 +1828,13 @@
     }
 
     // =========================================================================
-    // 8. BACKOFFICE DASHBOARD & ADMIN OPERATIONS
+    // 9. ADMIN BACKOFFICE MANAGEMENT
     // =========================================================================
     function renderAdminDashboard() {
       document.getElementById('stat-total-bookings').innerText = state.bookings.length;
       document.getElementById('stat-pending-bookings').innerText = state.bookings.filter(b => b.status === 'PENDING').length;
       document.getElementById('stat-accepted-bookings').innerText = state.bookings.filter(b => b.status === 'ACCEPTED').length;
       document.getElementById('stat-completed-bookings').innerText = state.bookings.filter(b => b.status === 'COMPLETED').length;
-
-      document.getElementById('stat-active-barbers').innerText = state.barbers.filter(b => b.is_active).length;
-      document.getElementById('stat-active-services').innerText = state.services.filter(s => s.is_active).length;
-      document.getElementById('stat-pending-reviews').innerText = state.reviews.filter(r => r.status === 'PENDING').length;
     }
 
     function renderAdminBookingsTable() {
@@ -1612,7 +1883,7 @@
               <option value="DECLINED" ${b.status === 'DECLINED' ? 'selected' : ''}>DECLINED</option>
               <option value="COMPLETED" ${b.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
               <option value="CANCELLED" ${b.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
-              <option value="NO_SHOW" ${b.status === 'NO_SHOW' ? 'selected' : ''}>NO_SHOW</option>
+              <option value="NO_SHOW" ${b.status === 'NO_SHOW' ? 'selected' : ''}>NO SHOW</option>
             </select>
           </td>
         `;
@@ -1640,100 +1911,50 @@
       if (error) {
         showToast('Failed to update status: ' + error.message, 'error');
       } else {
-        // Record status history
-        await db.from('booking_status_history').insert([{
-          booking_id: bookingId,
-          old_status: oldStatus,
-          new_status: newStatus,
-          changed_by: currentUser ? currentUser.id : null
-        }]);
-
         showToast(`Booking status changed to ${newStatus}`, 'success');
         await fetchBookings();
         renderAdminBookingsTable();
-
-        // Dispatch WhatsApp Notification via Edge Function
-        dispatchWhatsAppNotification(bookingId, newStatus);
-      }
-    }
-
-    async function dispatchWhatsAppNotification(bookingId, status) {
-      const booking = state.bookings.find(b => b.id === bookingId);
-      if (!booking) return;
-
-      try {
-        await db.functions.invoke('send-whatsapp', {
-          body: {
-            phone: booking.customer_phone,
-            customerName: booking.customer_name,
-            bookingRef: booking.booking_ref,
-            status: status,
-            date: booking.appointment_date,
-            time: booking.appointment_time
-          }
-        });
-      } catch (err) {
-        console.warn('WhatsApp Edge function dispatch skipped or failed:', err);
       }
     }
 
     // =========================================================================
-    // 9. BARBERS CRUD OPERATIONS
+    // 10. BARBERS & SERVICES MODALS
     // =========================================================================
     function renderAdminBarbersGrid() {
       const container = document.getElementById('admin-barbers-grid');
       container.innerHTML = '';
-
-      if (state.barbers.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No barbers added yet.</div>`;
-        return;
-      }
 
       state.barbers.forEach(b => {
         const card = document.createElement('div');
         card.className = 'bg-brand-card border border-neutral-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between';
         card.innerHTML = `
           <div class="flex items-center gap-4">
-            <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80'}" class="w-16 h-16 object-cover rounded-xl border border-neutral-700">
+            <img src="${b.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80'}" class="w-16 h-16 rounded-full object-cover">
             <div>
-              <h4 class="font-bold text-white text-base">${b.name}</h4>
-              <p class="text-xs text-brand-primary">${b.speciality}</p>
-              <span class="text-[10px] ${b.is_active ? 'text-emerald-400' : 'text-red-400'} font-bold">${b.is_active ? 'ACTIVE' : 'INACTIVE'}</span>
+              <h4 class="font-bold text-white">${b.name}</h4>
+              <p class="text-xs text-neutral-400">${b.speciality}</p>
+              <span class="text-[10px] ${b.is_active ? 'text-emerald-400' : 'text-red-400'} font-bold uppercase">${b.is_active ? 'Active' : 'Inactive'}</span>
             </div>
           </div>
-          <div class="flex gap-2 pt-2 border-t border-neutral-800">
-            <button onclick="editBarber('${b.id}')" class="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white text-xs py-2 rounded-lg transition">Edit</button>
-            <button onclick="deleteBarber('${b.id}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs px-3 py-2 rounded-lg transition">Delete</button>
+          <div class="flex justify-end gap-2 pt-2 border-t border-neutral-800">
+            <button onclick='openBarberModal(${JSON.stringify(b).replace(/'/g, "&apos;")})' class="text-xs bg-neutral-800 text-neutral-200 px-3 py-1.5 rounded-lg">Edit</button>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
-    function openBarberModal(barberId = null) {
-      document.getElementById('barber-id').value = barberId || '';
-      if (barberId) {
-        const b = state.barbers.find(x => x.id === barberId);
-        document.getElementById('modal-barber-title').innerText = 'Edit Barber';
-        document.getElementById('barber-name').value = b.name;
-        document.getElementById('barber-speciality').value = b.speciality;
-        document.getElementById('barber-active').checked = b.is_active;
-        tempBarberImg = b.photo_url || '';
-        barberUploader.setUrl(tempBarberImg);
-      } else {
-        document.getElementById('modal-barber-title').innerText = 'Add Barber';
-        document.getElementById('barber-name').value = '';
-        document.getElementById('barber-speciality').value = '';
-        document.getElementById('barber-active').checked = true;
-        tempBarberImg = '';
-        barberUploader.setUrl('');
-      }
+    function openBarberModal(barber = null) {
+      document.getElementById('barber-id').value = barber ? barber.id : '';
+      document.getElementById('barber-name').value = barber ? barber.name : '';
+      document.getElementById('barber-speciality').value = barber ? barber.speciality : '';
+      document.getElementById('barber-active').checked = barber ? barber.is_active : true;
+      tempBarberImg = barber ? barber.photo_url : '';
+      barberUploader.setUrl(tempBarberImg);
       document.getElementById('modal-barber').classList.remove('hidden');
     }
 
-    function closeBarberModal() {
-      document.getElementById('modal-barber').classList.add('hidden');
-    }
+    function closeBarberModal() { document.getElementById('modal-barber').classList.add('hidden'); }
 
     async function handleSaveBarber(e) {
       e.preventDefault();
@@ -1745,17 +1966,13 @@
         photo_url: tempBarberImg
       };
 
-      let error;
-      if (id) {
-        ({ error } = await db.from('barbers').update(payload).eq('id', id));
-      } else {
-        ({ error } = await db.from('barbers').insert([payload]));
-      }
+      let res;
+      if (id) res = await db.from('barbers').update(payload).eq('id', id);
+      else res = await db.from('barbers').insert([payload]);
 
-      if (error) {
-        showToast('Failed to save barber: ' + error.message, 'error');
-      } else {
-        showToast('Barber saved successfully', 'success');
+      if (res.error) showToast('Failed to save barber: ' + res.error.message, 'error');
+      else {
+        showToast('Barber saved', 'success');
         closeBarberModal();
         await fetchBarbers();
         renderAdminBarbersGrid();
@@ -1763,174 +1980,97 @@
       }
     }
 
-    async function deleteBarber(id) {
-      if (!confirm('Are you sure you want to delete this barber?')) return;
-      const { error } = await db.from('barbers').delete().eq('id', id);
-      if (error) {
-        showToast('Delete failed: ' + error.message, 'error');
-      } else {
-        showToast('Barber deleted', 'success');
-        await fetchBarbers();
-        renderAdminBarbersGrid();
-        renderPublicBarbers();
-      }
-    }
-
-    function editBarber(id) { openBarberModal(id); }
-
-    // =========================================================================
-    // 10. SERVICES CRUD OPERATIONS
-    // =========================================================================
     function renderAdminServicesGrid() {
       const container = document.getElementById('admin-services-grid');
       container.innerHTML = '';
-
-      if (state.services.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No services available yet.</div>`;
-        return;
-      }
 
       state.services.forEach(s => {
         const card = document.createElement('div');
         card.className = 'bg-brand-card border border-neutral-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between';
         card.innerHTML = `
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">${s.category}</span>
-              <span class="text-[10px] ${s.is_active ? 'text-emerald-400' : 'text-red-400'} font-bold">${s.is_active ? 'ACTIVE' : 'INACTIVE'}</span>
+          <div>
+            <div class="flex justify-between items-start">
+              <h4 class="font-bold text-white">${s.title}</h4>
+              <span class="text-brand-primary font-bold text-sm">${formatMoney(s.price)}</span>
             </div>
-            <h4 class="font-bold text-white text-base">${s.title}</h4>
-            <p class="text-xs text-neutral-400 line-clamp-2">${s.description || 'No description.'}</p>
-            <div class="text-xs text-neutral-300 font-medium">Duration: ${s.duration_minutes} min ${s.price ? `| Price: $${s.price}` : ''}</div>
+            <p class="text-xs text-neutral-400 mt-1">${s.description || 'No description'}</p>
+            <div class="mt-2 flex gap-2">
+              <span class="text-[10px] bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded">${s.category}</span>
+              <span class="text-[10px] bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded">${s.duration_minutes}m</span>
+            </div>
           </div>
-          <div class="flex gap-2 pt-2 border-t border-neutral-800">
-            <button onclick="editService('${s.id}')" class="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white text-xs py-2 rounded-lg transition">Edit</button>
-            <button onclick="deleteService('${s.id}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs px-3 py-2 rounded-lg transition">Delete</button>
+          <div class="flex justify-end gap-2 pt-2 border-t border-neutral-800">
+            <button onclick='openServiceModal(${JSON.stringify(s).replace(/'/g, "&apos;")})' class="text-xs bg-neutral-800 text-neutral-200 px-3 py-1.5 rounded-lg">Edit</button>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
-    function openServiceModal(serviceId = null) {
-      document.getElementById('service-id').value = serviceId || '';
-      if (serviceId) {
-        const s = state.services.find(x => x.id === serviceId);
-        document.getElementById('modal-service-title').innerText = 'Edit Service';
-        document.getElementById('service-title').value = s.title;
-        document.getElementById('service-category').value = s.category;
-        document.getElementById('service-duration').value = s.duration_minutes;
-        document.getElementById('service-price').value = s.price || '';
-        document.getElementById('service-description').value = s.description || '';
-        document.getElementById('service-active').checked = s.is_active;
-        tempServiceImg = s.photo_url || '';
-        serviceUploader.setUrl(tempServiceImg);
-      } else {
-        document.getElementById('modal-service-title').innerText = 'Add Service';
-        document.getElementById('service-title').value = '';
-        document.getElementById('service-category').value = 'SKIN';
-        document.getElementById('service-duration').value = 30;
-        document.getElementById('service-price').value = '';
-        document.getElementById('service-description').value = '';
-        document.getElementById('service-active').checked = true;
-        tempServiceImg = '';
-        serviceUploader.setUrl('');
-      }
+    function openServiceModal(service = null) {
+      document.getElementById('service-id').value = service ? service.id : '';
+      document.getElementById('service-title').value = service ? service.title : '';
+      document.getElementById('service-category').value = service ? service.category : 'HAIR';
+      document.getElementById('service-duration').value = service ? service.duration_minutes : 30;
+      document.getElementById('service-price').value = service ? service.price : '';
+      document.getElementById('service-description').value = service ? service.description : '';
+      document.getElementById('service-active').checked = service ? service.is_active : true;
+      tempServiceImg = service ? service.photo_url : '';
+      serviceUploader.setUrl(tempServiceImg);
       document.getElementById('modal-service').classList.remove('hidden');
     }
 
-    function closeServiceModal() {
-      document.getElementById('modal-service').classList.add('hidden');
-    }
+    function closeServiceModal() { document.getElementById('modal-service').classList.add('hidden'); }
 
     async function handleSaveService(e) {
       e.preventDefault();
       const id = document.getElementById('service-id').value;
-      const priceVal = document.getElementById('service-price').value;
-
       const payload = {
         title: document.getElementById('service-title').value,
         category: document.getElementById('service-category').value,
         duration_minutes: parseInt(document.getElementById('service-duration').value),
-        price: priceVal ? parseFloat(priceVal) : null,
+        price: parseFloat(document.getElementById('service-price').value) || 0,
         description: document.getElementById('service-description').value,
         is_active: document.getElementById('service-active').checked,
         photo_url: tempServiceImg
       };
 
-      let error;
-      if (id) {
-        ({ error } = await db.from('services').update(payload).eq('id', id));
-      } else {
-        ({ error } = await db.from('services').insert([payload]));
-      }
+      let res;
+      if (id) res = await db.from('services').update(payload).eq('id', id);
+      else res = await db.from('services').insert([payload]);
 
-      if (error) {
-        showToast('Failed to save service: ' + error.message, 'error');
-      } else {
-        showToast('Service saved successfully', 'success');
+      if (res.error) showToast('Failed to save service: ' + res.error.message, 'error');
+      else {
+        showToast('Service saved', 'success');
         closeServiceModal();
         await fetchServices();
         renderAdminServicesGrid();
         renderPublicServices();
-        populateBookingDropdowns();
       }
     }
 
-    async function deleteService(id) {
-      if (!confirm('Are you sure you want to delete this service?')) return;
-      const { error } = await db.from('services').delete().eq('id', id);
-      if (error) {
-        showToast('Delete failed: ' + error.message, 'error');
-      } else {
-        showToast('Service deleted', 'success');
-        await fetchServices();
-        renderAdminServicesGrid();
-        renderPublicServices();
-        populateBookingDropdowns();
-      }
-    }
-
-    function editService(id) { openServiceModal(id); }
-
     // =========================================================================
-    // 11. REVIEWS MODERATION ENGINE
+    // 11. REVIEWS MODERATION & LOOKUPS
     // =========================================================================
-    function openReviewModal() {
-      document.getElementById('modal-review').classList.remove('hidden');
-    }
-
-    function closeReviewModal() {
-      document.getElementById('modal-review').classList.add('hidden');
-    }
+    function openReviewModal() { document.getElementById('modal-review').classList.remove('hidden'); }
+    function closeReviewModal() { document.getElementById('modal-review').classList.add('hidden'); }
 
     async function handlePublicReviewSubmit(e) {
       e.preventDefault();
-      const customerName = document.getElementById('review-customer-name').value;
-      const rating = parseInt(document.getElementById('review-rating').value);
-      const comment = document.getElementById('review-text').value;
-
-      const { data, error } = await db.from('reviews').insert([{
-        customer_name: customerName,
-        rating: rating,
-        comment: comment,
+      const payload = {
+        customer_name: document.getElementById('review-customer-name').value,
+        rating: parseInt(document.getElementById('review-rating').value),
+        comment: document.getElementById('review-text').value,
         status: 'PENDING'
-      }]).select().single();
+      };
 
-      if (error) {
-        showToast('Failed to submit review: ' + error.message, 'error');
-      } else {
-        // Trigger notification
-        await db.from('notifications').insert([{
-          type: 'NEW_REVIEW',
-          message: `New review submitted by ${customerName}`,
-          review_id: data.id
-        }]);
+      const { error } = await db.from('reviews').insert([payload]);
 
-        showToast('Thank you! Your review has been submitted for approval.', 'success');
+      if (error) showToast('Failed to submit review: ' + error.message, 'error');
+      else {
+        showToast('Review submitted! Pending approval.', 'success');
         closeReviewModal();
-        document.getElementById('review-customer-name').value = '';
-        document.getElementById('review-text').value = '';
+        document.getElementById('modal-review').querySelector('form').reset();
       }
     }
 
@@ -1938,228 +2078,85 @@
       const container = document.getElementById('admin-reviews-list');
       container.innerHTML = '';
 
-      if (state.reviews.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No reviews yet.</div>`;
-        return;
-      }
-
       state.reviews.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'bg-brand-card border border-neutral-800 p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4';
-        const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-        card.innerHTML = `
-          <div class="space-y-1">
+        const item = document.createElement('div');
+        item.className = 'bg-brand-card border border-neutral-800 p-4 rounded-xl flex items-center justify-between';
+        item.innerHTML = `
+          <div>
             <div class="flex items-center gap-2">
               <span class="font-bold text-white text-sm">${r.customer_name}</span>
-              <span class="text-amber-400 text-xs">${stars}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${r.status === 'PUBLISHED' ? 'bg-emerald-500/10 text-emerald-400' : r.status === 'DISCARDED' ? 'bg-red-500/10 text-red-400' : 'bg-amber-500/10 text-amber-400'}">${r.status}</span>
+              <span class="text-xs text-amber-400">★ ${r.rating}</span>
             </div>
-            <p class="text-xs text-neutral-300">"${r.comment}"</p>
+            <p class="text-xs text-neutral-400 mt-1">${r.comment}</p>
           </div>
-          <div class="flex items-center gap-2">
-            ${r.status !== 'PUBLISHED' ? `<button onclick="updateReviewStatus('${r.id}', 'PUBLISHED')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg transition">Publish</button>` : ''}
-            ${r.status !== 'DISCARDED' ? `<button onclick="updateReviewStatus('${r.id}', 'DISCARDED')" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-3 py-1.5 rounded-lg transition">Discard</button>` : ''}
-            <button onclick="deleteReview('${r.id}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs px-3 py-1.5 rounded-lg transition">Delete</button>
+          <div class="flex gap-2">
+            ${r.status === 'PENDING' ? `<button onclick="updateReviewStatus('${r.id}', 'PUBLISHED')" class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded">Publish</button>` : ''}
+            <button onclick="deleteReview('${r.id}')" class="text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded">Delete</button>
           </div>
         `;
-        container.appendChild(card);
+        container.appendChild(item);
       });
     }
 
-    async function updateReviewStatus(id, newStatus) {
-      const { error } = await db.from('reviews').update({ status: newStatus }).eq('id', id);
-      if (error) {
-        showToast('Update failed: ' + error.message, 'error');
-      } else {
-        showToast(`Review ${newStatus.toLowerCase()}`, 'success');
-        await fetchReviews();
-        renderAdminReviewsList();
-        renderPublicReviews();
-      }
+    async function updateReviewStatus(id, status) {
+      await db.from('reviews').update({ status }).eq('id', id);
+      showToast('Review status updated', 'success');
+      await fetchReviews();
+      renderAdminReviewsList();
+      renderPublicReviews();
     }
 
     async function deleteReview(id) {
-      if (!confirm('Delete this review permanently?')) return;
-      const { error } = await db.from('reviews').delete().eq('id', id);
-      if (error) {
-        showToast('Delete failed: ' + error.message, 'error');
-      } else {
-        showToast('Review deleted', 'success');
-        await fetchReviews();
-        renderAdminReviewsList();
-        renderPublicReviews();
-      }
+      await db.from('reviews').delete().eq('id', id);
+      showToast('Review deleted', 'info');
+      await fetchReviews();
+      renderAdminReviewsList();
+      renderPublicReviews();
     }
 
-    // =========================================================================
-    // 12. SHOP PROFILE & SECURITY PIN
-    // =========================================================================
-    function promptShopProfilePin() {
-      document.getElementById('shop-pin-input').value = '';
-      document.getElementById('modal-shop-pin').classList.remove('hidden');
-    }
-
-    function closeShopPinModal() {
-      document.getElementById('modal-shop-pin').classList.add('hidden');
-    }
-
-    function verifyShopProfilePin() {
-      const pin = document.getElementById('shop-pin-input').value;
-      if (pin === '2026') {
-        closeShopPinModal();
-        populateShopProfileForm();
-        switchAdminTab('shop-profile');
-      } else {
-        showToast('Invalid Security PIN', 'error');
-        document.getElementById('shop-pin-input').value = '';
-      }
-    }
-
-    function populateShopProfileForm() {
-      if (!state.shopProfile) return;
-      const p = state.shopProfile;
-      document.getElementById('profile-shop-name').value = p.shop_name || '';
-      document.getElementById('profile-slogan').value = p.slogan || '';
-      document.getElementById('profile-latitude').value = p.latitude;
-      document.getElementById('profile-longitude').value = p.longitude;
-      document.getElementById('profile-phone').value = p.phone || '';
-      document.getElementById('profile-whatsapp').value = p.whatsapp || '';
-      tempBannerImg = p.banner_url || '';
-      bannerUploader.setUrl(tempBannerImg);
-    }
-
-    async function handleSaveShopProfile(e) {
-      e.preventDefault();
-      const payload = {
-        shop_name: document.getElementById('profile-shop-name').value,
-        slogan: document.getElementById('profile-slogan').value,
-        latitude: parseFloat(document.getElementById('profile-latitude').value),
-        longitude: parseFloat(document.getElementById('profile-longitude').value),
-        phone: document.getElementById('profile-phone').value,
-        whatsapp: document.getElementById('profile-whatsapp').value,
-        banner_url: tempBannerImg
-      };
-
-      let error;
-      if (state.shopProfile && state.shopProfile.id) {
-        ({ error } = await db.from('shop_profile').update(payload).eq('id', state.shopProfile.id));
-      } else {
-        ({ error } = await db.from('shop_profile').insert([payload]));
-      }
-
-      if (error) {
-        showToast('Failed to save shop profile: ' + error.message, 'error');
-      } else {
-        showToast('Shop profile updated', 'success');
-        await fetchShopProfile();
-      }
-    }
-
-    // =========================================================================
-    // 13. DYNAMIC COLOR THEME ENGINE
-    // =========================================================================
-    async function selectTheme(themeClass) {
-      applyThemeClass(themeClass);
-
-      if (state.shopProfile && state.shopProfile.id) {
-        await db.from('shop_profile').update({ theme_name: themeClass }).eq('id', state.shopProfile.id);
-      }
-      showToast('Theme updated successfully', 'success');
-    }
-
-    function applyThemeClass(themeClass) {
-      document.body.classList.remove(
-        'theme-midnight-gold',
-        'theme-charcoal-silver',
-        'theme-black-burgundy',
-        'theme-navy-copper',
-        'theme-cream-darkbrown'
-      );
-      document.body.classList.add(themeClass);
-    }
-
-    // =========================================================================
-    // 14. CUSTOMER APPOINTMENT LOOKUP
-    // =========================================================================
-    function openBookingLookupModal() {
-      document.getElementById('lookup-results-container').innerHTML = '';
-      document.getElementById('modal-booking-lookup').classList.remove('hidden');
-    }
-
-    function closeBookingLookupModal() {
-      document.getElementById('modal-booking-lookup').classList.add('hidden');
-    }
+    function openBookingLookupModal() { document.getElementById('modal-booking-lookup').classList.remove('hidden'); }
+    function closeBookingLookupModal() { document.getElementById('modal-booking-lookup').classList.add('hidden'); }
 
     async function performBookingLookup() {
-      const ref = document.getElementById('lookup-ref-input').value.trim().toUpperCase();
+      const ref = document.getElementById('lookup-ref-input').value.trim();
       const phone = document.getElementById('lookup-phone-input').value.trim();
       const container = document.getElementById('lookup-results-container');
 
-      if (!ref || !phone) {
-        showToast('Enter both Reference and Phone Number', 'error');
+      if (!ref && !phone) return showToast('Enter booking reference or phone number', 'error');
+
+      let query = db.from('bookings').select('*');
+      if (ref) query = query.ilike('booking_ref', ref);
+      if (phone) query = query.eq('customer_phone', phone);
+
+      const { data } = await query;
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `<p class="text-xs text-neutral-400 text-center py-2">No bookings found.</p>`;
         return;
       }
 
-      container.innerHTML = `<div class="text-xs text-neutral-400 text-center py-2">Searching...</div>`;
-
-      const { data, error } = await db
-        .from('bookings')
-        .select('*')
-        .eq('booking_ref', ref)
-        .eq('customer_phone', phone)
-        .single();
-
-      if (error || !data) {
-        container.innerHTML = `<div class="text-xs text-red-400 text-center py-2">No matching appointment found.</div>`;
-      } else {
-        const serviceObj = state.services.find(s => s.id === data.service_id);
-        const barberObj = state.barbers.find(b => b.id === data.barber_id);
-
-        container.innerHTML = `
-          <div class="bg-neutral-950 p-4 rounded-xl space-y-2 text-xs border border-neutral-800">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-brand-primary">${data.booking_ref}</span>
-              ${getStatusBadge(data.status)}
-            </div>
-            <div><strong>Service:</strong> ${serviceObj ? serviceObj.title : 'Service'}</div>
-            <div><strong>Barber:</strong> ${barberObj ? barberObj.name : 'Barber'}</div>
-            <div><strong>Date & Time:</strong> ${data.appointment_date} at ${data.appointment_time}</div>
+      container.innerHTML = data.map(b => `
+        <div class="bg-neutral-950 p-3 rounded-lg border border-neutral-800 text-xs space-y-1 my-2">
+          <div class="flex justify-between font-bold text-white">
+            <span>Ref: ${b.booking_ref}</span>
+            <span>${getStatusBadge(b.status)}</span>
           </div>
-        `;
-      }
+          <p class="text-neutral-400">Date: ${b.appointment_date} at ${b.appointment_time}</p>
+        </div>
+      `).join('');
     }
 
     // =========================================================================
-    // 15. NOTIFICATIONS ENGINE & BADGES
+    // 12. SYSTEM NOTIFICATIONS & TOASTS
     // =========================================================================
     function updateNotificationBadges() {
-      const pendingBookings = state.bookings.filter(b => b.status === 'PENDING').length;
-      const pendingReviews = state.reviews.filter(r => r.status === 'PENDING').length;
-      const unreadNotifications = state.notifications.filter(n => !n.is_read).length;
-
-      const pBadge = document.getElementById('nav-pending-badge');
-      const rBadge = document.getElementById('nav-review-badge');
-      const nBadge = document.getElementById('nav-unread-notifications-badge');
-
-      if (pendingBookings > 0) {
-        pBadge.innerText = pendingBookings;
-        pBadge.classList.remove('hidden');
+      const unreadCount = state.notifications.filter(n => !n.is_read).length;
+      const badge = document.getElementById('nav-unread-notifications-badge');
+      if (unreadCount > 0) {
+        badge.innerText = unreadCount;
+        badge.classList.remove('hidden');
       } else {
-        pBadge.classList.add('hidden');
-      }
-
-      if (pendingReviews > 0) {
-        rBadge.innerText = pendingReviews;
-        rBadge.classList.remove('hidden');
-      } else {
-        rBadge.classList.add('hidden');
-      }
-
-      if (unreadNotifications > 0) {
-        nBadge.innerText = unreadNotifications;
-        nBadge.classList.remove('hidden');
-      } else {
-        nBadge.classList.add('hidden');
+        badge.classList.add('hidden');
       }
     }
 
@@ -2168,72 +2165,56 @@
       container.innerHTML = '';
 
       if (state.notifications.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No notifications.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-neutral-500 bg-brand-card rounded-2xl border border-neutral-800">No system notifications.</div>`;
         return;
       }
 
       state.notifications.forEach(n => {
         const item = document.createElement('div');
-        item.className = `p-4 rounded-xl border flex items-center justify-between gap-4 ${n.is_read ? 'bg-brand-card border-neutral-800 opacity-60' : 'bg-neutral-900 border-brand-primary/40'}`;
+        item.className = `p-4 rounded-xl border flex items-center justify-between ${n.is_read ? 'bg-brand-card border-neutral-800 text-neutral-400' : 'bg-brand-card border-brand-primary/40 text-white font-medium'}`;
         item.innerHTML = `
-          <div class="space-y-0.5">
-            <span class="text-[10px] font-bold uppercase ${n.type === 'NEW_BOOKING' ? 'text-amber-400' : 'text-blue-400'}">${n.type}</span>
-            <p class="text-xs text-white">${n.message}</p>
-            <span class="text-[10px] text-neutral-500">${new Date(n.created_at).toLocaleString()}</span>
+          <div class="flex items-center gap-3">
+            <i data-lucide="bell" class="w-4 h-4 text-brand-primary"></i>
+            <div>
+              <p class="text-xs">${n.message}</p>
+              <span class="text-[10px] opacity-60">${new Date(n.created_at).toLocaleString()}</span>
+            </div>
           </div>
-          ${!n.is_read ? `<button onclick="markNotificationAsRead('${n.id}')" class="text-xs text-brand-primary hover:underline">Mark Read</button>` : ''}
         `;
         container.appendChild(item);
       });
-    }
-
-    async function markNotificationAsRead(id) {
-      await db.from('notifications').update({ is_read: true }).eq('id', id);
-      await fetchNotifications();
-      renderAdminNotificationsList();
+      lucide.createIcons();
     }
 
     async function markAllNotificationsAsRead() {
-      await db.from('notifications').update({ is_read: true }).neq('is_read', true);
+      await db.from('notifications').update({ is_read: true }).eq('is_read', false);
+      showToast('Notifications marked as read', 'success');
       await fetchNotifications();
       renderAdminNotificationsList();
     }
 
-    // =========================================================================
-    // 16. TOAST NOTIFICATION UTILITY
-    // =========================================================================
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-
       const colors = {
-        success: 'bg-emerald-900/90 text-emerald-200 border-emerald-500/50',
-        error: 'bg-red-900/90 text-red-200 border-red-500/50',
-        info: 'bg-neutral-900/90 text-neutral-200 border-neutral-700'
+        success: 'bg-emerald-950 border-emerald-500 text-emerald-200',
+        error: 'bg-red-950 border-red-500 text-red-200',
+        info: 'bg-neutral-900 border-brand-primary text-neutral-100'
       };
 
-      toast.className = `pointer-events-auto flex items-center justify-between gap-3 p-4 rounded-xl border backdrop-blur-md shadow-2xl transition duration-300 transform translate-y-2 opacity-0 text-xs font-medium ${colors[type] || colors.info}`;
-      toast.innerHTML = `
-        <span>${message}</span>
-        <button onclick="this.parentElement.remove()" class="text-neutral-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
-      `;
-
+      toast.className = `pointer-events-auto border p-4 rounded-xl shadow-2xl text-xs font-semibold flex items-center justify-between transition-all duration-300 transform translate-y-2 opacity-0 ${colors[type] || colors.info}`;
+      toast.innerHTML = `<span>${message}</span>`;
       container.appendChild(toast);
-      lucide.createIcons();
 
       setTimeout(() => {
         toast.classList.remove('translate-y-2', 'opacity-0');
       }, 10);
 
       setTimeout(() => {
-        toast.classList.add('opacity-0');
+        toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
       }, 4000);
     }
-
-    // Open Modals Globally
-    function openLoginModal() { document.getElementById('modal-login').classList.remove('hidden'); }
-    function closeLoginModal() { document.getElementById('modal-login').classList.add('hidden'); }
   </script>
 </body>
 </html>
